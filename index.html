@@ -92,6 +92,9 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 .backlink{display:inline-block;margin:10px 0;color:var(--cy);cursor:pointer}
 h2.famtitle{color:var(--gold)}
 .note{font-size:.8em;color:var(--dim)}
+.crit{display:inline-block;background:#c0392b;color:#fff;font-size:.68em;padding:2px 8px;border-radius:8px;margin-left:8px;vertical-align:middle;letter-spacing:.04em}
+.xlink{margin:.5em 0}
+.xlink a{color:#9fc2ff}
 </style>
 </head>
 <body>
@@ -103,15 +106,18 @@ h2.famtitle{color:var(--gold)}
 <p class="sub">A Signature-line generator for every field and subject — jets, cars, engines, food, candy, toys, robots, buildings, nanoplasma, lightbots, medical concepts, and mix-and-match labs. Set the parameters or hit randomize: every output is <b>fully solved</b> — idea, sizes, dimensions, chips, measurements, materials, and colors. Boundless outputs, marching to 1,000,000.</p>
 <div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 generated outputs</small></div>
-<p class="staticcount">3,000 fully-solved generator outputs on file across 20 generator families, as of 2026-10-02. Live count above.</p>
+<p class="staticcount">6,000 fully-solved generator outputs on file across 20 generator families, as of 2026-10-02. Live count above.</p>
 <div class="solvebar">
-<div class="solvetitle">⚙️ Describe anything — the archive solves it fully</div>
+<div class="solvetitle">⚙️ Describe anything — the all-purpose generator</div>
 <div class="solverow"><input type="search" id="ctext" maxlength="140" placeholder="Describe anything… e.g. a solar-powered pizza oven, a faster mousetrap" aria-label="Describe anything to solve"><button class="btn gold" id="cgo">⚙️ Solve it</button></div>
-<p class="note">Type anything — an invention, a dish, a tool, a what-if. The solver finds the right generator template (or a universal one), then fully solves every field: idea, dimensions, materials, colors, chips, measurements, how to use. Same words → same design, forever — every solve gets a shareable link. Read aloud, copy, download, and ask-about-it all included.</p>
+<p class="note">Type anything — an invention, a dish, a tool, a what-if. The solver finds the right generator template (or a universal one), then fully solves every field: idea, dimensions, materials, colors, chips, measurements, <b>piece-by-piece parts list</b>, <b>build steps</b>, and <b>filed-archive cross-references</b>. Same words → same design, forever — every solve gets a shareable link. Read aloud, copy, download, and ask-about-it all included.</p>
 </div>
 </header>
 
 <div id="home">
+<h2 style="color:var(--gold)">Pick a generator</h2>
+<div class="grid" id="famgrid"></div>
+<h2 style="color:var(--gold)">Browse the archive</h2>
 <div class="toolbar">
 <input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
 <select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
@@ -119,8 +125,6 @@ h2.famtitle{color:var(--gold)}
 <div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
 <div id="fresults" class="fresults"></div>
 <div class="az" id="az"></div>
-<h2 style="color:var(--gold)">Generator families</h2>
-<div class="grid" id="famgrid"></div>
 <h2 style="color:var(--gold)">Fresh from the forge</h2>
 <div class="cards" id="fresh"></div>
 </div>
@@ -177,6 +181,9 @@ function genSpeakText(o){
   t+="Materials. "+o.materials.map(function(m){return m.part+": "+m.material+(m.finish?", "+m.finish:"")}).join(". ")+". ";
   t+="Colors. "+o.colors.map(function(c){return c.name+" on "+c.area}).join(". ")+". ";
   t+="Key measurements. "+o.measurements.map(function(m){return m.label+": "+m.value+" "+m.unit}).join(". ")+". ";
+  t+="Piece by piece parts list. "+o.parts.length+" parts, "+o.parts.filter(function(p){return p.critical}).length+" critical. "+
+    o.parts.map(function(p){return p.qty+" "+p.name+(p.critical?", critical":"")+", "+p.material+", "+p.dims+", tolerance "+p.tolerance}).join(". ")+". ";
+  t+="Build steps. "+o.build_steps.map(function(s){return s.title+". "+s.detail}).join(" ")+" ";
   t+="How to use: "+o.how_to_use;
   return t.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
 }
@@ -311,6 +318,12 @@ function outputPanelHTML(o,icon){
     '<div class="sect"><h3>🎨 Colors</h3><div class="swatches">'+o.colors.map(function(c){return '<span class="sw"><i style="background:'+c.hex+'"></i>'+esc(c.name)+' · '+esc(c.area)+'</span>'}).join("")+'</div></div>'+
     '<div class="sect"><h3>🔌 Components & chips</h3><table class="spec">'+o.components.map(function(c){return '<tr><th>'+esc(c.part)+'</th><td>'+(c.chip&&c.chip!=="n/a"?'<b style="color:var(--cy)">'+esc(c.chip)+'</b> · ':"")+esc(c.detail)+'</td></tr>'}).join("")+'</table></div>'+
     '<div class="sect"><h3>📏 Key measurements</h3><table class="spec">'+o.measurements.map(function(m){return '<tr><th>'+esc(m.label)+'</th><td>'+esc(m.value)+' '+esc(m.unit)+'</td></tr>'}).join("")+'</table></div>'+
+    '<div class="sect"><h3>🔩 Piece-by-piece parts list — exact recreation</h3><p class="note">Every piece needed to rebuild this design exactly — no assumptions. <span class="crit">★ CRITICAL</span> parts must be verified to tolerance.</p><table class="spec"><tr><th>Part</th><th>Qty</th><th>Material</th><th>Dimensions</th><th>Tolerance</th></tr>'+
+    o.parts.map(function(p){return '<tr><th>'+esc(p.name)+(p.critical?'<span class="crit">★ CRITICAL</span>':"")+(p.note?'<div class="note">'+esc(p.note)+'</div>':"")+'</th><td>'+p.qty+'</td><td>'+esc(p.material)+'</td><td>'+esc(p.dims)+'</td><td>'+esc(p.tolerance)+'</td></tr>'}).join("")+'</table></div>'+
+    '<div class="sect"><h3>🛠️ Build steps — assembly order</h3>'+
+    o.build_steps.map(function(s){return '<p><b>'+esc(s.title)+'</b><br>'+esc(s.detail)+'</p>'}).join("")+'</div>'+
+    '<div class="sect"><h3>🔗 Cross-references</h3>'+
+    o.crosslinks.map(function(c){return '<p class="xlink">🔗 <a href="'+esc(c.url)+'" target="_blank" rel="noopener"><b>'+esc(c.label)+'</b></a>'+(c.title?' — '+esc(c.title):"")+'<br><span class="note">'+esc(c.note||"")+'</span></p>'}).join("")+'</div>'+
     '<div class="sect"><h3>🧭 How to use</h3><p>'+esc(o.how_to_use)+'</p></div>'+
     '<p class="note">'+esc(o.lineage)+'</p>'+
     '<div class="mbtns"><button class="btn" onclick="readGen(G.curOut)">🔊 Read aloud</button>'+
@@ -341,6 +354,12 @@ function genText(o){
   L.push("","COLORS");o.colors.forEach(function(c){L.push(c.name+" ("+c.hex+") on "+c.area)});
   L.push("","COMPONENTS & CHIPS");o.components.forEach(function(c){L.push(c.part+": "+(c.chip&&c.chip!=="n/a"?c.chip+" — ":"")+c.detail)});
   L.push("","KEY MEASUREMENTS");o.measurements.forEach(function(m){L.push(m.label+": "+m.value+" "+m.unit)});
+  L.push("","PIECE-BY-PIECE PARTS LIST (exact recreation)");
+  o.parts.forEach(function(p){L.push(p.qty+"x "+p.name+(p.critical?" [CRITICAL]":"")+" — "+p.material+" — "+p.dims+" — tol "+p.tolerance+(p.note?" ("+p.note+")":""))});
+  L.push("","BUILD STEPS (assembly order)");
+  o.build_steps.forEach(function(s){L.push(s.title+": "+s.detail)});
+  L.push("","CROSS-REFERENCES");
+  o.crosslinks.forEach(function(c){L.push(c.label+(c.title?" — "+c.title:"")+" — "+c.url+(c.note?" ("+c.note+")":""))});
   L.push("","HOW TO USE",o.how_to_use,"",o.lineage);
   if(o.safety)L.push("",o.safety);
   return L.join("\n");
@@ -371,7 +390,10 @@ function askQA(){
     {k:["chip","electronic","motor","battery","sensor","component","part"],t:"Components & chips",h:o.components.map(function(c){return c.part+": "+(c.chip&&c.chip!=="n/a"?c.chip+" — ":"")+c.detail}).join("; ")},
     {k:["power","speed","range","time","capacity","torque","rpm","fast"],t:"Key measurements",h:o.measurements.map(function(m){return m.label+": "+m.value+" "+m.unit}).join("; ")},
     {k:["use","work","operate","do"],t:"How to use",h:o.how_to_use},
-    {k:["idea","what","about","concept"],t:"The idea",h:o.idea}
+    {k:["idea","what","about","concept"],t:"The idea",h:o.idea},
+    {k:["part","parts","piece","pieces","rebuild","recreate","bom"],t:"Piece-by-piece parts list",h:o.parts.length+" parts ("+o.parts.filter(function(p){return p.critical}).length+" critical): "+o.parts.map(function(p){return p.qty+"× "+p.name+(p.critical?" [CRITICAL]":"")+": "+p.material+", "+p.dims+", tol "+p.tolerance}).join("; ")},
+    {k:["step","steps","build","assemble","assembly","sequence","order"],t:"Build steps",h:o.build_steps.map(function(s){return s.title+": "+s.detail}).join(" ")},
+    {k:["link","reference","archive","filed","patent","engine"],t:"Cross-references",h:o.crosslinks.map(function(c){return c.label+(c.title?" — "+c.title:"")+": "+c.url}).join("; ")}
   ];
   var best=null,bs=0;
   sects.forEach(function(s){

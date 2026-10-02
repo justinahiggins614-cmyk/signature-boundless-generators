@@ -43,6 +43,7 @@ FAM_KW = {
     "mix-toy-lightbot": ["toy", "robot", "light", "plush"],
     "mix-food-candy": ["dessert", "candy", "chocolate", "recipe"],
     "mix-jet-engine": ["jet", "aircraft", "engine", "turbofan", "turbo"],
+    "universal": ["system", "device", "machine", "design", "apparatus", "unit"],
 }
 
 def score(title, kws):
