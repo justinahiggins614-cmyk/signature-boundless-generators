@@ -47,6 +47,10 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
 .az button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 11px;cursor:pointer}
 .az button.on{border-color:var(--gold);color:var(--gold)}
+.finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
+.finderbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:.95em}
+.fresults{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
 .card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:13px;cursor:pointer}
 .card:hover{border-color:var(--cy)}
@@ -103,6 +107,8 @@ h2.famtitle{color:var(--gold)}
 <input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
 <select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
 </div>
+<div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
+<div id="fresults" class="fresults"></div>
 <div class="az" id="az"></div>
 <h2 style="color:var(--gold)">Generator families</h2>
 <div class="grid" id="famgrid"></div>
@@ -356,6 +362,26 @@ function askQA(){
 }
 document.getElementById("aupause").onclick=auPauseToggle;
 document.getElementById("austop").onclick=auStop;
+/* ============ FINDER AI (pinned above A–Z; deterministic, data-grounded) ============ */
+var FSTOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,me,my,i,you,your,we,our,do,does,want,need,needs,looking,look,find,finds,get,something,anything,some,any,please,like,just,really,very,would,could,should,can,will,have,has,show,tell,give,kind,thing,things,describe,generator,generate,generated,output,outputs,design".split(","));
+function fKeywords(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FSTOP.has(w)})}
+async function fAsk(){
+  var q=document.getElementById("fq").value.trim();if(!q)return;
+  var kws=fKeywords(q),box=document.getElementById("fresults");
+  if(!kws.length){box.innerHTML='<p class="note">One more word — a field, a thing, a material… ⚙️</p>';return}
+  var idx=await ensureIdx();
+  if(!idx.length){box.innerHTML='<p class="note">The forge index is still loading — a moment, then Find it. ⚙️</p>';return}
+  var hits=idx.map(function(r){var f=SigGen.byKey(r[1]);
+    var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(f?f.name+" "+f.blurb:"")).toLowerCase();var s=0;
+    kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});
+    return{r:r,f:f,s:s}}).filter(function(x){return x.s>0})
+    .sort(function(a,b){return b.s-a.s}).slice(0,5);
+  if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. ⚙️</p>';return}
+  box.innerHTML=hits.map(function(h){var r=h.r;
+    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+(h.f?h.f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?gen='+encodeURIComponent(r[1])+'-'+r[2]+'">Take me there →</a></div>'}).join("");
+}
+document.getElementById("fgo").onclick=fAsk;
+document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});
 bindSearch();
 document.addEventListener("DOMContentLoaded",boot);
 </script>
