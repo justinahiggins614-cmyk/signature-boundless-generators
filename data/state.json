@@ -1,0 +1,24 @@
+{
+ "next_seed": {
+  "jet": 151,
+  "medical": 151,
+  "food": 151,
+  "candy": 151,
+  "nanoplasma": 151,
+  "lightbot": 151,
+  "car": 151,
+  "engine": 151,
+  "toy": 151,
+  "tool": 151,
+  "furniture": 151,
+  "clothing": 151,
+  "game": 151,
+  "instrument": 151,
+  "robot": 151,
+  "building": 151,
+  "mix-car-engine": 151,
+  "mix-toy-lightbot": 151,
+  "mix-food-candy": 151,
+  "mix-jet-engine": 151
+ }
+}
