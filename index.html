@@ -49,6 +49,10 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .az button.on{border-color:var(--gold);color:var(--gold)}
 .finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
 .finderbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:.95em}
+.solvebar{background:linear-gradient(180deg,#101a30,#0a0f1e);border:2px solid var(--gold);border-radius:14px;padding:18px;margin:22px 0 6px;text-align:left}
+.solvebar .solvetitle{color:var(--gold);font-weight:700;font-size:1.05em;margin-bottom:10px}
+.solverow{display:flex;gap:10px;flex-wrap:wrap}
+.solverow input[type=search]{flex:1;min-width:200px;padding:13px 16px;border-radius:10px;border:1px solid var(--gold);background:#060b1c;color:var(--txt);font-size:1em}
 .fresults{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
@@ -100,6 +104,11 @@ h2.famtitle{color:var(--gold)}
 <div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 generated outputs</small></div>
 <p class="staticcount">3,000 fully-solved generator outputs on file across 20 generator families, as of 2026-10-02. Live count above.</p>
+<div class="solvebar">
+<div class="solvetitle">⚙️ Describe anything — the archive solves it fully</div>
+<div class="solverow"><input type="search" id="ctext" maxlength="140" placeholder="Describe anything… e.g. a solar-powered pizza oven, a faster mousetrap" aria-label="Describe anything to solve"><button class="btn gold" id="cgo">⚙️ Solve it</button></div>
+<p class="note">Type anything — an invention, a dish, a tool, a what-if. The solver finds the right generator template (or a universal one), then fully solves every field: idea, dimensions, materials, colors, chips, measurements, how to use. Same words → same design, forever — every solve gets a shareable link. Read aloud, copy, download, and ask-about-it all included.</p>
+</div>
 </header>
 
 <div id="home">
@@ -186,6 +195,7 @@ async function boot(){
   renderStats();renderFamGrid();renderFamFilter();renderAZ();
   var qs=new URLSearchParams(location.search);
   var gen=qs.get("gen"),fam=qs.get("fam");
+  if(gen&&gen.toLowerCase().indexOf("custom-")===0){var d=qs.get("d");if(d){showCustom(d);return}}
   if(gen){var m=/^([a-z0-9-]+)-(\d+)$/i.exec(gen);if(m&&SigGen.byKey(m[1])){showGen(m[1],parseInt(m[2],10),{});return}}
   if(fam&&SigGen.byKey(fam)){showFam(fam);return}
   loadFresh();
@@ -287,9 +297,13 @@ function showGen(family,seed,overrides,inFam){
   G.curOut=o;
   var box=inFam?document.getElementById("outbox"):document.getElementById("genview");
   if(!inFam){show("genview");history.replaceState(null,"","?gen="+family+"-"+seed)}
-  var f=SigGen.byKey(family);
-  var h='<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+' · seed '+o.seed+'</div>'+
-    '<h2>'+f.icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
+  box.innerHTML=outputPanelHTML(o,SigGen.byKey(family).icon);
+  if(inFam)box.scrollIntoView({behavior:"smooth"});else window.scrollTo(0,0);
+  var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
+}
+function outputPanelHTML(o,icon){
+  var h='<div class="panel"><div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+(o.customHash?' · solve '+esc(o.customHash):' · seed '+o.seed)+'</div>'+
+    '<h2>'+icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
     (o.safety?'<div class="safety">'+esc(o.safety)+'</div>':"")+
     '<div class="sect"><h3>💡 The idea</h3><p>'+esc(o.idea)+'</p></div>'+
     '<div class="sect"><h3>📐 Dimensions</h3><table class="spec">'+o.dimensions.map(function(d){return '<tr><th>'+esc(d.label)+'</th><td>'+esc(d.value)+' '+esc(d.unit)+'</td></tr>'}).join("")+'</table></div>'+
@@ -306,8 +320,16 @@ function showGen(family,seed,overrides,inFam){
     '<div class="qa"><div class="q">❓ Ask about this design</div><div id="qaout"><p class="note">Ask anything about the '+esc(o.name)+' — answers come only from its solved spec.</p></div>'+
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the dimensions? What chips does it use?" aria-label="Ask about this design"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
-  box.innerHTML=h;
-  if(inFam)box.scrollIntoView({behavior:"smooth"});else window.scrollTo(0,0);
+  return h;
+}
+function showCustom(text){
+  text=String(text==null?"":text).replace(/\s+/g," ").trim().slice(0,140);
+  var o;
+  try{o=SigGen.solveCustom(text)}catch(e){audMsg("Describe something first — a few words is enough.");return}
+  G.curOut=o;show("genview");
+  history.replaceState(null,"","?gen=custom-"+o.customHash+"&d="+encodeURIComponent(text));
+  document.getElementById("genview").innerHTML=outputPanelHTML(o,"⚙️");
+  window.scrollTo(0,0);
   var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
 }
 function goHome(){show("home");history.replaceState(null,"","./");window.scrollTo(0,0)}
@@ -382,6 +404,10 @@ async function fAsk(){
 }
 document.getElementById("fgo").onclick=fAsk;
 document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});
+/* ============ UNIVERSAL SOLVER bar ("Describe anything…") ============ */
+function solveBarGo(){var t=document.getElementById("ctext").value;if(t&&t.trim())showCustom(t)}
+document.getElementById("cgo").onclick=solveBarGo;
+document.getElementById("ctext").addEventListener("keydown",function(e){if(e.key==="Enter")solveBarGo()});
 bindSearch();
 document.addEventListener("DOMContentLoaded",boot);
 </script>

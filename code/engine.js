@@ -629,6 +629,97 @@ fam({
   }
 });
 
+/* ================= UNIVERSAL "DESCRIBE ANYTHING" SOLVER ================= */
+/* Hash the user's words into a seed, classify into the nearest base family
+   (or "universal" when nothing fits), then solve every field with the seeded
+   RNG — the same words always yield the same fully-solved design. */
+var CUSTOM_KEYWORDS = {
+  jet: ["plane", "airplane", "aircraft", "jet", "flight", "fly", "flying", "drone", "aviation", "pilot", "wing", "cockpit", "runway", "helicopter", "glider", "aerospace"],
+  medical: ["medical", "health", "doctor", "hospital", "clinic", "wellness", "sleep", "heart", "body", "fitness", "pain", "therapy", "cure", "heal", "diagnos", "vitamin", "band", "wearable", "posture", "mobility", "disease", "medicine", "patient", "blood"],
+  food: ["food", "recipe", "dish", "meal", "pizza", "oven", "cook", "bake", "baking", "dinner", "lunch", "breakfast", "restaurant", "kitchen", "pasta", "soup", "salad", "bread", "cake", "grill", "bbq", "smoker", "stove", "chef"],
+  candy: ["candy", "chocolate", "gummy", "sweet", "dessert", "treat", "lollipop", "caramel", "fudge", "marshmallow", "taffy", "bonbon"],
+  nanoplasma: ["plasma", "nano", "quantum", "particle", "emitter", "laboratory", "sterilizer", "tweezer", "accelerator", "fusion"],
+  lightbot: ["lightbot", "lamp", "lantern", "glow", "nightlight", "flashlight", "chandelier", "bulb", "bright", "led"],
+  car: ["car", "vehicle", "auto", "automobile", "truck", "sedan", "suv", "coupe", "pickup", "drive", "driving", "roadster", "van", "bus", "taxi"],
+  engine: ["engine", "motor", "piston", "turbo", "horsepower", "diesel", "cylinder", "combustion", "gearbox", "transmission", "exhaust"],
+  toy: ["toy", "doll", "plush", "action figure", "plaything", "teddy", "blocks"],
+  tool: ["tool", "drill", "saw", "wrench", "hammer", "screwdriver", "workshop", "sander", "multitool", "trap", "mousetrap", "grinder"],
+  furniture: ["chair", "table", "sofa", "couch", "bed", "shelf", "bookshelf", "furniture", "desk", "cabinet", "dresser", "wardrobe", "stool", "bench"],
+  clothing: ["shirt", "jacket", "dress", "clothing", "clothes", "pants", "hoodie", "uniform", "fashion", "coat", "sweater", "apparel"],
+  game: ["game", "board game", "card game", "puzzle", "chess", "party game", "dice"],
+  instrument: ["instrument", "guitar", "piano", "music", "trumpet", "drum", "violin", "song", "melody", "saxophone", "flute"],
+  robot: ["robot", "android", "automaton", "warehouse", "assembly", "inspector"],
+  building: ["house", "building", "home", "tower", "architecture", "pavilion", "room", "apartment", "cabin", "barn", "skyscraper", "hut", "shed"]
+};
+function classifyText(text) {
+  var toks = String(text).toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean);
+  var best = null, bestScore = 0;
+  FAMILIES.forEach(function (f) {
+    var kws = CUSTOM_KEYWORDS[f.key];
+    if (!kws) return; /* mix labs never classify */
+    var s = 0;
+    toks.forEach(function (t) {
+      kws.forEach(function (k) {
+        if (t === k) s += 3;
+        else if (t.length >= 4 && k.length >= 4 && (t.indexOf(k) >= 0 || k.indexOf(t) >= 0)) s += 1;
+      });
+    });
+    if (s > bestScore) { bestScore = s; best = f.key; }
+  });
+  return best; /* null when nothing fits -> universal */
+}
+function isMedicalText(text) {
+  var t = " " + String(text).toLowerCase().replace(/[^a-z0-9 ]/g, " ") + " ";
+  return CUSTOM_KEYWORDS.medical.some(function (k) { return t.indexOf(k) >= 0; });
+}
+function solveUniversal(rng, text) {
+  var name = brandName(rng, "UX-" + rng.int(10, 99));
+  var svc = rng.int(6, 24);
+  return {
+    name: name,
+    tagline: "Universal solve · from your description",
+    idea: "The " + name + " is a Signature-line concept solved from your description — \u201C" + text +
+      ".\u201D It takes the described idea at face value and works out a complete, buildable specification: every size, material, color, component, and measurement below is fixed and repeatable — enter the same words again and you get this exact design.",
+    dimensions: [D("Primary size", fmt(rng.float(8, 120, 1), 1), "cm"), D("Secondary size", fmt(rng.float(4, 60, 1), 1), "cm"), D("Weight", fmt(rng.float(0.2, 45, 1), 1), "kg"), D("Capacity", fmt(rng.float(1, 200, 0), 0), "units")],
+    materials: [M("Housing", rng.pick(METALS.concat(PLASTICS)), rng.pick(FINISHES)), M("Core", rng.pick(PLASTICS.concat(WOODS)), "matte"), M("Accent trim", rng.pick(FABRICS.concat(METALS)), rng.pick(FINISHES))],
+    colors: colorSet(rng, ["housing", "accents", "trim"], 3),
+    components: [CP("Main module", chip(rng, "UM"), "core function block"), CP("Control chip", chip(rng, "UC"), "behavior + sequencing"), CP("Power", "n/a", fmt(rng.float(5, 500, 0), 0) + " W " + rng.pick(["mains", "battery", "solar"]) + " supply")],
+    measurements: [S("Rated output", fmt(rng.float(10, 1000, 0), 0), rng.pick(["W", "units/h", "kg", "L"])), S("Efficiency", fmt(rng.float(78, 97, 1), 1), "%"), S("Service interval", svc, "months"), S("Design life", rng.int(3, 15), "years")],
+    how_to_use: "Set up the " + name + " per the dimensions above, connect power, run it through one full cycle to verify, then operate normally and service every " + svc + " months."
+  };
+}
+function customHash(text) {
+  var h = hashStr(String(text)).toString(36).toUpperCase();
+  while (h.length < 7) h = "0" + h;
+  return h;
+}
+function solveCustom(text) {
+  text = String(text == null ? "" : text).replace(/\s+/g, " ").trim().slice(0, 140);
+  if (!text) throw new Error("empty description");
+  var rng = RNG("custom:" + text);
+  var famKey = classifyText(text);
+  var o;
+  if (famKey) {
+    var def = byKey(famKey);
+    o = def.solve(rng, resolveParams(def, rng, null));
+    o.family = "custom";
+    o.familyName = "Universal Solver \u2192 " + def.name;
+    o.idea = "Solved from your description — \u201C" + text + ".\u201D " + o.idea;
+    if (def.safety) o.safety = def.safety;
+  } else {
+    o = solveUniversal(rng, text);
+    o.family = "custom";
+    o.familyName = "Universal Solver";
+  }
+  o.customHash = customHash(text);
+  o.id = "JAH-GEN-CUSTOM-" + o.customHash;
+  o.seed = o.customHash;
+  o.params = { description: text };
+  o.lineage = "Signature line — original concept solved from your description by the Signature system.";
+  if (!o.safety && isMedicalText(text)) o.safety = MED_NOTE;
+  return o;
+}
+
 /* ================= PUBLIC API ================= */
 function genId(familyKey, seed) {
   var n = String(seed);
@@ -662,7 +753,7 @@ function families() {
   });
 }
 
-var API = { FAMILIES: FAMILIES, families: families, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams };
+var API = { FAMILIES: FAMILIES, families: families, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams, solveCustom: solveCustom, customHash: customHash, classifyText: classifyText };
 
 /* node CLI: node engine.js families | node engine.js solve <family> <seed> [paramsJSON] | node engine.js batch <family> <start> <count> */
 if (typeof module !== "undefined" && typeof require !== "undefined" && require.main === module) {
@@ -676,6 +767,8 @@ if (typeof module !== "undefined" && typeof require !== "undefined" && require.m
     process.stdout.write(JSON.stringify(solve(args[1], parseInt(args[2], 10), ov)));
   } else if (cmd === "batch") {
     process.stdout.write(JSON.stringify(batch(args[1], parseInt(args[2], 10), parseInt(args[3], 10))));
+  } else if (cmd === "custom") {
+    process.stdout.write(JSON.stringify(solveCustom(args.slice(1).join(" "))));
   } else if (cmd === "validate") {
     // validate one output per family: every field present, numbers concrete
     var fails = [];
@@ -694,10 +787,27 @@ if (typeof module !== "undefined" && typeof require !== "undefined" && require.m
     // determinism check
     var a = JSON.stringify(solve("car", 42, null)), b = JSON.stringify(solve("car", 42, null));
     if (a !== b) fails.push("car: not deterministic");
+    // custom solver checks: determinism, classification, medical safety, universal fallback
+    var c1 = solveCustom("a solar-powered pizza oven"), c2 = solveCustom("a solar-powered pizza oven");
+    if (JSON.stringify(c1) !== JSON.stringify(c2)) fails.push("custom: not deterministic");
+    if (c1.familyName.indexOf("Dish") < 0) fails.push("custom: 'solar-powered pizza oven' did not classify to food (" + c1.familyName + ")");
+    var c3 = solveCustom("a faster mousetrap");
+    if (c3.familyName.indexOf("Tool") < 0) fails.push("custom: 'faster mousetrap' did not classify to tool (" + c3.familyName + ")");
+    var cm = solveCustom("a gentle sleep aid band");
+    if (!cm.safety) fails.push("custom: medical-adjacent input missing safety note");
+    var cu = solveCustom("xyzzy blorpt quux");
+    if (cu.familyName !== "Universal Solver") fails.push("custom: gibberish did not fall back to universal");
+    if (c1.id.indexOf("JAH-GEN-CUSTOM-") !== 0) fails.push("custom: bad id " + c1.id);
+    [c1, cu].forEach(function (o) {
+      ["id", "name", "idea", "dimensions", "materials", "colors", "components", "measurements", "how_to_use", "lineage"].forEach(function (k) {
+        if (o[k] === undefined || o[k] === null || o[k] === "" || (o[k].length !== undefined && !o[k].length)) fails.push("custom: missing/empty " + k);
+      });
+      if (/TBD|XXX|undefined|NaN/.test(JSON.stringify(o))) fails.push("custom: placeholder text leaked");
+    });
     if (fails.length) { process.stderr.write("FAIL\n" + fails.join("\n") + "\n"); process.exit(1); }
     process.stdout.write("OK " + FAMILIES.length + " families validated, deterministic\n");
   } else {
-    process.stderr.write("usage: node engine.js families|solve|batch|validate\n");
+    process.stderr.write("usage: node engine.js families|solve|batch|validate|custom \"<text>\"\n");
     process.exit(2);
   }
 }
