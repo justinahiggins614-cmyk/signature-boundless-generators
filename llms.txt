@@ -11,7 +11,7 @@ fully-specified design record (idea, dimensions with units, materials, colors,
 components, measurements, piece-by-piece parts list, build steps, filed-archive
 cross-references). Marching to 1,000,000 outputs.
 
-OUTPUTS_ON_FILE: 21000
+OUTPUTS_ON_FILE: 22500
 GENERATOR_FAMILIES: 20
 MARCH_GOAL: 1000000
 ARCHIVE_UPDATED: 2026-10-03
