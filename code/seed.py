@@ -87,9 +87,11 @@ def main():
     json.dump(state, open(os.path.join(DATA, "state.json"), "w"), indent=1)
 
     # compact full index (for search)
+    fam_counts = {}
     with gzip.open(os.path.join(DATA, "index.json.gz"), "wt") as fh:
         for r in iter_rows(chunks):
             fh.write(json.dumps(r, separators=(",", ":")) + "\n")
+            fam_counts[r[1]] = fam_counts.get(r[1], 0) + 1
 
     # api.json
     api = {
@@ -101,6 +103,26 @@ def main():
         "index": "data/index.json.gz",
     }
     json.dump(api, open(os.path.join(ROOT, "api.json"), "w"), indent=1)
+
+    # SITE-17 DIAG FIX-02: machine-readable catalog feed (rebuilt on every drip)
+    import datetime
+    cat = {
+        "site": "The Signature Boundless Generator Archive",
+        "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "outputs": manifest["count"],
+        "goal": 1000000,
+        "manifest": "data/manifest.json",
+        "index": "data/index.json.gz",
+        "hubs": "hubs/",
+        "families": [{
+            "key": f["key"], "name": f["name"], "icon": f["icon"], "blurb": f["blurb"],
+            "outputs": fam_counts.get(f["key"], 0),
+            "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=" + f["key"],
+            "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/" + f["key"] + ".html",
+        } for f in fams],
+    }
+    json.dump(cat, open(os.path.join(ROOT, "generators-catalog.json"), "w"), indent=1)
+
     print("TOTAL outputs:", manifest["count"])
 
 def iter_rows(chunks):
