@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{var _jt=localStorage.getItem('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Signature Boundless Generator Archive — every field, fully solved</title>
 <meta name="description" content="The Signature Boundless Generator Archive: Signature-line generators for every field — jets, cars, engines, food, candy, toys, robots, buildings and mix-and-match labs. Every output fully solved down to sizes, dimensions, chips, measurements, materials and colors. Marching to 1,000,000.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Signature Boundless Generator Archive">
+<meta property="og:title" content="The Signature Boundless Generator Archive — every field, fully solved">
+<meta property="og:description" content="Signature-line generators for every field — jets, cars, engines, food, candy, toys, robots, buildings and mix-and-match labs. Every output fully solved down to sizes, dimensions, chips, measurements, materials and colors.">
+<meta property="og:url" content="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Signature Boundless Generator Archive — every field, fully solved">
+<meta name="twitter:description" content="Signature-line generators for every field — every output fully solved down to sizes, dimensions, chips, measurements, materials and colors.">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"The Signature Boundless Generator Archive","url":"https://justinahiggins614-cmyk.github.io/signature-boundless-generators/","description":"Catalog of Signature-line generators for every field and subject. Each generator produces fully-solved outputs: sizes, dimensions, chips, measurements, materials, colors."}
 </script>
@@ -156,9 +165,15 @@ h2.famtitle{color:var(--gold)}
 .aicard{background:#0d1526;border:1px solid var(--cy);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:.9em}
 .aicard .aname{color:var(--cy);font-weight:700}
 .aicard .duties{color:var(--dim)}
+/* DARK-MODE TOGGLE (opt-in): invert-based dark theme. Default look unchanged. */
+#jahThemeToggle{position:fixed;top:10px;right:10px;z-index:9999;opacity:.72;font-size:.8em;padding:6px 10px;background:#0d1526;border:1px solid var(--line);color:var(--gold);border-radius:20px;cursor:pointer}
+#jahThemeToggle:hover{opacity:1}
+html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
+html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
 </style>
 </head>
 <body>
+<button type="button" id="jahThemeToggle" aria-label="Toggle dark mode" title="Dark mode">◐</button>
 <nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><span class="cur">YOU ARE HERE: THE SIGNATURE BOUNDLESS GENERATOR ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
 
 <div class="wrap">
@@ -618,6 +633,30 @@ document.getElementById("cgo").onclick=solveBarGo;
 document.getElementById("ctext").addEventListener("keydown",function(e){if(e.key==="Enter")solveBarGo()});
 bindSearch();
 document.addEventListener("DOMContentLoaded",boot);
+</script>
+<script>
+/* UX PASS: dark-mode toggle + session restore (localStorage only, nothing leaves this device) */
+(function(){
+'use strict';
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+/* dark-mode toggle */
+var tb=document.getElementById('jahThemeToggle');
+function paintToggle(){ if(tb) tb.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '◑' : '◐'; }
+if(tb){ paintToggle(); tb.onclick=function(){ var d=document.documentElement; if(d.getAttribute('data-theme')==='dark'){d.removeAttribute('data-theme');lsSet('jah-theme','light');} else {d.setAttribute('data-theme','dark');lsSet('jah-theme','dark');} paintToggle(); }; }
+/* session restore: scroll position per path (throttled) */
+var spk='jah-scroll:'+location.pathname;
+var st=null;
+window.addEventListener('scroll',function(){ if(st) return; st=setTimeout(function(){ st=null; lsSet(spk,String(window.scrollY|0)); },250); },{passive:true});
+window.addEventListener('load',function(){ var y=parseInt(lsGet(spk),10); if(y>0){ setTimeout(function(){ window.scrollTo(0,y); },60); } });
+/* session restore: active tab state (any buttons acting as tabs) */
+function tabBtns(){ var b=document.querySelectorAll('[data-tab],button.tab,.tabbtn,.az button'); return b.length?b:[]; }
+document.addEventListener('click',function(e){ var t=e.target&&e.target.closest?e.target.closest('[data-tab],button.tab,.tabbtn,.az button'):null; if(t) lsSet('jah-tab:'+location.pathname, t.getAttribute('data-tab')||t.textContent||''); },true);
+window.addEventListener('load',function(){ var v=lsGet('jah-tab:'+location.pathname); if(!v) return; var bs=tabBtns(); for(var i=0;i<bs.length;i++){ var b=bs[i]; if((b.getAttribute('data-tab')||b.textContent)===v){ try{b.click();}catch(e){} break; } } });
+/* session restore: last-opened record id */
+document.addEventListener('click',function(e){ var t=e.target&&e.target.closest?e.target.closest('[data-record],[data-spec],[data-patent],[data-id]'):null; if(t){ var rid=t.getAttribute('data-record')||t.getAttribute('data-spec')||t.getAttribute('data-patent')||t.getAttribute('data-id'); if(rid) lsSet('jah-lastrec:'+location.pathname,rid); } },true);
+window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) return; var rid=lsGet('jah-lastrec:'+location.pathname); if(!rid) return; setTimeout(function(){ var el=document.querySelector('[data-record="'+rid+'"],[data-spec="'+rid+'"],[data-patent="'+rid+'"],[data-id="'+rid+'"]'); if(el){ try{el.scrollIntoView({block:'center'});}catch(e){} } },400); });
+})();
 </script>
 </body>
 </html>
