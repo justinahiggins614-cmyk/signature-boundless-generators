@@ -89,7 +89,7 @@ th{{color:#9aa4b2;font-weight:400}}
 .recbadge{{display:inline-block;border:2px solid #c9a227;background:#2a230c;color:#c9a227;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:bold;letter-spacing:.06em}}</style>
 </head>
 <body><div class="wrap">
-<p class="sitekicker"><b>SITE 17 OF 25</b> &middot; THE JAH NETWORK</p>
+<p class="sitekicker"><b>SITE 15 OF 27</b> &middot; THE JAH NETWORK</p>
 <p><a href="../">&larr; The Signature Boundless Generator Archive</a> &middot; <a href="./">All generator families</a></p>
 <h1>{icon} {name}</h1>
 <p>{blurb}</p>
@@ -128,7 +128,7 @@ h1{{color:#c9a227}}a{{color:#9fc2ff}}li{{margin:12px 0}}span{{color:#9aa4b2;font
 .sitekicker{{font-size:11px;letter-spacing:.28em;color:#9aa4b2}}</style>
 </head>
 <body><div class="wrap">
-<p class="sitekicker"><b>SITE 17 OF 25</b> &middot; THE JAH NETWORK</p>
+<p class="sitekicker"><b>SITE 15 OF 27</b> &middot; THE JAH NETWORK</p>
 <p><a href="../">&larr; The Signature Boundless Generator Archive</a></p>
 <h1>Generator families (static directory)</h1>
 <ul>

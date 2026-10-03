@@ -4,7 +4,7 @@
 
 ## What this site is
 
-The Signature Boundless Generator Archive (Site 17 of 25, THE JAH NETWORK) is a
+The Signature Boundless Generator Archive (Site 15 of 27, THE JAH NETWORK) is a
 catalog of deterministic fully-solved Signature-line design concepts by
 Justin Addam Higgins. Describe something → pick a generator family → get a
 fully-specified design record (idea, dimensions with units, materials, colors,
