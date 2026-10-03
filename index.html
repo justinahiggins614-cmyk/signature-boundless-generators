@@ -170,6 +170,19 @@ h2.famtitle{color:var(--gold)}
 #jahThemeToggle:hover{opacity:1}
 html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
 html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
+/* FIRST-TIME USER GUIDE (network-wide pattern): spotlight tour + permanent ? Guide panel */
+#jahtourcard{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:10002;max-width:min(560px,92vw);background:#0a0f22;border:2px solid var(--gold);border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px #000a}
+#jahtourcard h3{margin:.1em 0 .4em;color:var(--gold);font-size:1.02em}
+#jahtourcard p{font-size:.88em;margin:.4em 0}
+#jahtourcard .tstep{font-size:.75em;color:var(--dim);letter-spacing:.08em}
+#jahtourcard .tbtns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+#jahtourcard .tbtns .btn{min-height:44px;padding:10px 20px}
+#jahguidecard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10003;width:min(640px,94vw);max-height:86vh;overflow:auto;background:#0a0f22;border:2px solid var(--cy);border-radius:14px;padding:20px 22px;box-shadow:0 10px 40px #000c}
+#jahguidecard h2{margin-top:0;color:var(--gold)}
+#jahguidecard h3{color:var(--cy);font-size:.95em;margin:1em 0 .3em}
+#jahguidecard p,#jahguidecard li{font-size:.87em}
+#jahguidecard .tbtns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+#jahguidecard .tbtns .btn{min-height:44px;padding:10px 20px}
 </style>
 </head>
 <body>
@@ -182,7 +195,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <h1>⚙️ The Signature Boundless Generator Archive</h1>
 <p class="sub">A Signature-line generator for every field and subject — jets, cars, engines, food, candy, toys, robots, buildings, nanoplasma, lightbots, medical concepts, and mix-and-match labs. Set the parameters or hit randomize: every output is <b>fully solved</b> — idea, sizes, dimensions, chips, measurements, materials, and colors. Boundless outputs, marching to 1,000,000.</p>
 <details class="statscollapse"><summary>Site stats</summary>
-<div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
+<!--__STATS_STAMP_START--><div class="stats" id="stats"><div class="stat"><b>24,000</b><span>outputs on file</span></div><div class="stat"><b>20</b><span>generator families</span></div><div class="stat"><b>1,000,000</b><span>march goal</span></div></div><!--__STATS_STAMP_END-->
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 generated outputs</small></div>
 </details>
 <p class="staticcount">24,000 fully-solved generator outputs on file across 20 generator families, as of 2026-10-03. Live count above.</p>
@@ -203,6 +216,7 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
 <select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
 <button class="btn ghost" onclick="randomGen()" title="Open a random archived output">🎲 Random</button>
+<button class="btn ghost" id="guidebtn" onclick="jahGuideOpen()" title="How to use this site">❓ Guide</button>
 </div>
 <div id="searchmeta" class="searchmeta" aria-live="polite"></div>
 <div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
@@ -333,7 +347,13 @@ async function boot(){
   if(gen&&gen.toLowerCase().indexOf("custom-")===0){var d=qs.get("d");if(d){showCustom(d);return}}
   if(gen){
     var mf=/^JAH-GEN-([A-Z0-9]+)-(\d{6})$/i.exec(gen);
-    if(mf){var fk=mf[1].toLowerCase();if(SigGen.byKey(fk)){showGen(fk,parseInt(mf[2],10),{});return}}
+    if(mf){
+      /* FIX-WAVE: real archived mix-family IDs strip non-alphanumerics (JAH-GEN-MIXJETENGINE-000883),
+         so also match the stripped family key, not just the literal key. */
+      var fk=mf[1].toLowerCase();
+      if(!SigGen.byKey(fk)){var _fs=SigGen.families();for(var _i=0;_i<_fs.length;_i++){if(_fs[_i].key.toUpperCase().replace(/[^A-Z0-9]/g,"").toLowerCase()===fk){fk=_fs[_i].key;break}}}
+      if(SigGen.byKey(fk)){showGen(fk,parseInt(mf[2],10),{});return}
+    }
     var m=/^([a-z0-9-]+)-(\d+)$/i.exec(gen);if(m&&SigGen.byKey(m[1])){showGen(m[1],parseInt(m[2],10),{});return}
     showGenNotFound(gen);return;
   }
@@ -740,7 +760,7 @@ function askQA(){
   ];
   var best=null,bs=0;
   sects.forEach(function(s){
-    var sc=0;toks.forEach(function(w){if(s.k.indexOf(w)>=0)sc+=2;if(s.h.toLowerCase().indexOf(w)>=0)sc+=1});
+    var sc=0;toks.forEach(function(w){var pl=(w.length>4&&w.charAt(w.length-1)==="s")?w.slice(0,-1):null;if(s.k.indexOf(w)>=0||(pl&&s.k.indexOf(pl)>=0))sc+=2;if(s.h.toLowerCase().indexOf(w)>=0)sc+=1});
     if(sc>bs){bs=sc;best=s}
   });
   var ans=best?("<b>"+best.t+":</b> "+esc(best.h)):"I can only answer from this design's solved spec — try asking about its dimensions, materials, colors, chips, measurements, or how to use it.";
@@ -772,7 +792,7 @@ document.getElementById("fq").addEventListener("keydown",function(e){if(e.key===
 /* ============ UNIVERSAL SOLVER bar ("Describe anything…") ============ */
 function solveBarGo(){
   var t=document.getElementById("ctext").value;
-  if(!(t&&t.trim()))return;
+  if(!(t&&t.trim())){audMsg("Describe something first — a few words is enough.");return}
   /* SITE-17 DIAG FIX-05: disable during the solve so double taps can't stack runs */
   var b=document.getElementById("cgo");
   b.classList.add("busy");b.setAttribute("disabled","disabled");
@@ -806,6 +826,76 @@ window.addEventListener('load',function(){ var v=lsGet('jah-tab:'+location.pathn
 document.addEventListener('click',function(e){ var t=e.target&&e.target.closest?e.target.closest('[data-record],[data-spec],[data-patent],[data-id]'):null; if(t){ var rid=t.getAttribute('data-record')||t.getAttribute('data-spec')||t.getAttribute('data-patent')||t.getAttribute('data-id'); if(rid) lsSet('jah-lastrec:'+location.pathname,rid); } },true);
 window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) return; var rid=lsGet('jah-lastrec:'+location.pathname); if(!rid) return; setTimeout(function(){ var el=document.querySelector('[data-record="'+rid+'"],[data-spec="'+rid+'"],[data-patent="'+rid+'"],[data-id="'+rid+'"]'); if(el){ try{el.scrollIntoView({block:'center'});}catch(e){} } },400); });
 })();
+</script>
+<script>
+/* ============ FIRST-TIME USER GUIDE (network-wide pattern): spotlight tour + ? Guide ============ */
+var JAH_TOUR_KEY="jah-tour-seen-generators";
+var JAH_TOUR_STEPS=[
+ {t:"Welcome to the Boundless Generator Archive",d:"<b>WHAT:</b> A Signature-line generator for every field — jets, cars, engines, food, candy, toys, robots, buildings, medical concepts, and mix-and-match labs.<br><b>WHAT IT DOES:</b> Every output is <b>fully solved</b> — idea, dimensions, materials, colors, chips, measurements, a piece-by-piece parts list, build steps, and filed-archive cross-references.<br><b>HOW:</b> This 1-minute tour walks the controls. It never covers the content — close it any time and keep exploring."},
+ {t:"1 · Generator families",d:"<b>WHAT:</b> 20 generator families on the home page — jet, medical, food, candy, nanoplasma, lightbot, car, engine, toy, tool, furniture, clothing, game, instrument, robot, building, and four mix labs.<br><b>WHAT IT DOES:</b> Open a family to set parameters (class, range, seats…) and solve.<br><b>HOW:</b> Tap a family card, adjust the sliders or pick options, then ⚙️ <b>Generate</b> — or 🎲 <b>Randomize</b> for a fresh seed. Same family + seed always yields the same design."},
+ {t:"2 · Solve It — describe anything",d:"<b>WHAT:</b> The gold all-purpose generator bar at the top.<br><b>WHAT IT DOES:</b> Type anything — an invention, a dish, a tool, a what-if — and it finds the right generator template (or a universal one) and fully solves it.<br><b>HOW:</b> Type a few words, hit <b>⚙️ Solve it</b>. Same words → same design, forever — every solve gets a shareable link."},
+ {t:"3 · Archive search + Finder",d:"<b>WHAT:</b> The search box, family filter, A–Z buttons, and the Finder bar.<br><b>WHAT IT DOES:</b> Archive search finds <b>existing outputs only</b> — name, tagline, or JAH-GEN-… ID — and never invents records. The Finder takes a description and ranks the closest archived outputs.<br><b>HOW:</b> Type in the search box or describe what you're looking for, then hit <b>Find it</b>. 🎲 <b>Random</b> opens a random archived output."},
+ {t:"4 · The record view",d:"<b>WHAT:</b> Every solved output is a full record page.<br><b>WHAT IT DOES:</b> A result card (input, family, seed, ID, status), then every section: idea, dimensions, materials, colors, components & chips, measurements, the piece-by-piece parts list (★ critical parts flagged), build steps, cross-references, and how to use.<br><b>HOW:</b> Every output carries a red <b>CONCEPT / SIMULATION</b> banner — a generated design, not engineered, tested, or certified safe. Medical-family outputs also carry a <b>wellness-concept-only</b> notice at the top: never medical advice."},
+ {t:"5 · Reproduce + Verify",d:"<b>WHAT:</b> The RECORD row on every output: OPEN · SOURCE · ID · VERSION · REPRODUCE · VERIFY · SHARE.<br><b>WHAT IT DOES:</b> <b>REPRODUCE</b> re-solves locally from your words and confirms it's byte-identical. <b>VERIFY</b> also checks the archived row (ID, name, tagline, content hash). <b>SHARE</b> copies the ?gen= deep link — it survives a refresh.<br><b>HOW:</b> Tap <b>⟳ REPRODUCE</b> any time to prove determinism to yourself."},
+ {t:"6 · Read aloud, copy, download, ask",d:"<b>WHAT:</b> The buttons under every record.<br><b>WHAT IT DOES:</b> 🔊 <b>Read aloud</b> reads the whole solved spec (with the floating bar — pause/stop anytime). 📋 <b>Copy</b> copies the full text. ⬇ <b>.txt / .json</b> downloads a real file. ⇪ <b>Import</b> re-loads an exported .json and verifies its envelope. <b>Ask about it</b> answers questions using only that design's solved spec.<br><b>HOW:</b> You're set — enjoy the archive. Tap <b>Done</b> or press <b>Esc</b>."}
+];
+function jahTourShow(i){
+  var card=document.getElementById("jahtourcard");
+  if(!card){card=document.createElement("div");card.id="jahtourcard";card.setAttribute("role","dialog");card.setAttribute("aria-label","First-time user guide");document.body.appendChild(card)}
+  var s=JAH_TOUR_STEPS[i],last=i===JAH_TOUR_STEPS.length-1;
+  card.innerHTML='<div class="tstep">GUIDED TOUR · STEP '+(i+1)+' OF '+JAH_TOUR_STEPS.length+'</div><h3>'+s.t+'</h3><p>'+s.d+'</p>'+
+    '<div class="tbtns">'+
+    (i>0?'<button class="btn ghost" id="tourback">← Back</button>':"")+
+    (last?'<button class="btn gold" id="tournext">Done</button>':'<button class="btn gold" id="tournext">Next →</button>')+
+    '<button class="btn ghost" id="tourskip">Skip tour</button></div>';
+  card.style.display="block";
+  var nx=document.getElementById("tournext");if(nx)nx.onclick=function(){jahTourNext(i)};
+  var bk=document.getElementById("tourback");if(bk)bk.onclick=function(){jahTourShow(i-1)};
+  var sk=document.getElementById("tourskip");if(sk)sk.onclick=jahTourDone;
+  try{nx&&nx.focus()}catch(e){}
+  jahTourStep=i;
+}
+function jahTourNext(i){if(i>=JAH_TOUR_STEPS.length-1){jahTourDone();return}jahTourShow(i+1)}
+function jahTourDone(){try{localStorage.setItem(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahtourcard");if(c)c.style.display="none";jahTourStep=-1}
+function jahTourMaybe(){
+  var seen=null;try{seen=localStorage.getItem(JAH_TOUR_KEY)}catch(e){seen="1"}
+  if(seen)return;
+  if(location.search&&location.search.length>1)return; /* deep-linked visitors get straight to the record */
+  jahTourStep=0;jahTourShow(0);
+}
+function jahGuideOpen(){
+  var c=document.getElementById("jahguidecard");
+  if(!c){
+    c=document.createElement("div");c.id="jahguidecard";c.setAttribute("role","dialog");c.setAttribute("aria-label","How to use this site");
+    c.innerHTML='<h2>❓ How to use this site</h2>'+
+    '<h3>Generator families (20)</h3><p>Pick a family card (jet, medical, food, candy, nanoplasma, lightbot, car, engine, toy, tool, furniture, clothing, game, instrument, robot, building, four mix labs). Set parameters with the sliders and option lists, then ⚙️ <b>Generate</b> for a seeded solve or 🎲 <b>Randomize</b> for a fresh seed. Same family + seed → same design, forever.</p>'+
+    '<h3>Solve It — describe anything</h3><p>The gold bar at the top. Type anything (max 140 characters — longer text is trimmed, and you will see the exact words used), hit <b>⚙️ Solve it</b>. Same words → same design, forever. Empty input shows a guidance message instead of doing nothing.</p>'+
+    '<h3>Archive search, Finder, A–Z, Random</h3><p>The search box filters archived outputs by name, tagline, or JAH-GEN-… ID; the family filter and A–Z buttons narrow further. The Finder bar ranks the closest archived outputs from a plain-language description. All of these search <b>existing records only</b> and never invent outputs — no match gets an honest "nothing found" message. 🎲 <b>Random</b> opens a random archived output.</p>'+
+    '<h3>Record view</h3><p>Every output shows a result card (input, family, seed, ID, status), then: idea, dimensions, materials, colors, components & chips, measurements, piece-by-piece parts list with ★ <b>critical</b> flags, build steps, cross-references to real filed archive records (inspiration only), and how to use. Every output carries a red <b>CONCEPT / SIMULATION</b> banner: a generated design — not engineered, not physically tested, not certified safe. Medical-family outputs carry an extra <b>wellness-concept-only — not medical advice</b> notice at the top of the result and in the warnings list.</p>'+
+    '<h3>Reproduce · Verify · Share</h3><p><b>REPRODUCE</b> re-solves locally and proves the output is byte-identical. <b>VERIFY</b> also checks the archived row (ID, name, tagline, content hash). <b>OPEN</b> opens the record in a new tab, <b>SOURCE</b> shows provenance, <b>ID</b> copies the output ID, <b>VERSION</b> shows engine + schema versions. <b>SHARE</b> copies the ?gen= deep link, which survives a refresh.</p>'+
+    '<h3>Read aloud · Copy · Download · Import</h3><p>🔊 <b>Read aloud</b> reads the full solved spec with a floating pause/stop bar (built-in voice first, online voice fallback). 📋 <b>Copy</b> copies the full text. ⬇ <b>.txt / .json</b> downloads a valid file of the record (the JSON carries a manifest envelope with a content hash). ⇪ <b>Import</b> loads an exported .json back and verifies the envelope before showing it.</p>'+
+    '<h3>Ask about it</h3><p>The AI helper answers only from that design\'s solved spec — dimensions, materials, colors, chips, measurements, parts, steps, cross-references. It never invents; if it can\'t answer from the spec, it says so and suggests what to ask.</p>'+
+    '<h3>Honest states</h3><p>If the archive index can\'t load, search shows <b>Retry</b> instead of fake results; the generators keep working without the index. Invalid IDs show an <b>Output not found</b> message with the ID format. Counts always come from the shipped data manifest — never hard-coded.</p>'+
+    '<h3>Dark mode</h3><p>The ◐ button (top right) toggles a dark theme. Your choice is remembered on this device only.</p>'+
+    '<div class="tbtns"><button class="btn gold" onclick="jahGuideClose()">Close</button></div>';
+    document.body.appendChild(c);
+  }
+  c.style.display="block";
+  try{var b=c.querySelector(".tbtns .btn");if(b)b.focus()}catch(e){}
+}
+function jahGuideClose(){var c=document.getElementById("jahguidecard");if(c)c.style.display="none"}
+var jahTourStep=-1;
+document.addEventListener("keydown",function(e){
+  var tour=document.getElementById("jahtourcard"),tourOpen=tour&&tour.style.display!=="none";
+  var guide=document.getElementById("jahguidecard"),guideOpen=guide&&guide.style.display!=="none";
+  if(e.key==="Escape"){if(guideOpen){jahGuideClose();e.preventDefault();return}if(tourOpen){jahTourDone();e.preventDefault();return}}
+  if(tourOpen&&jahTourStep>=0){
+    if(e.key==="ArrowRight"){jahTourNext(jahTourStep);e.preventDefault()}
+    else if(e.key==="ArrowLeft"&&jahTourStep>0){jahTourShow(jahTourStep-1);e.preventDefault()}
+  }
+});
+/* auto-show the tour on first home visit, after the page boots */
+(function(){function kick(){try{jahTourMaybe()}catch(e){}}if(document.readyState==="complete")kick();else window.addEventListener("load",kick)})();
 </script>
 </body>
 </html>

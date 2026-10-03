@@ -106,6 +106,19 @@ def main():
     html = pat.sub(new, html, count=1)
     open(p, "w").write(html)
     print("stamped staticcount:", total)
+    # FIX-WAVE: re-stamp the initial stats block (first-load state, never bare "…" —
+    # the JS renderStats() overwrites it live, but crawlers/AI checkers read the raw HTML)
+    html = open(p).read()
+    spat = re.compile(r"<!--__STATS_STAMP_START-->.*?<!--__STATS_STAMP_END-->", re.S)
+    snew = ("<!--__STATS_STAMP_START--><div class=\"stats\" id=\"stats\">"
+            "<div class=\"stat\"><b>%s</b><span>outputs on file</span></div>"
+            "<div class=\"stat\"><b>%d</b><span>generator families</span></div>"
+            "<div class=\"stat\"><b>1,000,000</b><span>march goal</span></div></div>"
+            "<!--__STATS_STAMP_END-->" % (format(total, ","), len(fams)))
+    assert spat.search(html), "STATS_STAMP markers missing"
+    html = spat.sub(snew, html, count=1)
+    open(p, "w").write(html)
+    print("stamped stats block:", total)
 
 
 if __name__ == "__main__":
