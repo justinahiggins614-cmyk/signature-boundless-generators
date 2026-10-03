@@ -1,7 +1,7 @@
 {
  "site": "The Signature Boundless Generator Archive",
- "updated": "2026-10-03T18:33:26Z",
- "outputs": 22500,
+ "updated": "2026-10-03T20:33:29Z",
+ "outputs": 24000,
  "goal": 1000000,
  "manifest": "data/manifest.json",
  "index": "data/index.json.gz",
@@ -12,7 +12,7 @@
    "name": "Signature Jet Generator",
    "icon": "\u2708\ufe0f",
    "blurb": "Complete Signature-line jet aircraft concepts \u2014 airframe, powerplant, avionics, all the way down to fasteners and paint.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=jet",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/jet.html"
   },
@@ -21,7 +21,7 @@
    "name": "Signature Medical Concept Generator",
    "icon": "\u271a",
    "blurb": "Speculative Signature-line wellness device and formulation concepts. Concepts only \u2014 never medical advice.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=medical",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/medical.html"
   },
@@ -30,7 +30,7 @@
    "name": "Signature Dish Generator",
    "icon": "\ud83c\udf7d\ufe0f",
    "blurb": "Complete Signature-line dishes \u2014 every ingredient weighed, every step timed, every temperature set.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=food",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/food.html"
   },
@@ -39,7 +39,7 @@
    "name": "Signature Candy Generator",
    "icon": "\ud83c\udf6c",
    "blurb": "Complete Signature-line confections \u2014 batch math, sugar stages, molds, and colors, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=candy",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/candy.html"
   },
@@ -48,7 +48,7 @@
    "name": "Signature Nanoplasma Device Generator",
    "icon": "\u269b\ufe0f",
    "blurb": "Theoretical Signature-line nanoplasma instruments \u2014 emitter physics worked out on paper, labeled theoretical.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=nanoplasma",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/nanoplasma.html"
   },
@@ -57,7 +57,7 @@
    "name": "Signature Lightbot Generator",
    "icon": "\ud83d\udca1",
    "blurb": "Complete Signature-line lightbots \u2014 pocket robots that paint with light, electronics fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=lightbot",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/lightbot.html"
   },
@@ -66,7 +66,7 @@
    "name": "Signature Car Generator",
    "icon": "\ud83d\ude97",
    "blurb": "Complete Signature-line cars \u2014 chassis, drivetrain, aero, interior, down to the lug nuts.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=car",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/car.html"
   },
@@ -75,7 +75,7 @@
    "name": "Signature Engine Generator",
    "icon": "\u2699\ufe0f",
    "blurb": "Complete Signature-line engines \u2014 bore, stroke, compression, power curves, every bolt accounted for.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=engine",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/engine.html"
   },
@@ -84,7 +84,7 @@
    "name": "Signature Toy Generator",
    "icon": "\ud83e\uddf8",
    "blurb": "Complete Signature-line toys \u2014 safe materials, mechanisms, and colors, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=toy",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/toy.html"
   },
@@ -93,7 +93,7 @@
    "name": "Signature Tool Generator",
    "icon": "\ud83d\udd27",
    "blurb": "Complete Signature-line power tools \u2014 motor, gearbox, battery, and ergonomics, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=tool",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/tool.html"
   },
@@ -102,7 +102,7 @@
    "name": "Signature Furniture Generator",
    "icon": "\ud83e\ude91",
    "blurb": "Complete Signature-line furniture \u2014 joinery, finishes, and load ratings, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=furniture",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/furniture.html"
   },
@@ -111,7 +111,7 @@
    "name": "Signature Clothing Generator",
    "icon": "\ud83d\udc55",
    "blurb": "Complete Signature-line garments \u2014 graded sizes, fabrics, and construction, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=clothing",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/clothing.html"
   },
@@ -120,7 +120,7 @@
    "name": "Signature Game Generator",
    "icon": "\ud83c\udfb2",
    "blurb": "Complete Signature-line tabletop games \u2014 components, rules, and box, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=game",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/game.html"
   },
@@ -129,7 +129,7 @@
    "name": "Signature Instrument Generator",
    "icon": "\ud83c\udfba",
    "blurb": "Complete Signature-line instruments \u2014 acoustics, action, and range, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=instrument",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/instrument.html"
   },
@@ -138,7 +138,7 @@
    "name": "Signature Robot Generator",
    "icon": "\ud83e\udd16",
    "blurb": "Complete Signature-line robots \u2014 kinematics, sensors, and power, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=robot",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/robot.html"
   },
@@ -147,7 +147,7 @@
    "name": "Signature Building Generator",
    "icon": "\ud83c\udfe2",
    "blurb": "Complete Signature-line building concepts \u2014 massing, structure, and program, fully specified.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=building",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/building.html"
   },
@@ -156,7 +156,7 @@
    "name": "Car \u00d7 Engine Mix Lab",
    "icon": "\ud83d\ude97",
    "blurb": "A Signature car with its powerplant solved as one machine \u2014 chassis and engine co-designed.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-car-engine",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/mix-car-engine.html"
   },
@@ -165,7 +165,7 @@
    "name": "Toy \u00d7 Lightbot Mix Lab",
    "icon": "\ud83e\uddf8",
    "blurb": "A Signature toy with a lightbot heart \u2014 plaything outside, robot inside.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-toy-lightbot",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/mix-toy-lightbot.html"
   },
@@ -174,7 +174,7 @@
    "name": "Dish \u00d7 Candy Mix Lab",
    "icon": "\ud83c\udf7d\ufe0f",
    "blurb": "A Signature dessert where the dish course meets the candy bench \u2014 plated and pulled.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-food-candy",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/mix-food-candy.html"
   },
@@ -183,7 +183,7 @@
    "name": "Jet \u00d7 Engine Mix Lab",
    "icon": "\u2708\ufe0f",
    "blurb": "A Signature jet with its powerplant solved as one machine \u2014 airframe and turbofan co-designed.",
-   "outputs": 1125,
+   "outputs": 1200,
    "url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-jet-engine",
    "hub": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/hubs/mix-jet-engine.html"
   }
