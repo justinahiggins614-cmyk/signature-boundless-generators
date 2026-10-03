@@ -198,9 +198,11 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <div class="grid" id="famgrid"></div>
 <h2 style="color:var(--gold)">Browse the archive</h2>
 <div class="filterstack">
+<div style="margin:2px 0 8px"><span class="reclbl">FIND AN EXISTING OUTPUT</span> <span class="note">— archive search only, never invents records. To solve something new, use the all-purpose generator above.</span></div>
 <div class="toolbar">
 <input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
 <select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
+<button class="btn ghost" onclick="randomGen()" title="Open a random archived output">🎲 Random</button>
 </div>
 <div id="searchmeta" class="searchmeta" aria-live="polite"></div>
 <div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
@@ -245,7 +247,7 @@ function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function
 function auChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);for(var i=0;i<parts.length;i+=2){var sent=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!sent)continue;if(cur&&(cur+" "+sent).length>220){out.push(cur.trim());cur=sent}else cur=cur?cur+" "+sent:sent}if(cur.trim())out.push(cur.trim());return out}
 function auShowBar(show){var bar=document.getElementById("aubar");if(bar)bar.style.display=show?"flex":"none"}
 function auPaintBtn(){var p=document.getElementById("aupause");if(p)p.innerHTML=AU.paused?"&#9654; Resume":"&#10074;&#10074; Pause";var l=document.getElementById("aulabel");if(l)l.textContent="Reading: "+AU.label;var pr=document.getElementById("auprog");if(pr)pr.textContent=AU.q.length?("chunk "+(AU.i+1)+" of "+AU.q.length):""}
-function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();var u=new SpeechSynthesisUtterance(AU.q[AU.i]);u.rate=AU.rate;u.lang="en-US";var v=auVoice();if(v)u.voice=v;u.onend=function(){if(!AU.active)return;AU.i++;auSpeakNext()};u.onerror=function(){if(!AU.active)return;AU.i++;auSpeakNext()};window.speechSynthesis.speak(u)}
+function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();var u=new SpeechSynthesisUtterance(AU.q[AU.i]);u.rate=AU.rate;u.lang="en-US";var v=auVoice();if(v)u.voice=v;var done=false,idx=AU.i;function adv(){if(done||!AU.active||AU.i!==idx)return;done=true;AU.i++;auSpeakNext()}u.onend=function(){adv()};u.onerror=function(){adv()};/* FIX-WAVE: speech watchdog — a hung utterance can never stall the queue */setTimeout(adv,30000);window.speechSynthesis.speak(u)}
 function hasSpeech(){try{return("speechSynthesis" in window)&&!!window.speechSynthesis&&typeof window.speechSynthesis.speak==="function"}catch(e){return false}}
 try{if(hasSpeech()){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){try{window.speechSynthesis.getVoices()}catch(e){}}}}catch(e){}
 function audMsg(m){var t=document.getElementById("audmsg");if(!t){t=document.createElement("div");t.id="audmsg";t.style.cssText="position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#0a0f22;border:1px solid #00f0ff;color:#d7e3ff;padding:10px 18px;border-radius:10px;z-index:10001;font-size:.9em;max-width:92vw;text-align:center";document.body.appendChild(t)}t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2600)}
@@ -277,29 +279,77 @@ function readGen(o){auStop();AU.label=o.name;AU.q=auChunks(genSpeakText(o));AU.i
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
 /* NOTE: every .json.gz fetch MUST inflate via DecompressionStream — .text() on gzip bytes is binary garbage. */
 async function gz(url){var r=await fetch(url);if(!r.ok)throw new Error("HTTP "+r.status+" "+url);return await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text()}
-var G={manifest:null,api:null,idx:null,fams:[],curFam:null,curSeed:1,curOut:null};
+/* FIX-WAVE: fetch JSON with timeout + retry. Never hangs the page, never throws to callers. */
+async function fetchJSON(url,ms,retries){
+  ms=ms||8000;retries=(retries==null?2:retries);
+  var last=null;
+  for(var a=0;a<=retries;a++){
+    try{
+      var ctl=new AbortController();var to=setTimeout(function(){try{ctl.abort()}catch(e){}},ms);
+      var r=await fetch(url,{signal:ctl.signal});clearTimeout(to);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      return await r.json();
+    }catch(e){last=e;if(a<retries)await new Promise(function(res){setTimeout(res,600*(a+1))})}
+  }
+  throw last;
+}
+var STATS_KEY="jah-gen17-stats";
+function statsCacheGet(){try{var s=localStorage.getItem(STATS_KEY);return s?JSON.parse(s):null}catch(e){return null}}
+function statsCacheSet(n,fams){try{localStorage.setItem(STATS_KEY,JSON.stringify({count:n,families:fams,goal:1000000,verifiedAt:new Date().toISOString()}))}catch(e){}}
+var G={manifest:null,api:null,idx:null,idxFail:false,fams:[],curFam:null,curSeed:1,curOut:null};
 
 async function boot(){
-  try{G.manifest=await(await fetch("data/manifest.json")).json()}catch(e){}
-  try{G.api=await(await fetch("api.json")).json()}catch(e){}
+  /* FIX-WAVE: manifest/api with timeout+retry; cached stats fallback; never zero-on-failure */
+  var cached=statsCacheGet();
+  try{G.manifest=await fetchJSON("data/manifest.json")}catch(e){G.manifest=null}
+  try{G.api=await fetchJSON("api.json")}catch(e){G.api=null}
   G.fams=SigGen.families();
-  renderStats();renderFamGrid();renderFamFilter();renderAZ();
+  var nFams=G.fams.length;
+  if(G.manifest&&G.manifest.count){
+    statsCacheSet(G.manifest.count,nFams);
+    renderStats(G.manifest.count,nFams,"verified just now");
+  }else if(cached&&cached.count){
+    renderStats(cached.count,cached.families||nFams,"last verified "+cached.verifiedAt.slice(0,10)+" — <button class='btn ghost' onclick='boot()' style='padding:2px 10px'>Retry</button>");
+  }else{
+    renderStats(0,nFams,"count unavailable — <button class='btn ghost' onclick='boot()' style='padding:2px 10px'>Retry</button>");
+  }
+  renderFamGrid();renderFamFilter();renderAZ();
+  paintKicker();
   /* SITE-17 DIAG FIX-06: initial match-feedback line */
-  ensureIdx().then(function(idx){paintSearchMeta(idx.length,idx.length,idx.length)});
+  ensureIdx().then(function(idx){if(idx)paintSearchMeta(idx.length,idx.length,idx.length)});
   var qs=new URLSearchParams(location.search);
-  var gen=qs.get("gen"),fam=qs.get("fam");
+  var gen=qs.get("gen"),fam=qs.get("fam"),q=qs.get("q");
   if(gen&&gen.toLowerCase().indexOf("custom-")===0){var d=qs.get("d");if(d){showCustom(d);return}}
-  if(gen){var m=/^([a-z0-9-]+)-(\d+)$/i.exec(gen);if(m&&SigGen.byKey(m[1])){showGen(m[1],parseInt(m[2],10),{});return}}
+  if(gen){
+    var mf=/^JAH-GEN-([A-Z0-9]+)-(\d{6})$/i.exec(gen);
+    if(mf){var fk=mf[1].toLowerCase();if(SigGen.byKey(fk)){showGen(fk,parseInt(mf[2],10),{});return}}
+    var m=/^([a-z0-9-]+)-(\d+)$/i.exec(gen);if(m&&SigGen.byKey(m[1])){showGen(m[1],parseInt(m[2],10),{});return}
+    showGenNotFound(gen);return;
+  }
   if(fam&&SigGen.byKey(fam)){showFam(fam);return}
+  if(q){var qi=document.getElementById("q");if(qi){qi.value=q}loadFresh().then(function(){doSearch()});return}
   loadFresh();
 }
-function renderStats(){
-  var n=G.manifest?G.manifest.count:0,el=document.getElementById("stats");
+function showGenNotFound(gen){
+  show("genview");
+  document.getElementById("genview").innerHTML='<div class="panel"><div class="conceptbanner">⚠ '+esc(CONCEPT_STATUS)+'</div><h2>Output not found</h2><p class="note">OUTPUT_NOT_FOUND — no archived output matches <b>'+esc(gen)+'</b>. IDs are permanent: <b>JAH-GEN-&lt;FAMILY&gt;-&lt;6-digit seed&gt;</b> (e.g. JAH-GEN-JET-000001). Check the ID, or <a href="./">browse the archive</a>.</p></div>';
+  window.scrollTo(0,0);
+}
+/* FIX-WAVE: kicker reads "Site 17 of 25" live from the network manifest; cached fallback */
+async function paintKicker(){
+  var el=document.querySelector(".sitekicker");if(!el)return;
+  var nm=null;
+  try{nm=await fetchJSON("JAH-NETWORK-MANIFEST.json",5000,1)}catch(e){}
+  if(nm&&nm.site_number&&nm.site_count){el.innerHTML="<b>SITE "+nm.site_number+" OF "+nm.site_count+"</b> · THE JAH NETWORK"}
+}
+function renderStats(n,fams,note){
+  var el=document.getElementById("stats");
   el.innerHTML='<div class="stat"><b>'+n.toLocaleString()+'</b><span>outputs on file</span></div>'+
-    '<div class="stat"><b>'+G.fams.length+'</b><span>generator families</span></div>'+
-    '<div class="stat"><b>1,000,000</b><span>march goal</span></div>';
+    '<div class="stat"><b>'+fams+'</b><span>generator families</span></div>'+
+    '<div class="stat"><b>1,000,000</b><span>march goal</span></div>'+
+    (note?'<div class="stat"><b style="font-size:.8em">⧖</b><span>'+note+'</span></div>':"");
   document.getElementById("marchfill").style.width=Math.min(100,n/1000000*100)+"%";
-  document.getElementById("marchtxt").textContent=n.toLocaleString()+" / 1,000,000 outputs";
+  document.getElementById("marchtxt").textContent=n? n.toLocaleString()+" / 1,000,000 outputs" : "Marching to 1,000,000 generated outputs";
 }
 function renderFamGrid(){
   document.getElementById("famgrid").innerHTML=G.fams.map(function(f){
@@ -314,14 +364,32 @@ function renderAZ(){
   el.innerHTML='<button class="on" data-l="">#</button>'+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function(l){return '<button data-l="'+l+'">'+l+'</button>'}).join("");
   el.querySelectorAll("button").forEach(function(b){b.onclick=function(){el.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");doSearch()}});
 }
+/* FIX-WAVE: index fetch with timeout+retry; on failure G.idx stays null (never []) —
+   the generator keeps working and search shows Retry instead of a fake "no match". */
 async function ensureIdx(){
   if(G.idx)return G.idx;
-  try{var t=await gz("data/index.json.gz");G.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse)}catch(e){G.idx=[]}
-  return G.idx;
+  if(G.idxFail)return null;
+  var last=null;
+  for(var a=0;a<3;a++){
+    try{
+      var ctl=new AbortController();var to=setTimeout(function(){try{ctl.abort()}catch(e){}},12000);
+      var r=await fetch("data/index.json.gz",{signal:ctl.signal});clearTimeout(to);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      var t=await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).text();
+      G.idx=t.trim().split("\n").filter(Boolean).map(JSON.parse);
+      return G.idx;
+    }catch(e){last=e;if(a<2)await new Promise(function(res){setTimeout(res,800*(a+1))})}
+  }
+  G.idxFail=true;
+  return null;
+}
+function idxFailHTML(){
+  return '<p class="note">⚠ The archive index could not be loaded (INDEX_UNAVAILABLE) — check your connection, then <button class="btn ghost" onclick="G.idxFail=false;loadFresh();doSearch()">Retry</button>. The generators above still work: every output is reproducible on this page without the index.</p>';
 }
 function show(id){["home","famview","genview"].forEach(function(x){document.getElementById(x).style.display=x===id?"":"none"})}
 async function loadFresh(){
   var idx=await ensureIdx();
+  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();return}
   var rows=idx.slice(-12).reverse();
   document.getElementById("fresh").innerHTML=rows.map(cardHTML).join("");
 }
@@ -337,8 +405,7 @@ function bindSearch(){
 }
 async function doSearch(){
   var idx=await ensureIdx();
-  /* CONSISTENCY PASS: honest "Loading…" — never "No outputs match" while the index resolves */
-  if(!idx.length){document.getElementById("fresh").innerHTML='<p class="note">The forge index is still loading — a moment…</p>';return;}
+  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();paintSearchMeta(0,0,0);return}
   var q=document.getElementById("q").value.trim().toLowerCase();
   var fam=document.getElementById("ffam").value;
   var L=document.querySelector("#az button.on").dataset.l;
@@ -347,7 +414,7 @@ async function doSearch(){
       (!q||r[0].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0||r[4].toLowerCase().indexOf(q)>=0);
   });
   var shown=rows.slice(-60).reverse();
-  document.getElementById("fresh").innerHTML=shown.length?shown.map(cardHTML).join(""):'<p class="note">No outputs match — try another search.</p>';
+  document.getElementById("fresh").innerHTML=shown.length?shown.map(cardHTML).join(""):'<p class="note"><b>NO ARCHIVE MATCH FOUND</b> — nothing on file matches. This search covers archived outputs only and never invents records. Try different words, or use the all-purpose generator above to solve something new.</p>';
   var h=document.querySelector("#home h2:last-of-type");if(h)h.textContent=q||fam||L?"Search results":"Fresh from the forge";
   /* SITE-17 DIAG FIX-06: real-time matching feedback */
   paintSearchMeta(idx.length,rows.length,shown.length);
@@ -434,6 +501,7 @@ function showGen(family,seed,overrides,inFam){
   var o;
   try{o=SigGen.solve(family,seed,overrides||{})}catch(e){return}
   G.curOut=o;
+  o._overrides=overrides||null; /* FIX-WAVE: stash original overrides so REPRODUCE re-solves byte-identical */
   var box=inFam?document.getElementById("outbox"):document.getElementById("genview");
   if(!inFam){show("genview");history.replaceState(null,"","?gen="+family+"-"+seed)}
   var fk=SigGen.byKey(family);
@@ -500,13 +568,17 @@ function outputPanelHTML(o,icon,ctx){
     '<div class="mbtns"><button class="btn" onclick="readGen(G.curOut)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyGen()">📋 Copy</button>'+
     '<button class="btn" onclick="dlGen(\'txt\')">⬇ .txt</button>'+
-    '<button class="btn" onclick="dlGen(\'json\')">⬇ .json</button></div>'+
+    '<button class="btn" onclick="dlGen(\'json\')">⬇ .json</button>'+
+    '<button class="btn" onclick="importGen()">⇪ Import</button>'+
+    '<input type="file" id="importfile" accept="application/json,.json" style="display:none" onchange="importGenFile(this)" aria-label="Import a generator export file"></div>'+
     /* CONSISTENCY PASS: record panel — OPEN · SOURCE · ID · VERSION · SHARE (read-aloud/copy/download live in the row above) */
-    '<div class="recbar" role="group" aria-label="Record panel: open, source, id, version, share"><span class="reclbl">RECORD</span>'+
+    '<div class="recbar" role="group" aria-label="Record panel: open, source, id, version, reproduce, verify, share"><span class="reclbl">RECORD</span>'+
     '<button class="btn ghost" onclick="genRecOpen()">↗ OPEN</button>'+
     '<button class="btn ghost" onclick="genRecSrc()">⇄ SOURCE</button>'+
     '<button class="btn ghost" onclick="genRecId()"># ID</button>'+
     '<button class="btn ghost" onclick="genRecVer()">⚙ VERSION</button>'+
+    '<button class="btn ghost" onclick="genRecRepro()">⟳ REPRODUCE</button>'+
+    '<button class="btn ghost" onclick="genRecVerify()">✓ VERIFY</button>'+
     '<button class="btn ghost" onclick="genRecShare()">⤴ SHARE</button></div>'+
     '<div class="recinfo" id="recinfo"></div>'+
     /* CONSISTENCY PASS: AI identity card */
@@ -537,6 +609,27 @@ function genRecOpen(){window.open(genRecDeep(),"_blank","noopener")}
 function genRecSrc(){var o=G.curOut;if(!o)return;var b=genRecInfoBox();if(b.style.display==="block"&&b.dataset.kind==="src"){b.style.display="none";b.dataset.kind="";return}genRecShow("<b>SOURCE</b> — "+esc(o.lineage||"Generated by the SigGen deterministic engine."));b.dataset.kind="src"}
 function genRecId(){var o=G.curOut;if(!o)return;var b=genRecInfoBox();genRecShow("<b>ID</b> — "+esc(o.id));b.dataset.kind="id";try{navigator.clipboard.writeText(o.id)}catch(e){}}
 function genRecVer(){var o=G.curOut;var b=genRecInfoBox();genRecShow("<b>VERSION</b> — SigGen v"+esc(sigVer())+" · generator-record schema v1 · deterministic: the same family + seed always yields this exact output.");b.dataset.kind="ver"}
+/* FIX-WAVE: REPRODUCE re-solves locally and compares; VERIFY checks the archived row too */
+function genRecRepro(){
+  var o=G.curOut;var b=genRecInfoBox();if(!o||!b)return;
+  var o2=o.customHash?SigGen.solveCustom(o._customText||""):SigGen.solve(o.family,o.seed,o._overrides||null);
+  var same=SigGen.outputHash(o)===SigGen.outputHash(o2);
+  genRecShow("<b>REPRODUCE</b> — re-solved locally from "+(o.customHash?"your words":"family "+esc(o.family)+" · seed "+o.seed)+": "+(same?"✓ identical (name, tagline, full content)":"✗ differs")+" · content hash <code>"+esc(SigGen.outputHash(o2).slice(0,16))+"…</code>");
+  b.dataset.kind="repro";
+}
+function genRecVerify(){
+  var o=G.curOut;var b=genRecInfoBox();if(!o||!b)return;
+  var o2=o.customHash?SigGen.solveCustom(o._customText||""):SigGen.solve(o.family,o.seed,o._overrides||null);
+  var repro=SigGen.outputHash(o)===SigGen.outputHash(o2);
+  ensureIdx().then(function(idx){
+    if(!idx){genRecShow("<b>VERIFY</b> — archive index unavailable (INDEX_UNAVAILABLE); retry when connected. Local re-solve: "+(repro?"✓ reproduces":"✗ differs")+".");b.dataset.kind="verify";return}
+    var row=null;for(var i=0;i<idx.length;i++)if(idx[i][0]===o.id){row=idx[i];break}
+    if(!row){genRecShow("<b>VERIFY</b> — OUTPUT_NOT_FOUND: this output is not in the archived index (a fresh custom solve). Local re-solve: "+(repro?"✓ reproduces":"✗ differs")+".");b.dataset.kind="verify";return}
+    var v=SigGen.verifyRecord(row);
+    genRecShow("<b>VERIFY</b> — archived row "+(v.ok?"✓ VERIFIED":"✗ MISMATCH")+": id "+(v.idMatch?"✓":"✗")+" · name "+(v.nameMatch?"✓":"✗")+" · tagline "+(v.taglineMatch?"✓":"✗")+" · content_sha256 <code>"+esc(v.content_sha256.slice(0,16))+"…</code>");
+    b.dataset.kind="verify";
+  });
+}
 function genRecShare(){var u=genRecDeep();var b=genRecInfoBox();if(navigator.share){try{navigator.share({title:document.title,url:u})}catch(e){}return}if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){genRecShow("<b>SHARE</b> — output link copied: "+esc(u));b.dataset.kind="share"},function(){genRecShow("<b>SHARE</b> — output link: "+esc(u));b.dataset.kind="share"})}else{genRecShow("<b>SHARE</b> — output link: "+esc(u));b.dataset.kind="share"}}
 function genText(o){
   var L=[];
@@ -566,10 +659,55 @@ function copyGen(){
 }
 function dlGen(kind){
   var o=G.curOut,blob;
-  if(kind==="json")blob=new Blob([JSON.stringify(o,null,1)],{type:"application/json"});
+  if(kind==="json"){
+    /* FIX-WAVE: export carries a manifest envelope — import verifies it */
+    var env={export_manifest:{exported_at:new Date().toISOString(),
+      site:"The Signature Boundless Generator Archive",
+      generator:"SigGen",generator_version:sigVer(),
+      record_id:o.id,record_schema:"schema/generator-output.schema.json",
+      content_sha256:SigGen.outputHash(o),canonical_url:genRecDeep(),
+      family_id:SigGen.familyId?SigGen.familyId(o.family):null,
+      verify:"re-solve with SigGen and compare content_sha256"},record:o};
+    blob=new Blob([JSON.stringify(env,null,1)],{type:"application/json"});
+  }
   else blob=new Blob([genText(o)],{type:"text/plain"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=o.id+"."+kind;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);
+}
+/* FIX-WAVE: import an exported record file — verifies the envelope before showing */
+function importGen(){
+  var inp=document.getElementById("importfile");if(!inp)return;inp.click();
+}
+function importGenFile(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var env=JSON.parse(rd.result);
+      var o=env&&env.record?env.record:env;
+      if(!o||!o.id||!o.name||!o.dimensions){audMsg("That file is not a generator export.");return}
+      var man=env&&env.export_manifest;
+      var h=SigGen.outputHash(o);
+      var okm=man&&man.content_sha256===h;
+      var fk=o.family||"";
+      G.curOut=o;o._imported=true;
+      show("genview");window.scrollTo(0,0);
+      document.getElementById("genview").innerHTML=
+        '<div class="panel"><p class="note">⇪ <b>Imported record</b> — from file <b>'+esc(f.name)+'</b>. '+
+        (okm?'✓ envelope manifest verified (content_sha256 matches).':'⚠ no verifiable envelope manifest — treated as unverified; run VERIFY against the archive below.')+'</p></div>'+
+        outputPanelHTML(o,(SigGen.byKey(fk)||{}).icon||"⚙️",{familyKey:fk,familyName:o.familyName||"Signature generator",inputDesc:"Imported from file"});
+      var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
+    }catch(e){audMsg("Could not read that file as a generator export.")}
+    inp.value="";
+  };
+  rd.readAsText(f);
+}
+/* FIX-WAVE: random record from the archive */
+async function randomGen(){
+  var idx=await ensureIdx();
+  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();return}
+  var r=idx[Math.floor(Math.random()*idx.length)];
+  showGen(r[1],r[2],{});
 }
 /* ============ grounded Q&A — answers only from the solved spec ============ */
 var QA_STOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,he,she,his,her,its,tell,me,my,you,your,do,can,please,give,show,have,has,had,will,would,should,could,much,many,big,small".split(","));
@@ -608,7 +746,7 @@ async function fAsk(){
   var kws=fKeywords(q),box=document.getElementById("fresults");
   if(!kws.length){box.innerHTML='<p class="note">One more word — a field, a thing, a material… ⚙️</p>';return}
   var idx=await ensureIdx();
-  if(!idx.length){box.innerHTML='<p class="note">The forge index is still loading — a moment, then Find it. ⚙️</p>';return}
+  if(!idx){box.innerHTML=idxFailHTML();return}
   var hits=idx.map(function(r){var f=SigGen.byKey(r[1]);
     var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(f?f.name+" "+f.blurb:"")).toLowerCase();var s=0;
     kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});

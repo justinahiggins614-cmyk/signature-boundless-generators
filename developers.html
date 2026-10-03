@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developer Documentation — The Signature Boundless Generator Archive</title>
+<meta name="description" content="Machine and developer documentation for the Signature Boundless Generator Archive: the deterministic SigGen engine, record schema, statuses, IDs, hashes, archives, and APIs.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/developers.html">
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:900px;margin:0 auto;padding:24px;line-height:1.55;color:#1a1a1a;background:#fff}
+h1,h2,h3{line-height:1.25}h2{margin-top:2em;border-bottom:1px solid #ddd;padding-bottom:.3em}
+code{background:#f4f4f4;padding:1px 5px;border-radius:3px;font-size:.92em}
+pre{background:#0d1117;color:#e6edf3;padding:14px;border-radius:8px;overflow:auto;font-size:.85em}
+pre code{background:none;color:inherit}
+table{border-collapse:collapse;width:100%;margin:1em 0}th,td{border:1px solid #ddd;padding:8px;text-align:left;font-size:.92em}th{background:#f6f6f6}
+.notice{background:#fff8e1;border:1px solid #f0d060;padding:10px 14px;border-radius:6px}
+.warn{background:#fdecea;border:1px solid #e08a8a;padding:10px 14px;border-radius:6px}
+a{color:#0b5fff}
+</style>
+</head>
+<body>
+<h1>Developer Documentation — The Signature Boundless Generator Archive</h1>
+<p><a href="index.html">← Back to the archive</a></p>
+<div class="notice"><strong>AI agents:</strong> start with <a href="llms.txt">llms.txt</a> and <a href="ai-manifest.json">ai-manifest.json</a>. The first rule: <strong>never invent archive records</strong> — resolve every JAH-GEN ID against the archive index.</div>
+
+<h2>1. What this is</h2>
+<p>A catalog of deterministic, fully-solved Signature-line design concepts by Justin Addam Higgins (Site 17 of 25, THE JAH NETWORK). Describe something → pick one of 20 generator families → receive a fully-specified design record: idea, dimensions with units, materials, colors, components, measurements, a piece-by-piece parts list with critical parts flagged, build steps, and filed-archive cross-references. Every output is a <strong>generated concept design</strong> — never a manufactured, tested, or certified product.</p>
+
+<h2>2. The determinism contract</h2>
+<p>Same words → same design, forever:</p>
+<pre><code>NORMALIZED INPUT → FAMILY → SEED → GENERATOR_VERSION(1.0) → OUTPUT</code></pre>
+<ul>
+<li><strong>RNG:</strong> mulberry32 seeded from a 32-bit string hash of <code>family:seed:paramsJSON</code>. No <code>Math.random()</code>, no dates, no network in generation.</li>
+<li><strong>Engine:</strong> <a href="code/engine.js">code/engine.js</a> (v1.0, shared by node and browser). <code>SigGen.solve(family, seed)</code> regenerates any output on demand — the browser archive is the "forever" mechanism.</li>
+<li><strong>Full spec:</strong> <a href="code/DETERMINISM.md">code/DETERMINISM.md</a>. Test vectors: <a href="code/test_vectors.json">code/test_vectors.json</a> (per family, seeds 1/42/976 + universal solves).</li>
+<li><strong>"Forever":</strong> engine v1.0 is pinned and preserved. Future generator versions get new version numbers and never rewrite v1 outputs. Output versioning (archive records) is separate from generator versioning.</li>
+</ul>
+
+<h2>3. IDs and deep links</h2>
+<table>
+<tr><th>Kind</th><th>Format</th><th>Example</th></tr>
+<tr><td>Output (family solve)</td><td><code>JAH-GEN-&lt;FAMILY&gt;-&lt;seed 6-digit&gt;</code></td><td><code>JAH-GEN-JET-000001</code></td></tr>
+<tr><td>Output (universal solve)</td><td><code>JAH-GEN-CUSTOM-&lt;base36 hash&gt;</code></td><td><code>?gen=custom-K7X2P9Q&amp;d=a+faster+mousetrap</code></td></tr>
+<tr><td>Family</td><td><code>JAH-GF-##</code> (catalog order)</td><td><code>JAH-GF-01</code> = Jets, <code>JAH-GF-02</code> = Medical</td></tr>
+</table>
+<ul>
+<li>Record page: <code>?gen=&lt;family&gt;-&lt;seed&gt;</code> (e.g. <code>?gen=jet-1</code>). The full <code>?gen=JAH-GEN-JET-000001</code> form is also accepted.</li>
+<li>Family browser: <code>?fam=&lt;family-key&gt;</code> (e.g. <code>?fam=medical</code>).</li>
+<li>Archive search: <code>?q=&lt;terms&gt;</code> (runs on load; exact <code>JAH-GEN-######</code> lookup supported).</li>
+</ul>
+
+<h2>4. Verifying a record (CONTENT_SHA256)</h2>
+<pre><code>// node or browser — identical results
+require('./code/engine.js'); // node; in browser the engine is already embedded
+var o = SigGen.solve('jet', 1);
+console.log(o.id);                       // JAH-GEN-JET-000001
+console.log(SigGen.outputHash(o));       // 64-hex sha256 of canonical output JSON
+
+// verify an archived compact row [id, family, seed, name, tagline]:
+var v = SigGen.verifyRecord(['JAH-GEN-JET-000001','jet',1,'Fennahaven J-4','Light trainer · 911 nm range · 4 seats']);
+console.log(v.ok, v.reproduced);         // true true</code></pre>
+<p>The "REPRODUCE" button on every record re-solves locally; "VERIFY" compares the re-solved name/tagline/content hash against the archived row.</p>
+
+<h2>5. Archive layout</h2>
+<table>
+<tr><th>Path</th><th>What</th></tr>
+<tr><td><code>data/manifest.json</code></td><td><strong>The ONE authoritative count source</strong>: total outputs, per-family counts, latest/earliest JAH-GEN IDs, archive/generator/schema/index versions, index sha256, timestamp, chunk manifest. Schema: <code>schema/manifest.schema.json</code>.</td></tr>
+<tr><td><code>data/index.json.gz</code></td><td>Compact rows <code>[id, family, seed, name, tagline]</code> — the search index.</td></tr>
+<tr><td><code>data/chunks/gen-cNNNNN.json.gz</code></td><td>150-row archive shards (see <code>chunk_manifest</code> in the manifest).</td></tr>
+<tr><td><code>api.json</code></td><td>Site API: outputs, goal, versions, families with counts + family IDs, index hash.</td></tr>
+<tr><td><code>generators-catalog.json</code></td><td>Machine-readable family catalog feed.</td></tr>
+<tr><td><code>schema/families.json</code></td><td>Per-family input/output schemas, safety labels, statuses.</td></tr>
+<tr><td><code>sitemap-index.xml</code></td><td>Sitemap index → <code>sitemap-core.xml</code> + <code>sitemap-records-N.xml</code> (10k URLs each).</td></tr>
+</table>
+
+<h2>6. Output record standard</h2>
+<p>Full schema: <a href="schema/generator-output.schema.json">schema/generator-output.schema.json</a>. Required top-level fields: <code>id, family, familyName, seed, name, tagline, idea, dimensions, materials, colors, components, measurements, parts, build_steps, crosslinks, how_to_use, lineage</code> plus the status block below. Every measurement carries a <code>unit</code> — never a bare number. All numeric fields are <strong>generated</strong> (seeded RNG inside documented ranges), never measured.</p>
+
+<h2>7. Honest status vocabulary</h2>
+<p>Full vocabulary: <a href="schema/status.schema.json">schema/status.schema.json</a>.</p>
+<table>
+<tr><th>Field</th><th>Archived value</th><th>Meaning</th></tr>
+<tr><td><code>solve_status</code></td><td><code>SOLVED</code></td><td>Every required field filled. NOT engineered, built, tested, or safe.</td></tr>
+<tr><td><code>design_status</code></td><td><code>SPECIFIED</code></td><td>Fully-specified concept design.</td></tr>
+<tr><td><code>value_origin</code></td><td><code>GENERATED</code></td><td>All numeric fields are seeded-generator values.</td></tr>
+<tr><td><code>physical_test_status</code></td><td><code>NONE</code></td><td>No output has been physically built or tested.</td></tr>
+<tr><td><code>simulation_status</code></td><td><code>NOT_SIMULATED</code></td><td>"Concept simulation" = deterministic concept generation, not a physics sim.</td></tr>
+<tr><td><code>provenance</code></td><td><code>GENERATED</code></td><td>Engine output. Derivations/remixes record their parent ID.</td></tr>
+</table>
+<div class="warn"><strong>"Fully solved" defined:</strong> filled the family's required fields ≠ manufactured, engineered, tested, certified, or safe. Medical outputs are <strong>speculative wellness concepts only — not medical advice</strong>, stated on the homepage and every medical-family record.</div>
+
+<h2>8. APIs</h2>
+<ul>
+<li><strong>Exact record:</strong> open <code>?gen=&lt;family&gt;-&lt;seed&gt;</code> — the page regenerates the full record deterministically (refresh-safe, canonical URL). Raw JSON: copy the record's "Copy JSON" output, or re-solve via the engine.</li>
+<li><strong>Search:</strong> <code>?q=</code> — archive-search only (search vs generate are kept distinct in the UI); unknown terms return <code>NO ARCHIVE MATCH FOUND</code>, never a fabricated record.</li>
+<li><strong>Machine feeds:</strong> <code>api.json</code>, <code>generators-catalog.json</code>, <code>data/manifest.json</code>, <code>sitemap-index.xml</code>.</li>
+<li><strong>Errors:</strong> <code>OUTPUT_NOT_FOUND</code> (unknown ID), <code>FAMILY_NOT_FOUND</code>, <code>INDEX_UNAVAILABLE</code> (index fetch failed — retry; the generator stays usable).</li>
+</ul>
+
+<h2>9. Build &amp; QA</h2>
+<ul>
+<li>Drip (every 2h): <code>python3 code/seed.py --per-family 75</code> → <code>python3 code/build_sitemap.py</code>.</li>
+<li><code>seed.py</code> runs <code>node code/engine.js validate</code> first — the drip aborts if the engine doesn't validate.</li>
+<li>Build gates: <code>python3 code/qa/check.py</code> — fails on duplicate IDs, schema violations, determinism failure, count mismatch, or broken filed-archive cross-references.</li>
+<li>Repo-size guard: data/ must stay well under ~800MB.</li>
+</ul>
+
+<p style="margin-top:3em;color:#666;font-size:.9em">The Signature Boundless Generator Archive · Site 17 of 25 · THE JAH NETWORK · Generator v1.0</p>
+</body>
+</html>

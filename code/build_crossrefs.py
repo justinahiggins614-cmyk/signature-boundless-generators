@@ -119,16 +119,19 @@ def main():
                 pat_hits[fam].append((pub, title))
 
     refs = {}
+    spec_titles = {sid: title for sid, title in spec_rows}
     for fam in FAM_KW:
         specs = pick(fam, [(sid, t, 1) for sid, t in spec_hits[fam]], 3)
         if len(specs) < 3:
-            # deterministic fallback: always-valid spec IDs from the hash
+            # deterministic fallback: hash-picked REAL spec IDs, with real titles.
+            # Every emitted ID is verified present in the local spec search file —
+            # a "filed archive cross-reference" must always resolve to a real record.
             n = 0
-            while len(specs) < 3 and n < 50:
+            while len(specs) < 3 and n < 500:
                 h = int(hashlib.sha1((fam + "fallback" + str(n)).encode()).hexdigest(), 16)
                 sid = "JAH-SPEC-%06d" % (1 + h % 540000)
-                if sid not in [s[0] for s in specs]:
-                    specs.append([sid, "Signature archive record"])
+                if sid in spec_titles and sid not in [s[0] for s in specs]:
+                    specs.append([sid, spec_titles[sid][:90]])
                 n += 1
         refs[fam] = {"specs": specs, "patents": pick(fam, [(p, t, 1) for p, t in pat_hits[fam]], 2)}
 

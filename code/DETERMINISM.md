@@ -61,6 +61,11 @@ NORMALIZED INPUT
 `content_sha256`, plus universal-solver vectors. The QA gate
 (`code/qa/check.py`) re-solves every vector and fails the build on any mismatch.
 
+NOTE: cross-link titles come from the filed archives via `code/build_crossrefs.py`
+(FILED_REFS, deterministic given the archive snapshots). Whenever FILED_REFS is
+rebuilt, regenerate `code/test_vectors.json` too — the two are a pair, and the
+QA gate enforces that they agree.
+
 ## What "fully solved" does and does not mean
 
 Fully solved = the generator filled every required field of that family's record

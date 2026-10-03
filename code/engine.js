@@ -80,12 +80,12 @@ var FILED_REFS = {
   ],
   "patents": [
    [
-    "CA2075043C",
-    "Vtol aircraft"
+    "WO2003062057A1",
+    "Anti-ballistic, intrusion resistant, cockpit door"
    ],
    [
-    "CA2023118A1",
-    "Ink additives for improved ink-jet performance"
+    "CA2075043C",
+    "Vtol aircraft"
    ]
   ]
  },
@@ -100,8 +100,8 @@ var FILED_REFS = {
     "Diagnostics lab for autonomous decision making using circuit breaking"
    ],
    [
-    "JAH-SPEC-280011",
-    "Diagnostics suite for malware classification using approximate nearest neighbors"
+    "JAH-SPEC-641045",
+    "Diagnostic tools lab for route planning using t-digest quantiles Rev 2"
    ]
   ],
   "patents": [
@@ -118,16 +118,16 @@ var FILED_REFS = {
  "food": {
   "specs": [
    [
+    "JAH-SPEC-643713",
+    "Video games system for food-grade sanitation using fan-out wafer packaging"
+   ],
+   [
     "JAH-SPEC-208153",
     "Livestock feeder for food-grade sanitation using anodic bonding \u2014 Tractor guidance unit Co"
    ],
    [
     "JAH-SPEC-295498",
     "Industrial goods engine-Plane detector hybrid for food-grade sanitation using adaptive clo"
-   ],
-   [
-    "JAH-SPEC-391644",
-    "Brewing kettle for food-grade sanitation using inductive coupling \u2014 Bottle filler Vector S"
    ]
   ],
   "patents": [
@@ -145,15 +145,15 @@ var FILED_REFS = {
   "specs": [
    [
     "JAH-SPEC-390256",
-    "Signature archive record"
+    "Phased array front-end for surge suppression using embedded passives Rev 2"
    ],
    [
     "JAH-SPEC-277816",
-    "Signature archive record"
+    "QoS classifier for data deduplication using CQRS projections \u2014 Mesh coordinator Edge Line "
    ],
    [
     "JAH-SPEC-514312",
-    "Signature archive record"
+    "Constraint solver for clinical triage using hyperloglog sketching (Deterministic Edition)"
    ]
   ],
   "patents": [
@@ -174,12 +174,12 @@ var FILED_REFS = {
     "Neural accelerator-Oracle feeder hybrid for abrasive cutting using silicon interposers"
    ],
    [
-    "JAH-SPEC-316379",
-    "Quantum science lab for document summarization using dictionary compression"
+    "JAH-SPEC-625401",
+    "Signature Neural accelerator for outdoor weathering using micro-bump arrays"
    ],
    [
-    "JAH-SPEC-299483",
-    "Retort sterilizer for short-circuit protection using eutectic die attach Rev 2"
+    "JAH-SPEC-316379",
+    "Quantum science lab for document summarization using dictionary compression"
    ]
   ],
   "patents": [
@@ -226,12 +226,12 @@ var FILED_REFS = {
     "Signature Vehicles array for passive cooling using powder coating"
    ],
    [
-    "JAH-SPEC-104944",
-    "Portable vehicles for continuous duty cycling using flip-chip bonding \u2014 Vehicles system Pr"
+    "JAH-SPEC-587448",
+    "Vehicles console for EMI shielding using aluminum nitride carriers"
    ],
    [
-    "JAH-SPEC-292912",
-    "Military vehicles array for bulk material transport using aluminum nitride carriers"
+    "JAH-SPEC-104944",
+    "Portable vehicles for continuous duty cycling using flip-chip bonding \u2014 Vehicles system Pr"
    ]
   ],
   "patents": [
@@ -248,26 +248,26 @@ var FILED_REFS = {
  "engine": {
   "specs": [
    [
+    "JAH-SPEC-575601",
+    "Proteomics engine for fraud detection using CQRS projections"
+   ],
+   [
     "JAH-SPEC-401858",
     "Environment detection hub for feature engineering using CQRS projections Rev 2"
    ],
    [
     "JAH-SPEC-386171",
     "Router board-Load balancer hybrid-Planning engine hybrid for voice capture using chain dri"
-   ],
-   [
-    "JAH-SPEC-508836",
-    "Music engine for frequency hopping using fan-out wafer packaging"
    ]
   ],
   "patents": [
    [
-    "KR0181143B1",
-    "Message transmission and reception method in the operation maintenance system"
+    "DE10029332B4",
+    "Measurement of the load condition of a motor vehicle"
    ],
    [
-    "US5012750A",
-    "Apparatus for recovery of constituents and heat from fluidized bed combustion"
+    "KR0181143B1",
+    "Message transmission and reception method in the operation maintenance system"
    ]
   ]
  },
@@ -282,8 +282,8 @@ var FILED_REFS = {
     "Portable toys for dust sealing using chain drives Rev 2"
    ],
    [
-    "JAH-SPEC-461695",
-    "Toys hub for passive cooling using optical alignment"
+    "JAH-SPEC-577730",
+    "Toys engine for bulk material transport using dynamic voltage scaling"
    ]
   ],
   "patents": [
@@ -292,8 +292,8 @@ var FILED_REFS = {
     "Traveling toy"
    ],
    [
-    "US7568965B2",
-    "Transformable toy and leg structure for toys"
+    "CN202496483U",
+    "Enclosed upper type plush leather shoes"
    ]
   ]
  },
@@ -314,17 +314,21 @@ var FILED_REFS = {
   ],
   "patents": [
    [
-    "CN111152302A",
-    "Automatic numerically-controlled drilling machine for drilling of paulownia \u2026"
+    "CN111229385A",
+    "Heavy hammer crusher applied to stone"
    ],
    [
-    "CN108220903A",
-    "A kind of process of surface treatment for numerically-controlled machine tool \u2026"
+    "US6252192B1",
+    "EDM tool holder"
    ]
   ]
  },
  "furniture": {
   "specs": [
+   [
+    "JAH-SPEC-632077",
+    "Curriculums toolkit for fail-safe shutdown using belt drives \u2014 Portable curriculums Pro Li"
+   ],
    [
     "JAH-SPEC-098361",
     "Signature Portable civil engineering for query optimization using contrastive pretraining"
@@ -332,10 +336,6 @@ var FILED_REFS = {
    [
     "JAH-SPEC-257527",
     "Portable research papers for model serving using dictionary compression"
-   ],
-   [
-    "JAH-SPEC-455635",
-    "constant calculators lab-Portable planning-Medical procedures system-Cabinet hinge hybrid "
    ]
   ],
   "patents": [
@@ -430,16 +430,16 @@ var FILED_REFS = {
  "robot": {
   "specs": [
    [
+    "JAH-SPEC-588775",
+    "Mixed reality media lab for model serving using reservoir sampling"
+   ],
+   [
     "JAH-SPEC-321390",
     "Duplicate detector for code generation using reservoir sampling (Deterministic Edition)"
    ],
    [
     "JAH-SPEC-509480",
     "Energy systems array for traffic forecasting using reservoir sampling"
-   ],
-   [
-    "JAH-SPEC-031642",
-    "Pc system task troll console for personalized recommendation using reservoir sampling"
    ]
   ],
   "patents": [
@@ -474,8 +474,8 @@ var FILED_REFS = {
     "Slope type dendrobium officinale seedling cultivation frame in greenhouse"
    ],
    [
-    "KR20030059953A",
-    "Fungicide and insecticide composition for house dust-mite control"
+    "AU3976685A",
+    "Cooling tower monitor"
    ]
   ]
  },
@@ -522,12 +522,12 @@ var FILED_REFS = {
   ],
   "patents": [
    [
-    "CN108174485A",
-    "A kind of intellectual single light controller autocontrol method"
+    "CN118061215A",
+    "A grabbing manipulator and handling robot for conical parts"
    ],
    [
-    "CN208029804U",
-    "A kind of irrigation robot"
+    "US5338246A",
+    "Suspension systems of vehicle toys"
    ]
   ]
  },
@@ -535,15 +535,15 @@ var FILED_REFS = {
   "specs": [
    [
     "JAH-SPEC-491049",
-    "Signature archive record"
+    "Isochrone calculator for document summarization using sharded counters (Deterministic Edit"
    ],
    [
     "JAH-SPEC-525346",
-    "Signature archive record"
+    "Forecasting suite for log analysis using learned indexing (Hybrid Edition)"
    ],
    [
     "JAH-SPEC-527603",
-    "Signature archive record"
+    "Frameworks module for autonomous decision making using RDMA transfers Rev 2"
    ]
   ],
   "patents": [
@@ -560,16 +560,16 @@ var FILED_REFS = {
  "mix-jet-engine": {
   "specs": [
    [
+    "JAH-SPEC-654414",
+    "QoS classifier for churn prediction using bloom filter cascades \u2014 BGP policy engine Ultra "
+   ],
+   [
     "JAH-SPEC-289410",
     "Future media engine for indoor positioning using flex-rigid PCBs \u2014 Future media array Puls"
    ],
    [
     "JAH-SPEC-118015",
     "Personalization engine for predictive maintenance using hyperloglog sketching"
-   ],
-   [
-    "JAH-SPEC-374870",
-    "Beam splitter-Environmental engineering system-Nanoscience lab hybrid-Webhook dispatcher h"
    ]
   ],
   "patents": [
