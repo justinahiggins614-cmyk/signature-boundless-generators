@@ -9,6 +9,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"The Signature Boundless Generator Archive","url":"https://justinahiggins614-cmyk.github.io/signature-boundless-generators/","description":"Catalog of Signature-line generators for every field and subject. Each generator produces fully-solved outputs: sizes, dimensions, chips, measurements, materials, colors."}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"The Signature Boundless Generator Archive","creator":{"@type":"Person","name":"Justin Addam Higgins"}}
+</script>
 <style>
 :root{--bg:#070b16;--bg2:#0a0f1e;--line:#2a3a5f;--txt:#d7e3ff;--dim:#9aa4b2;--gold:#c9a227;--cy:#00f0ff;--am:#e8a020}
 *{box-sizing:border-box}
@@ -44,7 +47,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .btn:hover{background:#1a3054}
 .btn.gold{border-color:var(--gold);color:var(--gold)}
 .btn.ghost{background:transparent}
-.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.az{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;position:sticky;top:0;z-index:40;background:#070b16;padding:10px 4px}
 .az button{background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 11px;cursor:pointer}
 .az button.on{border-color:var(--gold);color:var(--gold)}
 .finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
@@ -95,17 +98,26 @@ h2.famtitle{color:var(--gold)}
 .crit{display:inline-block;background:#c0392b;color:#fff;font-size:.68em;padding:2px 8px;border-radius:8px;margin-left:8px;vertical-align:middle;letter-spacing:.04em}
 .xlink{margin:.5em 0}
 .xlink a{color:#9fc2ff}
+/* FIX-03: stat tickers collapse on mobile (<768px); desktop unchanged */
+.statscollapse{border:0;margin:0;padding:0}
+.statscollapse>summary{list-style:none;cursor:pointer;font-size:.85em;color:var(--dim);text-align:center;padding:9px 12px;border:1px dashed var(--line);border-radius:8px;background:var(--bg2);max-width:340px;margin:12px auto}
+.statscollapse>summary::-webkit-details-marker{display:none}
+.statscollapse>summary::before{content:"\25B8  "}
+.statscollapse[open]>summary::before{content:"\25BE  "}
+@media(min-width:768px){.statscollapse>summary{display:none}}
 </style>
 </head>
 <body>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><span class="cur">YOU ARE HERE: THE SIGNATURE BOUNDLESS GENERATOR ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem" role="navigation"><span class="jahnet-t">THE JAH NETWORK</span><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Spec Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><span class="cur">YOU ARE HERE: THE SIGNATURE BOUNDLESS GENERATOR ARCHIVE</span><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></nav>
 
 <div class="wrap">
 <header class="hero">
 <h1>⚙️ The Signature Boundless Generator Archive</h1>
 <p class="sub">A Signature-line generator for every field and subject — jets, cars, engines, food, candy, toys, robots, buildings, nanoplasma, lightbots, medical concepts, and mix-and-match labs. Set the parameters or hit randomize: every output is <b>fully solved</b> — idea, sizes, dimensions, chips, measurements, materials, and colors. Boundless outputs, marching to 1,000,000.</p>
+<details class="statscollapse"><summary>Site stats</summary>
 <div class="stats" id="stats"><div class="stat"><b>…</b><span>loading</span></div></div>
 <div class="march"><div class="bar"><div class="fill" id="marchfill"></div></div><small id="marchtxt">Marching to 1,000,000 generated outputs</small></div>
+</details>
 <p class="staticcount">6,000 fully-solved generator outputs on file across 20 generator families, as of 2026-10-02. Live count above.</p>
 <div class="solvebar">
 <div class="solvetitle">⚙️ Describe anything — the all-purpose generator</div>
@@ -135,7 +147,7 @@ h2.famtitle{color:var(--gold)}
 
 <footer><div class="wrap">
 <p><b style="color:var(--gold)">The Signature Boundless Generator Archive</b> — every generator an original Signature-line concept engine by <b>Justin Addam Higgins</b>. Outputs are deterministic: the same family + seed always yields the same fully-solved design. Medical-family outputs are speculative wellness concepts only — not medical advice.</p>
-<div class="sites">THE JAH NETWORK ·
+<nav class="sites" aria-label="JAH Network footer sites" role="navigation">THE JAH NETWORK ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">Telephone Book</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a> ·
@@ -151,7 +163,7 @@ h2.famtitle{color:var(--gold)}
 <a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Newspaper Archive</a> ·
 <a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a> ·
-<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a></div>
+<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a></nav>
 </div></footer>
 
 <div id="aubar"><span id="aulabel">Reading…</span><span class="prog" id="auprog"></span><button class="btn ghost" id="aupause">⏸ Pause</button><button class="btn ghost" id="austop">⏹ Stop</button></div>
