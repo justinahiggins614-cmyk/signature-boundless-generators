@@ -1731,7 +1731,7 @@ function families() {
   });
 }
 
-var API = { FAMILIES: FAMILIES, families: families, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams, solveCustom: solveCustom, customHash: customHash, classifyText: classifyText };
+var API = { FAMILIES: FAMILIES, families: families, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams, solveCustom: solveCustom, customHash: customHash, classifyText: classifyText, version: "1.0" };
 
 /* node CLI: node engine.js families | node engine.js solve <family> <seed> [paramsJSON] | node engine.js batch <family> <start> <count> */
 if (typeof module !== "undefined" && typeof require !== "undefined" && require.main === module) {

@@ -59,7 +59,7 @@ def family_page(f, rows):
     key = f["key"]
     trs = []
     for r in rows:
-        trs.append('<tr><td>%s</td><td>%d</td><td><a href="../?gen=%s-%d">%s</a></td><td>%s</td></tr>' %
+        trs.append('<tr><td>%s</td><td>%d</td><td><a href="../?gen=%s-%d">%s</a></td><td>%s</td><td><span class="recbadge">GENERATED</span></td></tr>' %
                    (esc(r[0]), r[2], esc(key), r[2], esc(r[3]), esc(r[4])))
     ld = {"@context": "https://schema.org", "@type": "ItemList",
           "name": f["name"] + " — generated outputs",
@@ -84,17 +84,20 @@ def family_page(f, rows):
 h1{{color:#c9a227}}h2{{color:#00f0ff;font-size:1.05em;border-bottom:1px solid #2a3a5f;padding-bottom:6px}}
 a{{color:#9fc2ff}}table{{width:100%;border-collapse:collapse;font-size:.88em}}
 td,th{{border-bottom:1px solid #1a2440;padding:7px 8px;text-align:left;vertical-align:top}}
-th{{color:#9aa4b2;font-weight:400}}</style>
+th{{color:#9aa4b2;font-weight:400}}
+.sitekicker{{font-size:11px;letter-spacing:.28em;color:#9aa4b2}}
+.recbadge{{display:inline-block;border:2px solid #c9a227;background:#2a230c;color:#c9a227;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:bold;letter-spacing:.06em}}</style>
 </head>
 <body><div class="wrap">
+<p class="sitekicker"><b>SITE 17 OF 25</b> &middot; THE JAH NETWORK</p>
 <p><a href="../">&larr; The Signature Boundless Generator Archive</a> &middot; <a href="./">All generator families</a></p>
 <h1>{icon} {name}</h1>
 <p>{blurb}</p>
-<p>{count} fully-solved outputs on file. Every output is an exact-recreation package: piece-by-piece parts list, every measurement, build steps, filed-archive cross-references.</p>
+<p>{count} fully-solved outputs on file. Every output is an exact-recreation package: piece-by-piece parts list, every measurement, build steps, filed-archive cross-references. Record status of every output below: <span class="recbadge">GENERATED</span>.</p>
 {params}
 <h2>Outputs ({count})</h2>
 <table>
-<tr><th>ID</th><th>Seed</th><th>Name</th><th>Tagline</th></tr>
+<tr><th>ID</th><th>Seed</th><th>Name</th><th>Tagline</th><th>Record status</th></tr>
 {rows}
 </table>
 <p><a href="./">All generator families</a></p>
@@ -121,9 +124,11 @@ def index_page(fams, counts):
 <link rel="canonical" href="{base}hubs/">
 <style>body{{font-family:Arial,Helvetica,sans-serif;background:#070b16;color:#d7e3ff;margin:0;line-height:1.55}}
 .wrap{{max-width:1000px;margin:0 auto;padding:0 16px 60px}}
-h1{{color:#c9a227}}a{{color:#9fc2ff}}li{{margin:12px 0}}span{{color:#9aa4b2;font-size:.85em}}</style>
+h1{{color:#c9a227}}a{{color:#9fc2ff}}li{{margin:12px 0}}span{{color:#9aa4b2;font-size:.85em}}
+.sitekicker{{font-size:11px;letter-spacing:.28em;color:#9aa4b2}}</style>
 </head>
 <body><div class="wrap">
+<p class="sitekicker"><b>SITE 17 OF 25</b> &middot; THE JAH NETWORK</p>
 <p><a href="../">&larr; The Signature Boundless Generator Archive</a></p>
 <h1>Generator families (static directory)</h1>
 <ul>

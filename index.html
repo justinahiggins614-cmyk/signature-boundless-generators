@@ -142,6 +142,20 @@ h2.famtitle{color:var(--gold)}
 .solvedef p{color:var(--txt);margin:.6em 0 .2em}
 .warnlist{margin:.4em 0;padding-left:1.2em;font-size:.9em}
 .warnlist li{margin:.4em 0}
+/* CONSISTENCY PASS (network-wide 10-fix): shared record kit, styling-neutral */
+.sitekicker{font-size:11px;letter-spacing:.28em;color:var(--dim);margin:0 0 6px}
+.sitekicker b{color:var(--gold)}
+.reclbl{font-size:10.5px;letter-spacing:.22em;color:var(--dim);margin-right:8px}
+.recbadge{display:inline-block;border:2px solid var(--gold);background:#2a230c;color:var(--gold);border-radius:10px;padding:3px 12px;font-size:12px;font-weight:bold;letter-spacing:.06em;margin:3px 6px 3px 0}
+.recbadge.mini{font-size:10px;padding:1px 8px;border-width:1px;margin:0 0 6px}
+.provline{font-size:.82em;color:var(--dim);margin:8px 0}
+.provline b{color:var(--cy);font-weight:400}
+.recbar{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0;align-items:center}
+.recbar .btn{font-size:.85em;padding:9px 14px}
+.recinfo{background:#0d1526;border:1px dashed var(--gold);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:.88em;display:none}
+.aicard{background:#0d1526;border:1px solid var(--cy);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:.9em}
+.aicard .aname{color:var(--cy);font-weight:700}
+.aicard .duties{color:var(--dim)}
 </style>
 </head>
 <body>
@@ -149,6 +163,7 @@ h2.famtitle{color:var(--gold)}
 
 <div class="wrap">
 <header class="hero">
+<div class="sitekicker"><b>SITE 17 OF 25</b> · THE JAH NETWORK</div>
 <h1>⚙️ The Signature Boundless Generator Archive</h1>
 <p class="sub">A Signature-line generator for every field and subject — jets, cars, engines, food, candy, toys, robots, buildings, nanoplasma, lightbots, medical concepts, and mix-and-match labs. Set the parameters or hit randomize: every output is <b>fully solved</b> — idea, sizes, dimensions, chips, measurements, materials, and colors. Boundless outputs, marching to 1,000,000.</p>
 <details class="statscollapse"><summary>Site stats</summary>
@@ -178,7 +193,7 @@ h2.famtitle{color:var(--gold)}
 </div>
 <div id="fresults" class="fresults"></div>
 <h2 style="color:var(--gold)">Fresh from the forge</h2>
-<div class="cards" id="fresh"></div>
+<div class="cards" id="fresh"><p class="note">Loading the forge index…</p></div>
 </div>
 
 <div id="famview" style="display:none"></div>
@@ -297,7 +312,7 @@ async function loadFresh(){
 }
 function cardHTML(r){
   var f=SigGen.byKey(r[1]);
-  return '<div class="card" onclick="showGen(\''+r[1]+'\','+r[2]+',{})"><div class="sku">'+esc(r[0])+'</div><h4>'+(f?f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div></div>';
+  return '<div class="card" onclick="showGen(\''+r[1]+'\','+r[2]+',{})"><div class="sku">'+esc(r[0])+'</div><span class="recbadge mini">GENERATED</span><h4>'+(f?f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div></div>';
 }
 var searchT;
 function bindSearch(){
@@ -307,6 +322,8 @@ function bindSearch(){
 }
 async function doSearch(){
   var idx=await ensureIdx();
+  /* CONSISTENCY PASS: honest "Loading…" — never "No outputs match" while the index resolves */
+  if(!idx.length){document.getElementById("fresh").innerHTML='<p class="note">The forge index is still loading — a moment…</p>';return;}
   var q=document.getElementById("q").value.trim().toLowerCase();
   var fam=document.getElementById("ffam").value;
   var L=document.querySelector("#az button.on").dataset.l;
@@ -430,6 +447,9 @@ function outputPanelHTML(o,icon,ctx){
   var seedLabel=o.customHash?("custom-"+o.customHash):(""+o.seed);
   var h='<div class="panel">'+
     '<div class="conceptbanner">⚠ '+esc(CONCEPT_STATUS)+'</div>'+
+    /* CONSISTENCY PASS: canonical record-status badge (GENERATED) + provenance line */
+    '<div style="margin:8px 0"><span class="reclbl">RECORD STATUS</span><span class="recbadge">GENERATED</span></div>'+
+    '<p class="provline"><b>Provenance:</b> made by SigGen v'+esc(sigVer())+' (deterministic generator engine) · '+esc(ctx.inputDesc||("seed "+o.seed))+' · output '+esc(o.id)+'</p>'+
     (isMed&&o.safety?'<div class="medbanner">✚ '+esc(o.safety)+'</div>':"")+
     '<div class="sku" style="font-size:.75em;color:var(--dim)">'+esc(o.id)+(o.customHash?' · solve '+esc(o.customHash):' · seed '+o.seed)+'</div>'+
     '<h2>'+icon+' '+esc(o.name)+'</h2><p class="note">'+esc(o.tagline)+'</p>'+
@@ -466,6 +486,16 @@ function outputPanelHTML(o,icon,ctx){
     '<button class="btn" onclick="copyGen()">📋 Copy</button>'+
     '<button class="btn" onclick="dlGen(\'txt\')">⬇ .txt</button>'+
     '<button class="btn" onclick="dlGen(\'json\')">⬇ .json</button></div>'+
+    /* CONSISTENCY PASS: record panel — OPEN · SOURCE · ID · VERSION · SHARE (read-aloud/copy/download live in the row above) */
+    '<div class="recbar" role="group" aria-label="Record panel: open, source, id, version, share"><span class="reclbl">RECORD</span>'+
+    '<button class="btn ghost" onclick="genRecOpen()">↗ OPEN</button>'+
+    '<button class="btn ghost" onclick="genRecSrc()">⇄ SOURCE</button>'+
+    '<button class="btn ghost" onclick="genRecId()"># ID</button>'+
+    '<button class="btn ghost" onclick="genRecVer()">⚙ VERSION</button>'+
+    '<button class="btn ghost" onclick="genRecShare()">⤴ SHARE</button></div>'+
+    '<div class="recinfo" id="recinfo"></div>'+
+    /* CONSISTENCY PASS: AI identity card */
+    '<div class="aicard"><span class="aname">🤖 Design Analyst — AI identity</span><br><span class="duties">This design\u2019s personal AI assistant. <b>Duties:</b> answers questions from this solved spec only — dimensions, materials, parts, steps, cross-references — never invents. <b>Engine:</b> data-grounded spec matcher — talks human, answers from the record.</span></div>'+
     '<div class="qa"><div class="q">❓ Ask about this design</div><div id="qaout"><p class="note">Ask anything about the '+esc(o.name)+' — answers come only from its solved spec.</p></div>'+
     '<div class="qarow"><input id="qain" placeholder="e.g. What are the dimensions? What chips does it use?" aria-label="Ask about this design"><button class="btn" onclick="askQA()">Ask</button></div></div>'+
     '</div>';
@@ -477,11 +507,22 @@ function showCustom(text){
   try{o=SigGen.solveCustom(text)}catch(e){audMsg("Describe something first — a few words is enough.");return}
   G.curOut=o;show("genview");
   history.replaceState(null,"","?gen=custom-"+o.customHash+"&d="+encodeURIComponent(text));
+  o._customText=text; /* CONSISTENCY PASS: record-panel deep link needs the original words */
   document.getElementById("genview").innerHTML=outputPanelHTML(o,"⚙️",{familyName:o.familyName||"Universal Solver",inputDesc:'"'+text+'" (custom solve)'});
   window.scrollTo(0,0);
   var qi=document.getElementById("qain");if(qi)qi.addEventListener("keydown",function(e){if(e.key==="Enter")askQA()});
 }
 function goHome(){show("home");history.replaceState(null,"","./");window.scrollTo(0,0)}
+/* CONSISTENCY PASS: record-panel actions */
+function sigVer(){try{return (typeof SigGen!=="undefined"&&SigGen.version)||"1.0"}catch(e){return "1.0"}}
+function genRecInfoBox(){return document.getElementById("recinfo")}
+function genRecShow(html){var b=genRecInfoBox();if(!b)return;b.style.display="block";b.innerHTML=html}
+function genRecDeep(){var o=G.curOut;if(!o)return location.href;if(o.customHash)return location.origin+location.pathname+"?gen=custom-"+o.customHash+"&d="+encodeURIComponent(o._customText||"");return location.origin+location.pathname+"?gen="+o.family+"-"+o.seed}
+function genRecOpen(){window.open(genRecDeep(),"_blank","noopener")}
+function genRecSrc(){var o=G.curOut;if(!o)return;var b=genRecInfoBox();if(b.style.display==="block"&&b.dataset.kind==="src"){b.style.display="none";b.dataset.kind="";return}genRecShow("<b>SOURCE</b> — "+esc(o.lineage||"Generated by the SigGen deterministic engine."));b.dataset.kind="src"}
+function genRecId(){var o=G.curOut;if(!o)return;var b=genRecInfoBox();genRecShow("<b>ID</b> — "+esc(o.id));b.dataset.kind="id";try{navigator.clipboard.writeText(o.id)}catch(e){}}
+function genRecVer(){var o=G.curOut;var b=genRecInfoBox();genRecShow("<b>VERSION</b> — SigGen v"+esc(sigVer())+" · generator-record schema v1 · deterministic: the same family + seed always yields this exact output.");b.dataset.kind="ver"}
+function genRecShare(){var u=genRecDeep();var b=genRecInfoBox();if(navigator.share){try{navigator.share({title:document.title,url:u})}catch(e){}return}if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){genRecShow("<b>SHARE</b> — output link copied: "+esc(u));b.dataset.kind="share"},function(){genRecShow("<b>SHARE</b> — output link: "+esc(u));b.dataset.kind="share"})}else{genRecShow("<b>SHARE</b> — output link: "+esc(u));b.dataset.kind="share"}}
 function genText(o){
   var L=[];
   L.push("CONCEPT / SIMULATION — this generated design has not been engineered, physically tested, or certified safe.","");
@@ -560,7 +601,7 @@ async function fAsk(){
     .sort(function(a,b){return b.s-a.s}).slice(0,5);
   if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. ⚙️</p>';return}
   box.innerHTML=hits.map(function(h){var r=h.r;
-    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><h4>'+(h.f?h.f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?gen='+encodeURIComponent(r[1])+'-'+r[2]+'">Take me there →</a></div>'}).join("");
+    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><span class="recbadge mini">GENERATED</span><h4>'+(h.f?h.f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?gen='+encodeURIComponent(r[1])+'-'+r[2]+'">Take me there →</a></div>'}).join("");
 }
 document.getElementById("fgo").onclick=fAsk;
 document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});
