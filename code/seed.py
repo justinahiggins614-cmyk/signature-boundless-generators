@@ -7,7 +7,7 @@ rebuilds manifest + index + sitemap + api.json.
 
 Usage: python3 code/seed.py --per-family 150
 """
-import argparse, gzip, json, os, subprocess, sys
+import argparse, datetime, gzip, hashlib, json, os, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
@@ -34,6 +34,13 @@ def main():
     ap.add_argument("--per-family", type=int, default=150)
     a = ap.parse_args()
     os.makedirs(CHUNKS, exist_ok=True)
+
+    # GATE 0: the deterministic engine must validate before anything is written.
+    print("validating engine...", flush=True)
+    v = subprocess.run(["node", "code/engine.js", "validate"], capture_output=True, text=True, cwd=ROOT)
+    if v.returncode != 0:
+        raise RuntimeError("engine validate FAILED — drip aborted:\n" + v.stderr[:2000] + v.stdout[:2000])
+    print("  " + v.stdout.strip(), flush=True)
 
     fams = families()
     state = load_state()
@@ -81,8 +88,69 @@ def main():
         chunks.append(name)
 
     manifest["chunks"] = chunks
-    manifest["count"] = sum(1 for _ in iter_rows(chunks))
+    total = 0
+    per_fam = {}
+    chunk_manifest = []
+    for c in chunks:
+        p = os.path.join(CHUNKS, c)
+        h = hashlib.sha256()
+        first = last = None
+        n = 0
+        with gzip.open(p, "rb") as fh:
+            for line in fh:
+                h.update(line)
+                if line.strip():
+                    r = json.loads(line)
+                    n += 1
+                    if first is None:
+                        first = r[0]
+                    last = r[0]
+                    per_fam[r[1]] = per_fam.get(r[1], 0) + 1
+        total += n
+        chunk_manifest.append({"chunk": c, "first_id": first, "last_id": last,
+                               "count": n, "sha256": h.hexdigest()})
+    manifest["count"] = total
     manifest["per_family"] = {k: v - 1 for k, v in ns.items()}  # seeds issued per family
+    assert total == sum(per_fam.values()), "count mismatch"
+    assert manifest["per_family"] == per_fam, "per_family mismatch vs chunk scan"
+
+    # ---- authoritative manifest fields (the ONE count source) ----
+    now = datetime.datetime.now(datetime.timezone.utc)
+    fam_ids = {}
+    for i, f in enumerate(fams):
+        n2 = str(i + 1)
+        while len(n2) < 2:
+            n2 = "0" + n2
+        fam_ids[f["key"]] = "JAH-GF-" + n2
+    latest, earliest = {}, {}
+    for key, cnt in per_fam.items():
+        fam = key.upper().replace("-", "")
+        latest[key] = "JAH-GEN-%s-%06d" % (fam, cnt)
+        earliest[key] = "JAH-GEN-%s-000001" % fam
+    drips = manifest.get("drip_history", [])
+    drips.append({"date": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                  "added": len(new_rows), "per_family": a.per_family})
+    drips = drips[-50:]
+    manifest.update({
+        "site": "The Signature Boundless Generator Archive",
+        "site_id": "SIGNATURE-BOUNDLESS-GENERATORS",
+        "site_number": 17,
+        "goal": 1000000,
+        "family_ids": fam_ids,
+        "latest_ids": latest,
+        "earliest_ids": earliest,
+        "chunk_manifest": chunk_manifest,
+        "drip_history": drips,
+        "archive_version": now.strftime("%Y-%m-%d"),
+        "generator_version": "1.0",
+        "engine_version": "1.0",
+        "schema_version": "1.0",
+        "index_version": "1.0",
+        "index_url": "data/index.json.gz",
+        "updated": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/",
+        "id_scheme": "JAH-GEN-<FAMILY>-<seed 6-digit> (family key uppercased); universal solves JAH-GEN-CUSTOM-<base36 hash>",
+    })
     json.dump(manifest, open(manifest_p, "w"), indent=1)
     json.dump(state, open(os.path.join(DATA, "state.json"), "w"), indent=1)
 
@@ -92,20 +160,34 @@ def main():
         for r in iter_rows(chunks):
             fh.write(json.dumps(r, separators=(",", ":")) + "\n")
             fam_counts[r[1]] = fam_counts.get(r[1], 0) + 1
+    assert sum(fam_counts.values()) == total, "index row mismatch"
 
-    # api.json
+    # index hash (computed after the index is rebuilt)
+    ih = hashlib.sha256()
+    with open(os.path.join(DATA, "index.json.gz"), "rb") as fh:
+        for blk in iter(lambda: fh.read(1 << 20), b""):
+            ih.update(blk)
+    manifest["index_sha256"] = ih.hexdigest()
+    json.dump(manifest, open(manifest_p, "w"), indent=1)
+
+    # api.json (extends the same authoritative source)
     api = {
         "site": "The Signature Boundless Generator Archive",
         "outputs": manifest["count"],
         "goal": 1000000,
-        "families": [{"key": f["key"], "name": f["name"], "icon": f["icon"], "blurb": f["blurb"]} for f in fams],
+        "updated": manifest["updated"],
+        "generator_version": "1.0",
+        "schema_version": "1.0",
         "manifest": "data/manifest.json",
         "index": "data/index.json.gz",
+        "index_sha256": manifest["index_sha256"],
+        "families": [{"key": f["key"], "family_id": fam_ids[f["key"]], "name": f["name"],
+                      "icon": f["icon"], "blurb": f["blurb"],
+                      "outputs": fam_counts.get(f["key"], 0)} for f in fams],
     }
     json.dump(api, open(os.path.join(ROOT, "api.json"), "w"), indent=1)
 
     # SITE-17 DIAG FIX-02: machine-readable catalog feed (rebuilt on every drip)
-    import datetime
     cat = {
         "site": "The Signature Boundless Generator Archive",
         "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -122,6 +204,19 @@ def main():
         } for f in fams],
     }
     json.dump(cat, open(os.path.join(ROOT, "generators-catalog.json"), "w"), indent=1)
+
+    # refresh the AI-manifest count lines in llms.txt from the same source
+    llms_p = os.path.join(ROOT, "llms.txt")
+    if os.path.exists(llms_p):
+        import re
+        t = open(llms_p).read()
+        t = re.sub(r"^OUTPUTS_ON_FILE: .*$",
+                   "OUTPUTS_ON_FILE: %d" % manifest["count"], t, flags=re.M)
+        t = re.sub(r"^GENERATOR_FAMILIES: .*$",
+                   "GENERATOR_FAMILIES: %d" % len(fams), t, flags=re.M)
+        t = re.sub(r"^ARCHIVE_UPDATED: .*$",
+                   "ARCHIVE_UPDATED: %s" % now.strftime("%Y-%m-%d"), t, flags=re.M)
+        open(llms_p, "w").write(t)
 
     print("TOTAL outputs:", manifest["count"])
 

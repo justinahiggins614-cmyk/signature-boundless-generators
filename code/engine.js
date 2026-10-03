@@ -1691,11 +1691,116 @@ function finalize(famKey, o) {
   o.parts = buildParts(famKey, o);
   o.build_steps = buildSteps(famKey, o.parts, o);
   o.crosslinks = buildCrosslinks(famKey, o);
+  /* honest status vocabulary (see schema/status.schema.json) — constant per
+     record, so determinism is unaffected: same (family, seed) -> same output */
+  o.solve_status = "SOLVED";
+  o.design_status = "SPECIFIED";
+  o.value_origin = "GENERATED";
+  o.physical_test_status = "NONE";
+  o.simulation_status = "NOT_SIMULATED";
+  o.provenance = "GENERATED";
   if (o._bases) delete o._bases;
   return o;
 }
 
 /*__PART2__*/
+
+/* ============ content hashing (sync sha256, dependency-free) ============ */
+function sha256Hex(str) {
+  /* classic compact implementation; operates on a UTF-8 byte string */
+  function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+  var maxWord = Math.pow(2, 32), i, j, result = "";
+  var words = [], bitLen = str.length * 8;
+  var hash = sha256Hex.h = sha256Hex.h || [], k = sha256Hex.k = sha256Hex.k || [];
+  var pc = k.length, comp = {};
+  for (var cand = 2; pc < 64; cand++) {
+    if (!comp[cand]) {
+      for (i = 0; i < 313; i += cand) comp[i] = cand;
+      hash[pc] = (Math.pow(cand, 0.5) * maxWord) | 0;
+      k[pc++] = (Math.pow(cand, 1 / 3) * maxWord) | 0;
+    }
+  }
+  str += "\x80";
+  while (str.length % 64 - 56) str += "\x00";
+  for (i = 0; i < str.length; i++) {
+    j = str.charCodeAt(i); if (j >> 8) return "";
+    words[i >> 2] |= j << ((3 - i) % 4) * 8;
+  }
+  words[words.length] = (bitLen / maxWord) | 0;
+  words[words.length] = bitLen;
+  for (j = 0; j < words.length;) {
+    var w = words.slice(j, j += 16), old = hash;
+    hash = hash.slice(0, 8);
+    for (i = 0; i < 64; i++) {
+      var w15 = w[i - 15], w2 = w[i - 2], a = hash[0], e = hash[4];
+      var t1 = hash[7] + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & hash[5]) ^ (~e & hash[6])) + k[i]
+        + (w[i] = i < 16 ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+      var t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(t1 + t2) | 0].concat(hash); hash[4] = (hash[4] + t1) | 0;
+    }
+    for (i = 0; i < 8; i++) hash[i] = (hash[i] + old[i]) | 0;
+  }
+  for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) {
+    var b = (hash[i] >> (j * 8)) & 255;
+    result += (b < 16 ? "0" : "") + b.toString(16);
+  }
+  return result;
+}
+/* canonical serialization: sorted keys, "_" internals dropped, stable numbers */
+function stableStringify(v) {
+  if (v === null || v === undefined) return "null";
+  if (typeof v === "number") { if (!isFinite(v)) return "null"; return String(v); }
+  if (typeof v === "string") return JSON.stringify(v);
+  if (typeof v === "boolean") return v ? "true" : "false";
+  if (Array.isArray(v)) return "[" + v.map(stableStringify).join(",") + "]";
+  if (typeof v === "object") {
+    var ks = Object.keys(v).filter(function (k) { return k[0] !== "_"; }).sort();
+    return "{" + ks.map(function (k) { return JSON.stringify(k) + ":" + stableStringify(v[k]); }).join(",") + "}";
+  }
+  return "null";
+}
+function utf8bytes(s) { return unescape(encodeURIComponent(String(s))); }
+/* CONTENT_SHA256 for any solved output — identical in node and every browser */
+function outputHash(o) { return sha256Hex(utf8bytes(stableStringify(o))); }
+/* permanent family IDs: JAH-GF-01 .. JAH-GF-20 in catalog order */
+function familyId(key) {
+  for (var i = 0; i < FAMILIES.length; i++) {
+    if (FAMILIES[i].key === key) {
+      var n = String(i + 1); while (n.length < 2) n = "0" + n;
+      return "JAH-GF-" + n;
+    }
+  }
+  return null;
+}
+/* formal determinism descriptor (see code/DETERMINISM.md) */
+var DETERMINISM = {
+  engine_version: "1.0",
+  rng: "mulberry32",
+  string_hash: "hashStr (32-bit FNV-style mix, charCodeAt loop)",
+  seed_format: "family + ':' + seed + ':' + JSON.stringify(paramOverrides||{})",
+  custom_seed_format: "'custom:' + normalizedText",
+  custom_normalization: "whitespace collapsed, trimmed, sliced to 140 chars",
+  custom_id: "JAH-GEN-CUSTOM- + base36(hashStr(normalizedText)) zero-padded to 7",
+  id_scheme: "JAH-GEN-<FAMILY>-<seed zero-padded to 6> (family key uppercased, non-alphanumeric stripped, 12 chars max)",
+  canonical_serialization: "stableStringify (sorted keys, '_' internals dropped) -> UTF-8 -> sha256",
+  forever_rule: "engine v1.0 is pinned and preserved; new generator versions get new version numbers and never rewrite v1 outputs"
+};
+/* verify an archived compact row [id, family, seed, name, tagline] reproduces exactly */
+function verifyRecord(row) {
+  var res = { ok: false, id: row[0] };
+  try {
+    var o = solve(row[1], row[2], null);
+    res.idMatch = (o.id === row[0]);
+    res.nameMatch = (o.name === row[3]);
+    res.taglineMatch = (o.tagline === row[4]);
+    res.reproduced = res.idMatch && res.nameMatch && res.taglineMatch;
+    res.content_sha256 = outputHash(o);
+    res.engine_version = API_VERSION;
+    res.ok = res.reproduced;
+  } catch (e) { res.error = String((e && e.message) || e); }
+  return res;
+}
+var API_VERSION = "1.0";
 
 /* ================= PUBLIC API ================= */
 function genId(familyKey, seed) {
@@ -1727,11 +1832,11 @@ function batch(familyKey, startSeed, count) {
 }
 function families() {
   return FAMILIES.map(function (f) {
-    return { key: f.key, name: f.name, icon: f.icon, blurb: f.blurb, params: paramDefs(f), safety: f.safety || null };
+    return { key: f.key, family_id: familyId(f.key), name: f.name, icon: f.icon, blurb: f.blurb, params: paramDefs(f), safety: f.safety || null };
   });
 }
 
-var API = { FAMILIES: FAMILIES, families: families, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams, solveCustom: solveCustom, customHash: customHash, classifyText: classifyText, version: "1.0" };
+var API = { FAMILIES: FAMILIES, families: families, familyId: familyId, byKey: byKey, solve: solve, batch: batch, compactRow: compactRow, genId: genId, resolveParams: resolveParams, solveCustom: solveCustom, customHash: customHash, classifyText: classifyText, version: "1.0", apiVersion: API_VERSION, sha256Hex: sha256Hex, stableStringify: stableStringify, outputHash: outputHash, verifyRecord: verifyRecord, determinism: DETERMINISM };
 
 /* node CLI: node engine.js families | node engine.js solve <family> <seed> [paramsJSON] | node engine.js batch <family> <start> <count> */
 if (typeof module !== "undefined" && typeof require !== "undefined" && require.main === module) {

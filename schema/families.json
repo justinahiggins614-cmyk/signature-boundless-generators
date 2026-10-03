@@ -1,0 +1,849 @@
+{
+ "generator_version": "1.0",
+ "count": 20,
+ "families": [
+  {
+   "family_id": "JAH-GF-01",
+   "key": "jet",
+   "name": "Signature Jet Generator",
+   "description": "Complete Signature-line jet aircraft concepts — airframe, powerplant, avionics, all the way down to fasteners and paint.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Light trainer",
+      "Business jet",
+      "Regional airliner"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=jet"
+  },
+  {
+   "family_id": "JAH-GF-02",
+   "key": "medical",
+   "name": "Signature Medical Concept Generator",
+   "description": "Speculative Signature-line wellness device and formulation concepts. Concepts only — never medical advice.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Vital-signs monitoring",
+      "Mobility support",
+      "Sleep wellness",
+      "Posture coaching"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Wearable band",
+      "Handheld unit",
+      "Home station"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": "Speculative Signature-line wellness concept ONLY — not medical advice, not a diagnosis or treatment, not a licensed professional, illustrative concept. Consult a qualified professional for any health decision.",
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=medical"
+  },
+  {
+   "family_id": "JAH-GF-03",
+   "key": "food",
+   "name": "Signature Dish Generator",
+   "description": "Complete Signature-line dishes — every ingredient weighed, every step timed, every temperature set.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Mediterranean",
+      "East Asian",
+      "Latin",
+      "Comfort",
+      "Nordic"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Starter",
+      "Main",
+      "Dessert"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=food"
+  },
+  {
+   "family_id": "JAH-GF-04",
+   "key": "candy",
+   "name": "Signature Candy Generator",
+   "description": "Complete Signature-line confections — batch math, sugar stages, molds, and colors, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Gummy",
+      "Hard candy",
+      "Chocolate bar",
+      "Chewy caramel"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Citrus",
+      "Berry",
+      "Mint",
+      "Caramel",
+      "Tropical"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=candy"
+  },
+  {
+   "family_id": "JAH-GF-05",
+   "key": "nanoplasma",
+   "name": "Signature Nanoplasma Device Generator",
+   "description": "Theoretical Signature-line nanoplasma instruments — emitter physics worked out on paper, labeled theoretical.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Lab display",
+      "Surface sterilizer",
+      "Plasma tweezer"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Benchtop",
+      "Handheld"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=nanoplasma"
+  },
+  {
+   "family_id": "JAH-GF-06",
+   "key": "lightbot",
+   "name": "Signature Lightbot Generator",
+   "description": "Complete Signature-line lightbots — pocket robots that paint with light, electronics fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Palm",
+      "Desktop"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Dance",
+      "Patrol",
+      "Companion glow"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=lightbot"
+  },
+  {
+   "family_id": "JAH-GF-07",
+   "key": "car",
+   "name": "Signature Car Generator",
+   "description": "Complete Signature-line cars — chassis, drivetrain, aero, interior, down to the lug nuts.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Sedan",
+      "Coupe",
+      "SUV",
+      "Pickup"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "FWD",
+      "RWD",
+      "AWD",
+      "Electric AWD"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=car"
+  },
+  {
+   "family_id": "JAH-GF-08",
+   "key": "engine",
+   "name": "Signature Engine Generator",
+   "description": "Complete Signature-line engines — bore, stroke, compression, power curves, every bolt accounted for.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Inline-4",
+      "V6",
+      "V8",
+      "Flat-4"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Petrol",
+      "Diesel",
+      "Hybrid-assist petrol"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=engine"
+  },
+  {
+   "family_id": "JAH-GF-09",
+   "key": "toy",
+   "name": "Signature Toy Generator",
+   "description": "Complete Signature-line toys — safe materials, mechanisms, and colors, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Action figure",
+      "Vehicle",
+      "Puzzle",
+      "Plush"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "3+",
+      "6+",
+      "9+"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=toy"
+  },
+  {
+   "family_id": "JAH-GF-10",
+   "key": "tool",
+   "name": "Signature Tool Generator",
+   "description": "Complete Signature-line power tools — motor, gearbox, battery, and ergonomics, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Drill driver",
+      "Circular saw",
+      "Orbital sander",
+      "Multitool"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "18V battery",
+      "40V battery",
+      "Corded 120V"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=tool"
+  },
+  {
+   "family_id": "JAH-GF-11",
+   "key": "furniture",
+   "name": "Signature Furniture Generator",
+   "description": "Complete Signature-line furniture — joinery, finishes, and load ratings, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Lounge chair",
+      "Dining table",
+      "Bookshelf",
+      "Bed frame"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Mid-century",
+      "Scandi",
+      "Industrial",
+      "Japandi"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=furniture"
+  },
+  {
+   "family_id": "JAH-GF-12",
+   "key": "clothing",
+   "name": "Signature Clothing Generator",
+   "description": "Complete Signature-line garments — graded sizes, fabrics, and construction, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Field jacket",
+      "Hoodie",
+      "Work dress",
+      "Trail uniform"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Cold",
+      "Mild",
+      "Hot"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=clothing"
+  },
+  {
+   "family_id": "JAH-GF-13",
+   "key": "game",
+   "name": "Signature Game Generator",
+   "description": "Complete Signature-line tabletop games — components, rules, and box, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Board game",
+      "Card game",
+      "Party game"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=game"
+  },
+  {
+   "family_id": "JAH-GF-14",
+   "key": "instrument",
+   "name": "Signature Instrument Generator",
+   "description": "Complete Signature-line instruments — acoustics, action, and range, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Strings",
+      "Winds",
+      "Percussion",
+      "Electronic"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Student",
+      "Stage",
+      "Studio"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=instrument"
+  },
+  {
+   "family_id": "JAH-GF-15",
+   "key": "robot",
+   "name": "Signature Robot Generator",
+   "description": "Complete Signature-line robots — kinematics, sensors, and power, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Home assistant",
+      "Inspector",
+      "Carrier"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Wheels",
+      "Legs",
+      "Tracked"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=robot"
+  },
+  {
+   "family_id": "JAH-GF-16",
+   "key": "building",
+   "name": "Signature Building Generator",
+   "description": "Complete Signature-line building concepts — massing, structure, and program, fully specified.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Courtyard home",
+      "Mid-rise tower",
+      "Pavilion"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=building"
+  },
+  {
+   "family_id": "JAH-GF-17",
+   "key": "mix-car-engine",
+   "name": "Car × Engine Mix Lab",
+   "description": "A Signature car with its powerplant solved as one machine — chassis and engine co-designed.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Sedan",
+      "Coupe",
+      "SUV"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Inline-4",
+      "V6",
+      "V8"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-car-engine"
+  },
+  {
+   "family_id": "JAH-GF-18",
+   "key": "mix-toy-lightbot",
+   "name": "Toy × Lightbot Mix Lab",
+   "description": "A Signature toy with a lightbot heart — plaything outside, robot inside.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Action figure",
+      "Vehicle",
+      "Plush"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Dance",
+      "Patrol",
+      "Companion glow"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-toy-lightbot"
+  },
+  {
+   "family_id": "JAH-GF-19",
+   "key": "mix-food-candy",
+   "name": "Dish × Candy Mix Lab",
+   "description": "A Signature dessert where the dish course meets the candy bench — plated and pulled.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Mediterranean",
+      "East Asian",
+      "Latin",
+      "Comfort"
+     ],
+     "range": null
+    },
+    {
+     "type": "choice",
+     "options": [
+      "Citrus",
+      "Berry",
+      "Caramel",
+      "Tropical"
+     ],
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-food-candy"
+  },
+  {
+   "family_id": "JAH-GF-20",
+   "key": "mix-jet-engine",
+   "name": "Jet × Engine Mix Lab",
+   "description": "A Signature jet with its powerplant solved as one machine — airframe and turbofan co-designed.",
+   "generator_version": "1.0",
+   "status": "ACTIVE",
+   "input_schema": [
+    {
+     "type": "choice",
+     "options": [
+      "Light trainer",
+      "Business jet"
+     ],
+     "range": null
+    },
+    {
+     "type": "range",
+     "options": null,
+     "range": null
+    }
+   ],
+   "output_fields": [
+    "idea",
+    "dimensions",
+    "materials",
+    "colors",
+    "components",
+    "measurements",
+    "parts",
+    "build_steps",
+    "crosslinks"
+   ],
+   "safety": null,
+   "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?fam=mix-jet-engine"
+  }
+ ]
+}

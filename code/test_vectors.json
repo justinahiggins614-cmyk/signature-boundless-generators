@@ -1,0 +1,508 @@
+{
+ "engine_version": "1.0",
+ "api_version": "1.0",
+ "generated": "2026-10-03",
+ "vectors": [
+  {
+   "family": "jet",
+   "family_id": "JAH-GF-01",
+   "seed": 1,
+   "id": "JAH-GEN-JET-000001",
+   "name": "Fennahaven J-4",
+   "content_sha256": "425c7e3e7aff828266fc825a4ed23a35bc76601fe85d2c9db522cc87b588e35c"
+  },
+  {
+   "family": "jet",
+   "family_id": "JAH-GF-01",
+   "seed": 42,
+   "id": "JAH-GEN-JET-000042",
+   "name": "Quantispire J-20",
+   "content_sha256": "d0709b3b8f9f11450dd1ef67be8b728d2092577c7c711fbb82ff1f3157e34dae"
+  },
+  {
+   "family": "jet",
+   "family_id": "JAH-GF-01",
+   "seed": 976,
+   "id": "JAH-GEN-JET-000976",
+   "name": "Brevawing J-27",
+   "content_sha256": "1a6eb5078a17420f54cd41bca7ec59ca33806e4152279ae4ba11a78fe34d72f8"
+  },
+  {
+   "family": "medical",
+   "family_id": "JAH-GF-02",
+   "seed": 1,
+   "id": "JAH-GEN-MEDICAL-000001",
+   "name": "Gravaprime Mend-36",
+   "content_sha256": "84cfe5430119ec9474decd1d83cf3240f3f232b546d5054bf5e58f0e2a474e38"
+  },
+  {
+   "family": "medical",
+   "family_id": "JAH-GF-02",
+   "seed": 42,
+   "id": "JAH-GEN-MEDICAL-000042",
+   "name": "Halvadyne Mend-82",
+   "content_sha256": "e26e3fbfd448537e6333f41733be877a757b1fff208c06b8b2bd6b920091cb2a"
+  },
+  {
+   "family": "medical",
+   "family_id": "JAH-GF-02",
+   "seed": 976,
+   "id": "JAH-GEN-MEDICAL-000976",
+   "name": "Nyxacore Rest-93",
+   "content_sha256": "19d846ede64df91eb158c8750365aa31c7b1ebce7939e070f53637514397a8e2"
+  },
+  {
+   "family": "food",
+   "family_id": "JAH-GF-03",
+   "seed": 1,
+   "id": "JAH-GEN-FOOD-000001",
+   "name": "Oroiforge East Dessert",
+   "content_sha256": "4cc3ddd8df739e1c27f044ddaab92ba8f7d6458a1410a04893f91844a8f42f38"
+  },
+  {
+   "family": "food",
+   "family_id": "JAH-GF-03",
+   "seed": 42,
+   "id": "JAH-GEN-FOOD-000042",
+   "name": "Aerotrix Comfort Main",
+   "content_sha256": "1c3d22ffb62b6212370a4e46fd9afa78fb2b07b65a5db4a718086248ed6e973a"
+  },
+  {
+   "family": "food",
+   "family_id": "JAH-GF-03",
+   "seed": 976,
+   "id": "JAH-GEN-FOOD-000976",
+   "name": "Solomark Latin Dessert",
+   "content_sha256": "7a3ed7a14310fd9e241b5a62e4fda39c10b9a5e18066f89f384d6a741b7a42cc"
+  },
+  {
+   "family": "candy",
+   "family_id": "JAH-GF-04",
+   "seed": 1,
+   "id": "JAH-GEN-CANDY-000001",
+   "name": "Kestitrix Berry Hard candy",
+   "content_sha256": "4c48d8ffead73c47da09297c9c3c07ea34c5bbff6e55260dfd6b3c1abfd3d860"
+  },
+  {
+   "family": "candy",
+   "family_id": "JAH-GF-04",
+   "seed": 42,
+   "id": "JAH-GEN-CANDY-000042",
+   "name": "Nyxecraft Tropical Hard candy",
+   "content_sha256": "92ae9b5285640a2d28f72db9c757ebcb4d6d7e2e4409bcfcd8da1eaef75712bc"
+  },
+  {
+   "family": "candy",
+   "family_id": "JAH-GF-04",
+   "seed": 976,
+   "id": "JAH-GEN-CANDY-000976",
+   "name": "Lumaveil Caramel Chewy caramel",
+   "content_sha256": "08a36deb67bf6073dd6559cfe548ab81c4f67850bf34b00817c6cbb04a2fb80f"
+  },
+  {
+   "family": "nanoplasma",
+   "family_id": "JAH-GF-05",
+   "seed": 1,
+   "id": "JAH-GEN-NANOPLASMA-000001",
+   "name": "Kestispire NP-254",
+   "content_sha256": "027f3b64da55ac626e5e023c5935f4afe5ff55aa840dd492e4dad11ab0a3f03f"
+  },
+  {
+   "family": "nanoplasma",
+   "family_id": "JAH-GF-05",
+   "seed": 42,
+   "id": "JAH-GEN-NANOPLASMA-000042",
+   "name": "Brevimark NP-508",
+   "content_sha256": "98096e1eaf69379bd74816faf59a35f354a4bd2420ea459dd56dcab0b425b80b"
+  },
+  {
+   "family": "nanoplasma",
+   "family_id": "JAH-GF-05",
+   "seed": 976,
+   "id": "JAH-GEN-NANOPLASMA-000976",
+   "name": "Nyxastar NP-172",
+   "content_sha256": "848207fb799188be0087b650dad7525223ce4dd3cca7701082aeb4d561cbc721"
+  },
+  {
+   "family": "lightbot",
+   "family_id": "JAH-GF-06",
+   "seed": 1,
+   "id": "JAH-GEN-LIGHTBOT-000001",
+   "name": "Gravaforge Lumo-43",
+   "content_sha256": "7764b76b1358f4defb0afec0d23f1758dc6bb09d00fffeb39f28af3a7fb133f8"
+  },
+  {
+   "family": "lightbot",
+   "family_id": "JAH-GF-06",
+   "seed": 42,
+   "id": "JAH-GEN-LIGHTBOT-000042",
+   "name": "Halveworks Lumo-86",
+   "content_sha256": "fbc614de76cc1ffb33e6990c58295de1a1f7cc641fa713c18723ae592f817d47"
+  },
+  {
+   "family": "lightbot",
+   "family_id": "JAH-GF-06",
+   "seed": 976,
+   "id": "JAH-GEN-LIGHTBOT-000976",
+   "name": "Fenneforge Lumo-23",
+   "content_sha256": "f7c8248879f3a58ba9020b0180b5faec3dceba695a8b89ecbdb46f4a6e990881"
+  },
+  {
+   "family": "car",
+   "family_id": "JAH-GF-07",
+   "seed": 1,
+   "id": "JAH-GEN-CAR-000001",
+   "name": "Fennehaven SUV-420",
+   "content_sha256": "128a8f0546826c54480530ff1d51bc9dec6bcda259bb937abd3d41809bb7caa3"
+  },
+  {
+   "family": "car",
+   "family_id": "JAH-GF-07",
+   "seed": 42,
+   "id": "JAH-GEN-CAR-000042",
+   "name": "Nyxedyne SED-365",
+   "content_sha256": "bfe9940b960bb2cc5bdba1c717366e1afc5ab4af9d81ea0df096b7ff297d5373"
+  },
+  {
+   "family": "car",
+   "family_id": "JAH-GF-07",
+   "seed": 976,
+   "id": "JAH-GEN-CAR-000976",
+   "name": "Solestar COU-546",
+   "content_sha256": "6ba37e25e943d3c557d9ce21aec8561d8da7fcaf8ec2176607b42e5f8cd577bd"
+  },
+  {
+   "family": "engine",
+   "family_id": "JAH-GF-08",
+   "seed": 1,
+   "id": "JAH-GEN-ENGINE-000001",
+   "name": "Dravehaven SE-36",
+   "content_sha256": "ba59dbf250530dbc782ee972f261af6527a1f51e0f7ae166ff0bb5a3b01a9c76"
+  },
+  {
+   "family": "engine",
+   "family_id": "JAH-GF-08",
+   "seed": 42,
+   "id": "JAH-GEN-ENGINE-000042",
+   "name": "Quanteprime SE-43",
+   "content_sha256": "1bebab23dc4f25e930c87fbd03e107b081730fdc5e4c829934803f5097787a42"
+  },
+  {
+   "family": "engine",
+   "family_id": "JAH-GF-08",
+   "seed": 976,
+   "id": "JAH-GEN-ENGINE-000976",
+   "name": "Iriemark SE-23",
+   "content_sha256": "bd203ef04036d9a173f4d036b0913c1cd68e3da36e37665a0746cb59ca34a988"
+  },
+  {
+   "family": "toy",
+   "family_id": "JAH-GF-09",
+   "seed": 1,
+   "id": "JAH-GEN-TOY-000001",
+   "name": "Cindetrix Zippy-79",
+   "content_sha256": "1f7beade56bc112cb653e7c42039861024f4dd3e44e9d1c94262418b69868561"
+  },
+  {
+   "family": "toy",
+   "family_id": "JAH-GF-09",
+   "seed": 42,
+   "id": "JAH-GEN-TOY-000042",
+   "name": "Jovaprime Dash-67",
+   "content_sha256": "1187b3ee9dd281d9ca851634ff1444a8304b5e4030ec2d8b2ccee8f91ed28663"
+  },
+  {
+   "family": "toy",
+   "family_id": "JAH-GF-09",
+   "seed": 976,
+   "id": "JAH-GEN-TOY-000976",
+   "name": "Novafold Pip-45",
+   "content_sha256": "b8aaffe2eb51262b6bd4700cee8fc5c965512e3763c221d9d8573ebdd1229967"
+  },
+  {
+   "family": "tool",
+   "family_id": "JAH-GF-10",
+   "seed": 1,
+   "id": "JAH-GEN-TOOL-000001",
+   "name": "Zephaline T-164",
+   "content_sha256": "e69f8a07ee6671143d165ec2226e75af688c7058f0d50572bce82d8f56c97a36"
+  },
+  {
+   "family": "tool",
+   "family_id": "JAH-GF-10",
+   "seed": 42,
+   "id": "JAH-GEN-TOOL-000042",
+   "name": "Velihaven T-860",
+   "content_sha256": "3d91d85a591aa5412f6d60e31d95b48ac192b62e87cf2877d98c810845d4a7d6"
+  },
+  {
+   "family": "tool",
+   "family_id": "JAH-GF-10",
+   "seed": 976,
+   "id": "JAH-GEN-TOOL-000976",
+   "name": "Nyxidyne T-812",
+   "content_sha256": "28bea55bd48a2db7819348b32467b867c486c47bf8c279d4967aaa6246916a3c"
+  },
+  {
+   "family": "furniture",
+   "family_id": "JAH-GF-11",
+   "seed": 1,
+   "id": "JAH-GEN-FURNITURE-000001",
+   "name": "Iriestar Bookshelf-31",
+   "content_sha256": "983ce73928b8abbc9acf8c14b33dc2364d86a9c5583dde811839e2219a657290"
+  },
+  {
+   "family": "furniture",
+   "family_id": "JAH-GF-11",
+   "seed": 42,
+   "id": "JAH-GEN-FURNITURE-000042",
+   "name": "Solafold Bookshelf-53",
+   "content_sha256": "059c2378594aa9d6e3878c2a06f9822bea9ad2a5dff0ece785a86b428908b3ad"
+  },
+  {
+   "family": "furniture",
+   "family_id": "JAH-GF-11",
+   "seed": 976,
+   "id": "JAH-GEN-FURNITURE-000976",
+   "name": "Fenniveil Bookshelf-47",
+   "content_sha256": "21d7c1038e0e11447dfd520ae4407d738515f7a5c121bc5d0d19b04a167c707e"
+  },
+  {
+   "family": "clothing",
+   "family_id": "JAH-GF-12",
+   "seed": 1,
+   "id": "JAH-GEN-CLOTHING-000001",
+   "name": "Gravomark North Trail",
+   "content_sha256": "0145bf17cf2b60ee4e144db0aec68dbf76d7ebda73138172dfc5818010de8652"
+  },
+  {
+   "family": "clothing",
+   "family_id": "JAH-GF-12",
+   "seed": 42,
+   "id": "JAH-GEN-CLOTHING-000042",
+   "name": "Aericraft Halo Work",
+   "content_sha256": "943b6fb922fb38c0c240a02e88deb19b9ce78382f25f451c61e82136cac00196"
+  },
+  {
+   "family": "clothing",
+   "family_id": "JAH-GF-12",
+   "seed": 976,
+   "id": "JAH-GEN-CLOTHING-000976",
+   "name": "Oroeline Ember Work",
+   "content_sha256": "aada0bb56960e8bafd1f5bc6613ce362bc146c5a2a9d0c38d94c9e99aa8a88de"
+  },
+  {
+   "family": "game",
+   "family_id": "JAH-GF-13",
+   "seed": 1,
+   "id": "JAH-GEN-GAME-000001",
+   "name": "Iriowing Realms of Mist",
+   "content_sha256": "a32650549d85525a17e3d685c2e32323a76646861cd0fcb85b9bfa41ef95f28f"
+  },
+  {
+   "family": "game",
+   "family_id": "JAH-GF-13",
+   "seed": 42,
+   "id": "JAH-GEN-GAME-000042",
+   "name": "Halvocraft Gears of Ember",
+   "content_sha256": "1e270bc82522185593a4aae93ae99e2ba2eaa3ae83bab913f36c0da5b33b7aeb"
+  },
+  {
+   "family": "game",
+   "family_id": "JAH-GF-13",
+   "seed": 976,
+   "id": "JAH-GEN-GAME-000976",
+   "name": "Aeracore Echoes of Ember",
+   "content_sha256": "d2a0b06ea3470efd249c7c82338ca9ce7cc1c247f3e4508dc930cac566d95fac"
+  },
+  {
+   "family": "instrument",
+   "family_id": "JAH-GF-14",
+   "seed": 1,
+   "id": "JAH-GEN-INSTRUMENT-000001",
+   "name": "Cinditrix Aria-18",
+   "content_sha256": "49bac184b7e13c05312ee4d772908df7cdc871d222b672cd8b7c3ba341755d92"
+  },
+  {
+   "family": "instrument",
+   "family_id": "JAH-GF-14",
+   "seed": 42,
+   "id": "JAH-GEN-INSTRUMENT-000042",
+   "name": "Isteline Reso-24",
+   "content_sha256": "dc33f630cc3f44020f0f1955a7cb876320a8c902d0c0703cf059e70f69b83799"
+  },
+  {
+   "family": "instrument",
+   "family_id": "JAH-GF-14",
+   "seed": 976,
+   "id": "JAH-GEN-INSTRUMENT-000976",
+   "name": "Lumoline Tempo-56",
+   "content_sha256": "761ed2e291efbebe2cca263001c22f6e939b47a521327ff0b521a3962bb0b2b3"
+  },
+  {
+   "family": "robot",
+   "family_id": "JAH-GF-15",
+   "seed": 1,
+   "id": "JAH-GEN-ROBOT-000001",
+   "name": "Fennawing R-183",
+   "content_sha256": "8d3c6466f6e8f6d8108aa672ba06689d248f8e77f37570042d2e077ef948f990"
+  },
+  {
+   "family": "robot",
+   "family_id": "JAH-GF-15",
+   "seed": 42,
+   "id": "JAH-GEN-ROBOT-000042",
+   "name": "Gravoprime R-108",
+   "content_sha256": "c6ef39dc0f4792a17f82ff1e0bb94fb5def153915da2ec3075a97a8e4c431e2d"
+  },
+  {
+   "family": "robot",
+   "family_id": "JAH-GF-15",
+   "seed": 976,
+   "id": "JAH-GEN-ROBOT-000976",
+   "name": "Quantespire R-877",
+   "content_sha256": "c1d3f01362dd20db273e2c5c76bae91eea3d81ea039fca73167d9ec7900d488d"
+  },
+  {
+   "family": "building",
+   "family_id": "JAH-GF-16",
+   "seed": 1,
+   "id": "JAH-GEN-BUILDING-000001",
+   "name": "Quanteforge Harbor Pavilion",
+   "content_sha256": "f7e3836fca996651f5d1232daa753b083963ce448a9ea4fdb51f0218a855178e"
+  },
+  {
+   "family": "building",
+   "family_id": "JAH-GF-16",
+   "seed": 42,
+   "id": "JAH-GEN-BUILDING-000042",
+   "name": "Solowing Atrium Pavilion",
+   "content_sha256": "3591141c7b0b75bf9e0dfb1f46a5933f970d3e9be29dc46c6aa557c2439887f4"
+  },
+  {
+   "family": "building",
+   "family_id": "JAH-GF-16",
+   "seed": 976,
+   "id": "JAH-GEN-BUILDING-000976",
+   "name": "Kestiline Atrium Pavilion",
+   "content_sha256": "2e6f89bac412a2390aa828213945fed4bc640859123a5a4eb1cdfb26b1103b5a"
+  },
+  {
+   "family": "mix-car-engine",
+   "family_id": "JAH-GF-17",
+   "seed": 1,
+   "id": "JAH-GEN-MIXCARENGINE-000001",
+   "name": "Istaprime SED×V6",
+   "content_sha256": "213a334c335682ae7b3af566e92e89bfe76bc6b5a378c99b7f8bb7886f102fed"
+  },
+  {
+   "family": "mix-car-engine",
+   "family_id": "JAH-GF-17",
+   "seed": 42,
+   "id": "JAH-GEN-MIXCARENGINE-000042",
+   "name": "Lumadyne SED×V8",
+   "content_sha256": "80c867d9e0026060500b1b55f136cb23eea7705beb8214336e22d65243a223ef"
+  },
+  {
+   "family": "mix-car-engine",
+   "family_id": "JAH-GF-17",
+   "seed": 976,
+   "id": "JAH-GEN-MIXCARENGINE-000976",
+   "name": "Oroamatic SED×Inline4",
+   "content_sha256": "23ae277d4baddd51abcc46dbe324e7df9e4ef91fc544c33cce0221be02522807"
+  },
+  {
+   "family": "mix-toy-lightbot",
+   "family_id": "JAH-GF-18",
+   "seed": 1,
+   "id": "JAH-GEN-MIXTOYLIGHTB-000001",
+   "name": "Nyxacraft Glow-22",
+   "content_sha256": "8dad689c1e21cde36e857cfd08ecbfb65f9b1dc5c9d03d8a57854160f2740366"
+  },
+  {
+   "family": "mix-toy-lightbot",
+   "family_id": "JAH-GF-18",
+   "seed": 42,
+   "id": "JAH-GEN-MIXTOYLIGHTB-000042",
+   "name": "Halviveil Glow-31",
+   "content_sha256": "3b966686cb76b56c621357a310d5230c948a1a4355928344588149b26b638371"
+  },
+  {
+   "family": "mix-toy-lightbot",
+   "family_id": "JAH-GF-18",
+   "seed": 976,
+   "id": "JAH-GEN-MIXTOYLIGHTB-000976",
+   "name": "Lumacraft Glow-99",
+   "content_sha256": "b01d602452535dbc86e0d9ea8bef537f29c0fd739d595b8e3ff41c81a5afd831"
+  },
+  {
+   "family": "mix-food-candy",
+   "family_id": "JAH-GF-19",
+   "seed": 1,
+   "id": "JAH-GEN-MIXFOODCANDY-000001",
+   "name": "Kesticore Dolce-25",
+   "content_sha256": "5b605ce3bc47216c7002f389e2bbfce5f43e66201f9621f9ec3f842fecd6172b"
+  },
+  {
+   "family": "mix-food-candy",
+   "family_id": "JAH-GF-19",
+   "seed": 42,
+   "id": "JAH-GEN-MIXFOODCANDY-000042",
+   "name": "Quantitrix Dolce-15",
+   "content_sha256": "baf7eb10fb7af8f91f4bc7e903e35c08ab2792bfd8af94fbe49acd7d84dc4c38"
+  },
+  {
+   "family": "mix-food-candy",
+   "family_id": "JAH-GF-19",
+   "seed": 976,
+   "id": "JAH-GEN-MIXFOODCANDY-000976",
+   "name": "Fennohaven Dolce-85",
+   "content_sha256": "f08b72ccde371704a5c204baaba5c109da87ea5f3f4d910af547b50a58cad2c3"
+  },
+  {
+   "family": "mix-jet-engine",
+   "family_id": "JAH-GF-20",
+   "seed": 1,
+   "id": "JAH-GEN-MIXJETENGINE-000001",
+   "name": "Lumiwing JX-74",
+   "content_sha256": "2313d4df544979af1b42a568cc089cb81c3d6e37354cf7875425c1c7854658ed"
+  },
+  {
+   "family": "mix-jet-engine",
+   "family_id": "JAH-GF-20",
+   "seed": 42,
+   "id": "JAH-GEN-MIXJETENGINE-000042",
+   "name": "Kestadyne JX-81",
+   "content_sha256": "321b8788e31f0ff5dfd4b520222e138390128ebe4ccb1bfbbbd1732dab2efcde"
+  },
+  {
+   "family": "mix-jet-engine",
+   "family_id": "JAH-GF-20",
+   "seed": 976,
+   "id": "JAH-GEN-MIXJETENGINE-000976",
+   "name": "Veladyne JX-44",
+   "content_sha256": "1313dc8cb57387f40e9b64e96560d72b59477e67be444b5c614314f8a43ff8a5"
+  },
+  {
+   "family": "custom",
+   "input": "a solar-powered pizza oven",
+   "id": "JAH-GEN-CUSTOM-0U48254",
+   "name": "Novomark Nordic Main",
+   "content_sha256": "c6b4cb3391e0bf3208fc496516e8c7808ac6c38830cb64f161320d0233a69c64"
+  },
+  {
+   "family": "custom",
+   "input": "a faster mousetrap",
+   "id": "JAH-GEN-CUSTOM-1EHB3U0",
+   "name": "Velahaven T-187",
+   "content_sha256": "8390f34d6cfea79b56e237c9205491446d5bf3b0e3d0220e8d698ecacb9af633"
+  },
+  {
+   "family": "custom",
+   "input": "xyzzy blorpt quux",
+   "id": "JAH-GEN-CUSTOM-1YI20IC",
+   "name": "Cindofold UX-78",
+   "content_sha256": "49c492b261ede39c19094541b35371b59d6874a0d35256755f77102a43384faa"
+  }
+ ]
+}
