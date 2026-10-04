@@ -52,6 +52,18 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .famjump{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;justify-content:center}
 .famjump a{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--txt);text-decoration:none;font-size:.85em}
 .famjump a:hover{border-color:var(--gold);color:var(--gold)}
+/* BEST OF THE BEST — Manon's 2026-10-04 archive pattern: the AI's top pick pinned above the A–Z list */
+.bestofbest{border:2px solid var(--gold);border-radius:12px;background:linear-gradient(180deg,#141a2e,var(--bg2));padding:20px;margin:18px 0}
+.bestofbest h2{margin:0 0 4px;color:var(--gold);letter-spacing:.04em}
+.bestofbest .whybest{background:rgba(201,162,39,.1);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0;font-size:.92em}
+.bestofbest .beststats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.bestofbest .beststat{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:.82em;color:var(--dim)}
+.bestofbest .beststat b{color:var(--gold)}
+.bestofbest .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bestflow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 0;justify-content:center;font-size:.8em}
+.bestflow .bnode{background:var(--bg);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;text-align:center;max-width:150px}
+.bestflow .bnode b{display:block;color:var(--gold);margin-bottom:2px}
+.bestflow .barrow{color:var(--cy);font-size:18px;font-weight:700}
 .famblock{margin:10px 0;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:0 14px 6px}
 .famblock>summary{cursor:pointer;padding:12px 4px;font-size:1.02em;color:var(--txt);list-style:none}
 .famblock>summary::-webkit-details-marker{display:none}
@@ -220,6 +232,54 @@ document.getElementById("jah-askai-q").addEventListener("keydown",function(e){if
 </script>
 </div>
 
+
+<section class="bestofbest" aria-labelledby="besth">
+<h2 id="besth">★ Best of the Best</h2>
+<p class="note" style="margin:4px 0">The AI's top pick from this archive — the single output that best shows what a Signature generator does. Popped open for you.</p>
+<details open>
+<summary style="cursor:pointer;font-size:1.1em"><b>Fennahaven J-4</b> <span style="font-size:.8em;color:var(--dim)">JAH-GEN-JET-000001 · Jet Generator · output #1</span></summary>
+<div style="padding-top:8px">
+<p class="whybest"><b>Why this is the best:</b> the first fully-solved generator output ever made — output #1 of 40,500. It set the format every output since follows: fully solved to sizes, dimensions, measurements, and materials, with an exact-recreation parts list. This is the standard of the archive.</p>
+<div class="bestflow" aria-hidden="true"><div class="bnode"><b>You dream</b>a light trainer jet</div><div class="barrow">→</div><div class="bnode"><b>It solves</b>parts, sizes, materials</div><div class="barrow">→</div><div class="bnode"><b>It proves</b>every number stated</div><div class="barrow">→</div><div class="bnode"><b>You build</b>exact recreation</div></div>
+<p><b>What it does:</b> a light trainer jet — 911 nm range, 4 seats — fully solved: piece-by-piece parts list with critical parts flagged, every measurement, material and tolerance, assembly steps, and filed-archive cross-references. No assumptions anywhere — every number stated.</p>
+<p><b>Implications:</b> all <b>40,500</b> outputs across <b>20</b> generator families are built to this same depth. The archive marches toward <b>1,000,000</b>.</p>
+<div class="beststats"><span class="beststat"><b>40,500</b> outputs on file</span><span class="beststat">Output <b>#1</b> — the genesis</span><span class="beststat">Range: <b>911 nm</b> · Seats: <b>4</b></span><span class="beststat"><b>20</b> generator families</span></div>
+<div class="toolbar">
+<button class="btn" id="best-speak" type="button">🔊 Read aloud</button>
+<button class="btn" id="best-copy" type="button">⧉ Copy</button>
+<button class="btn" id="best-dl" type="button">⤓ Download</button>
+<a class="btn gold" href="./?gen=jet-1">Open the full record →</a>
+</div>
+</div>
+</details>
+</section>
+<script>
+(function(){
+"use strict";
+var plain="Best of the Best — Fennahaven J-4, JAH-GEN-JET-000001. The first fully-solved generator output ever made. A light trainer jet: 911 nautical mile range, 4 seats — fully solved with a piece-by-piece parts list, every measurement, material and tolerance, assembly steps, and filed-archive cross-references. No assumptions anywhere — every number stated.";
+var dl="THE SIGNATURE BOUNDLESS GENERATOR ARCHIVE — BEST OF THE BEST\nFennahaven J-4 — JAH-GEN-JET-000001 (output 1 of 40,500)\nJet Generator — Light trainer — 911 nm range — 4 seats\n\nWHY THIS IS THE BEST\nThe first fully-solved generator output ever made — it set the format every output since follows: fully solved to sizes, dimensions, measurements, and materials, with an exact-recreation parts list.\n\nWHAT IT DOES\nPiece-by-piece parts list with critical parts flagged, every measurement, material and tolerance, assembly steps, filed-archive cross-references. No assumptions — every number stated.\n\nIMPLICATIONS\nAll 40,500 outputs across 20 generator families are built to this same depth, marching toward 1,000,000.\n\nFull record: https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?gen=jet-1";
+function copyText(t,btn){function done(ok){var o=btn.textContent;btn.textContent=ok?"Copied ✓":"Copy failed";setTimeout(function(){btn.textContent=o;},1500);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done(true);}catch(e){done(false);}document.body.removeChild(ta);}}
+function download(name,text){try{var url=URL.createObjectURL(new Blob([text],{type:"text/plain"}));var a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);try{URL.revokeObjectURL(url);}catch(e){}},800);}catch(e){}}
+var speakTimer=null;
+function speakStop(){try{if(window.speechSynthesis)window.speechSynthesis.cancel();}catch(e){}if(speakTimer){clearTimeout(speakTimer);speakTimer=null;}}
+var speakBtn=document.getElementById("best-speak");
+speakBtn.onclick=function(){
+  speakStop();
+  try{
+    if(!("speechSynthesis" in window)){speakBtn.textContent="No voice on this device";setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},1800);return;}
+    if(window.speechSynthesis.speaking){speakBtn.textContent="🔊 Read aloud";return;}
+    var u=new SpeechSynthesisUtterance(plain);
+    speakBtn.textContent="⏹ Stop";
+    u.onend=function(){speakBtn.textContent="🔊 Read aloud";};
+    u.onerror=function(){speakBtn.textContent="🔊 Read aloud";};
+    window.speechSynthesis.speak(u);
+    speakTimer=setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},30000);
+  }catch(e){speakBtn.textContent="🔊 Read aloud";}
+};
+document.getElementById("best-copy").onclick=function(){copyText(dl,this);};
+document.getElementById("best-dl").onclick=function(){download("JAH-GEN-JET-000001-best.txt",dl);};
+})();
+</script>
 
 <h2 style="color:var(--gold)">Browse by family, then A–Z</h2>
 <p class="note">Open a family, then open a letter. Each letter list loads on its own — the page never downloads the whole archive at once. Tapping an output opens its full record.</p>
