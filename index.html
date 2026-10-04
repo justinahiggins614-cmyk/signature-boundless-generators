@@ -872,7 +872,7 @@ function jahWelcomeShow(){
   card.innerHTML=jahWelcomeHTML();
   card.classList.add("on");
   var ok=document.getElementById("welcomegotit");
-  if(ok){ok.onclick=jahWelcomeDone;try{ok.focus()}catch(e){}}
+  if(ok){ok.onclick=jahWelcomeDone;try{ok.focus({preventScroll:true})}catch(e){}}
 }
 function jahWelcomeDone(){try{localStorage.setItem(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahwelcomecard");if(c)c.classList.remove("on")}
 function jahTourMaybe(){
@@ -899,7 +899,7 @@ function jahGuideOpen(){
     document.body.appendChild(c);
   }
   c.style.display="block";
-  try{var b=c.querySelector(".tbtns .btn");if(b)b.focus()}catch(e){}
+  try{var b=c.querySelector(".tbtns .btn");if(b)b.focus({preventScroll:true})}catch(e){}
 }
 function jahGuideClose(){var c=document.getElementById("jahguidecard");if(c)c.style.display="none"}
 document.addEventListener("keydown",function(e){
