@@ -608,6 +608,32 @@ var FILED_REFS = {
     "Structural energy storage for cf based powered mobile devices"
    ]
   ]
+ },
+ "videogame": {
+  "specs": [
+   [
+    "JAH-SPEC-025799",
+    "Universal video game console for clinical triage using attention-gated memory"
+   ],
+   [
+    "JAH-SPEC-025802",
+    "Universal video game hub for wireless charging using body biasing"
+   ],
+   [
+    "JAH-SPEC-025805",
+    "Portable universal video game for image understanding using hyperloglog sketching"
+   ]
+  ],
+  "patents": [
+   [
+    "CA2012385C",
+    "Hand held video game with simulated air battle"
+   ],
+   [
+    "CA2012384C",
+    "Hand held video game with simulated battle against aliens"
+   ]
+  ]
  }
 };
 /*__FILED_REFS_END__*/
@@ -1204,6 +1230,7 @@ var CUSTOM_KEYWORDS = {
   furniture: ["chair", "table", "sofa", "couch", "bed", "shelf", "bookshelf", "furniture", "desk", "cabinet", "dresser", "wardrobe", "stool", "bench"],
   clothing: ["shirt", "jacket", "dress", "clothing", "clothes", "pants", "hoodie", "uniform", "fashion", "coat", "sweater", "apparel"],
   game: ["game", "board game", "card game", "puzzle", "chess", "party game", "dice"],
+  videogame: ["videogame", "video game", "platformer", "shooter", "arcade", "racing", "racer", "fighter", "fighting", "stealth", "survival", "roguelike", "metroidvania", "tower defense", "rts", "fps", "shmup", "dungeon", "boss", "8-bit", "16-bit", "side-scroller", "pixel art"],
   instrument: ["instrument", "guitar", "piano", "music", "trumpet", "drum", "violin", "song", "melody", "saxophone", "flute"],
   robot: ["robot", "android", "automaton", "warehouse", "assembly", "inspector"],
   building: ["house", "building", "home", "tower", "architecture", "pavilion", "room", "apartment", "cabin", "barn", "skyscraper", "hut", "shed"]
@@ -1343,6 +1370,7 @@ CRIT["mix-car-engine"] = CRIT.car.concat(CRIT.engine);
 CRIT["mix-jet-engine"] = CRIT.jet;
 CRIT["mix-toy-lightbot"] = CRIT.toy.concat(CRIT.lightbot);
 CRIT["mix-food-candy"] = CRIT.food.concat(CRIT.candy);
+CRIT.videogame = ["core game loop", "input handler", "demo build", "level data"];
 
 var PART_BUILDERS = {};
 PART_BUILDERS.jet = function (rng, o) {
@@ -1599,6 +1627,21 @@ PART_BUILDERS.universal = function (rng, o) {
     PT("Fastener kit", 12 + rng.int(0, 12), "stainless steel", "M3 per schedule", TOL.COUNT, false, 1, ""),
     PT("Power cable", 1, "copper + PVC", "1.8 m", TOL.ASM, false, 2, ""),
     PT("User manual", 1, "printed booklet", "setup + service", TOL.COUNT, false, 4, "")
+  ];
+};
+/* video-game build: code modules, data packs, art, and the shippable demo file */
+PART_BUILDERS.videogame = function (rng, o) {
+  var lv = Math.max(1, numOf(mv(o, "levels")) || 8);
+  var frames = 12 + rng.int(0, 24);
+  return [
+    PT("Core game loop module", 1, "JavaScript", "fixed-timestep 60 Hz update + render", TOL.COUNT, true, 1, "The heartbeat: input, update, draw, repeat"),
+    PT("Input handler module", 1, "JavaScript", "keyboard + touch, 48 px targets", TOL.COUNT, true, 2, "Arrows/WASD + Space; tap and swipe on touch"),
+    PT("Audio synth module", 1, "WebAudio", "8-voice bleep synth, 44.1 kHz", TOL.COUNT, false, 2, "Jump, score, hit, and win jingles"),
+    PT("Level data pack", lv, "JSON", lv + " seeded levels, difficulty-ramped", TOL.COUNT, true, 1, "Every level generated from the record seed"),
+    PT("Sprite frame set", frames, "SVG vector", frames + " print-ready vector frames", TOL.COUNT, false, 3, ""),
+    PT("Cover art file", 1, "SVG", "400 x 520 px, deterministic per record ID", TOL.COUNT, false, 4, "The cover shown on this page"),
+    PT("Demo build file", 1, "standalone HTML", "single file, runs offline in any browser", TOL.COUNT, true, 3, "The playable demo on this page"),
+    PT("Design document", 1, "text", "rules + controls + difficulty, 1 file", TOL.COUNT, false, 4, "")
   ];
 };
 
