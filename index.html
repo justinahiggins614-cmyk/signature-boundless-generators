@@ -170,13 +170,18 @@ h2.famtitle{color:var(--gold)}
 #jahThemeToggle:hover{opacity:1}
 html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
 html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
-/* FIRST-TIME USER GUIDE (network-wide pattern): spotlight tour + permanent ? Guide panel */
-#jahtourcard{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:10002;max-width:min(560px,92vw);background:#0a0f22;border:2px solid var(--gold);border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px #000a}
-#jahtourcard h3{margin:.1em 0 .4em;color:var(--gold);font-size:1.02em}
-#jahtourcard p{font-size:.88em;margin:.4em 0}
-#jahtourcard .tstep{font-size:.75em;color:var(--dim);letter-spacing:.08em}
-#jahtourcard .tbtns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-#jahtourcard .tbtns .btn{min-height:44px;padding:10px 20px}
+/* FIRST-TIME USER GUIDE (network-wide pattern): centered welcome overlay + permanent ? Guide panel */
+#jahwelcomecard{position:fixed;inset:0;z-index:10004;display:none;align-items:center;justify-content:center;background:rgba(4,8,18,.72);padding:16px}
+#jahwelcomecard.on{display:flex}
+#jahwelcomecard .wbox{background:#0a0f22;border:2px solid var(--gold);border-radius:14px;padding:20px 22px;box-shadow:0 8px 30px #000a;max-width:520px;width:100%;max-height:88vh;overflow-y:auto}
+#jahwelcomecard .wkind{font-size:.75em;color:var(--dim);letter-spacing:.18em;font-weight:700}
+#jahwelcomecard h3{margin:.1em 0 .4em;color:var(--gold);font-size:1.05em}
+#jahwelcomecard ol{margin:.4em 0;padding-left:1.25em}
+#jahwelcomecard li{font-size:.88em;line-height:1.5;margin:.55em 0}
+#jahwelcomecard li b{color:var(--gold)}
+#jahwelcomecard .tbtns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+#jahwelcomecard .tbtns .btn{min-height:52px;padding:12px 22px;font-size:1em;font-weight:700;width:100%}
+#jahwelcomecard .wnote{font-size:.75em;color:var(--dim);margin-top:8px;text-align:center}
 #jahguidecard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10003;width:min(640px,94vw);max-height:86vh;overflow:auto;background:#0a0f22;border:2px solid var(--cy);border-radius:14px;padding:20px 22px;box-shadow:0 10px 40px #000c}
 #jahguidecard h2{margin-top:0;color:var(--gold)}
 #jahguidecard h3{color:var(--cy);font-size:.95em;margin:1em 0 .3em}
@@ -807,38 +812,31 @@ window.addEventListener('load',function(){ if(location.search.indexOf('=')>0) re
 <script>
 /* ============ FIRST-TIME USER GUIDE (network-wide pattern): spotlight tour + ? Guide ============ */
 var JAH_TOUR_KEY="jah-tour-seen-generators";
-var JAH_TOUR_STEPS=[
- {t:"Welcome to the Boundless Generator Archive",d:"<b>WHAT:</b> A Signature-line generator for every field — jets, cars, engines, food, candy, toys, robots, buildings, medical concepts, and mix-and-match labs.<br><b>WHAT IT DOES:</b> Every output is <b>fully solved</b> — idea, dimensions, materials, colors, chips, measurements, a piece-by-piece parts list, build steps, and filed-archive cross-references.<br><b>HOW:</b> This 1-minute tour walks the controls. It never covers the content — close it any time and keep exploring."},
- {t:"1 · Generator families",d:"<b>WHAT:</b> 20 generator families on the home page — jet, medical, food, candy, nanoplasma, lightbot, car, engine, toy, tool, furniture, clothing, game, instrument, robot, building, and four mix labs.<br><b>WHAT IT DOES:</b> Open a family to set parameters (class, range, seats…) and solve.<br><b>HOW:</b> Tap a family card, adjust the sliders or pick options, then ⚙️ <b>Generate</b> — or 🎲 <b>Randomize</b> for a fresh seed. Same family + seed always yields the same design."},
- {t:"2 · Solve It — describe anything",d:"<b>WHAT:</b> The gold all-purpose generator bar at the top.<br><b>WHAT IT DOES:</b> Type anything — an invention, a dish, a tool, a what-if — and it finds the right generator template (or a universal one) and fully solves it.<br><b>HOW:</b> Type a few words, hit <b>⚙️ Solve it</b>. Same words → same design, forever — every solve gets a shareable link."},
- {t:"3 · Archive search + Finder",d:"<b>WHAT:</b> The search box, family filter, A–Z buttons, and the Finder bar.<br><b>WHAT IT DOES:</b> Archive search finds <b>existing outputs only</b> — name, tagline, or JAH-GEN-… ID — and never invents records. The Finder takes a description and ranks the closest archived outputs.<br><b>HOW:</b> Type in the search box or describe what you're looking for, then hit <b>Find it</b>. 🎲 <b>Random</b> opens a random archived output."},
- {t:"4 · The record view",d:"<b>WHAT:</b> Every solved output is a full record page.<br><b>WHAT IT DOES:</b> A result card (input, family, seed, ID, status), then every section: idea, dimensions, materials, colors, components & chips, measurements, the piece-by-piece parts list (★ critical parts flagged), build steps, cross-references, and how to use.<br><b>HOW:</b> Every output carries a red <b>CONCEPT / SIMULATION</b> banner — a generated design, not engineered, tested, or certified safe. Medical-family outputs also carry a <b>wellness-concept-only</b> notice at the top: never medical advice."},
- {t:"5 · Reproduce + Verify",d:"<b>WHAT:</b> The RECORD row on every output: OPEN · SOURCE · ID · VERSION · REPRODUCE · VERIFY · SHARE.<br><b>WHAT IT DOES:</b> <b>REPRODUCE</b> re-solves locally from your words and confirms it's byte-identical. <b>VERIFY</b> also checks the archived row (ID, name, tagline, content hash). <b>SHARE</b> copies the ?gen= deep link — it survives a refresh.<br><b>HOW:</b> Tap <b>⟳ REPRODUCE</b> any time to prove determinism to yourself."},
- {t:"6 · Read aloud, copy, download, ask",d:"<b>WHAT:</b> The buttons under every record.<br><b>WHAT IT DOES:</b> 🔊 <b>Read aloud</b> reads the whole solved spec (with the floating bar — pause/stop anytime). 📋 <b>Copy</b> copies the full text. ⬇ <b>.txt / .json</b> downloads a real file. ⇪ <b>Import</b> re-loads an exported .json and verifies its envelope. <b>Ask about it</b> answers questions using only that design's solved spec.<br><b>HOW:</b> You're set — enjoy the archive. Tap <b>Done</b> or press <b>Esc</b>."}
-];
-function jahTourShow(i){
-  var card=document.getElementById("jahtourcard");
-  if(!card){card=document.createElement("div");card.id="jahtourcard";card.setAttribute("role","dialog");card.setAttribute("aria-label","First-time user guide");document.body.appendChild(card)}
-  var s=JAH_TOUR_STEPS[i],last=i===JAH_TOUR_STEPS.length-1;
-  card.innerHTML='<div class="tstep">GUIDED TOUR · STEP '+(i+1)+' OF '+JAH_TOUR_STEPS.length+'</div><h3>'+s.t+'</h3><p>'+s.d+'</p>'+
-    '<div class="tbtns">'+
-    (i>0?'<button class="btn ghost" id="tourback">← Back</button>':"")+
-    (last?'<button class="btn gold" id="tournext">Done</button>':'<button class="btn gold" id="tournext">Next →</button>')+
-    '<button class="btn ghost" id="tourskip">Skip tour</button></div>';
-  card.style.display="block";
-  var nx=document.getElementById("tournext");if(nx)nx.onclick=function(){jahTourNext(i)};
-  var bk=document.getElementById("tourback");if(bk)bk.onclick=function(){jahTourShow(i-1)};
-  var sk=document.getElementById("tourskip");if(sk)sk.onclick=jahTourDone;
-  try{nx&&nx.focus()}catch(e){}
-  jahTourStep=i;
+function jahWelcomeHTML(){
+  return '<div class="wbox"><div class="wkind">WELCOME</div><h3>The generator lab in 4 taps</h3>'+
+  '<ol>'+
+  '<li><b>Generate from a family.</b> Tap one of the 20 family cards — jets, cars, food, robots, instruments and more — set the sliders and options, then press \u2699\uFE0F Generate (or \uD83C\uDFB2 Randomize). Same family + seed always yields the same design.</li>'+
+  '<li><b>Solve anything.</b> Type anything in the gold Solve it bar and press Solve it. It picks the right generator template and fully solves it — idea, dimensions, materials, colors, components, measurements, piece-by-piece parts list (\u2605 critical parts flagged) and build steps.</li>'+
+  '<li><b>Search the archive.</b> The search box, A–Z buttons and the Finder find existing outputs only — they never invent records. Every record page carries a CONCEPT / SIMULATION banner: a generated design, not engineered or certified safe.</li>'+
+  '<li><b>Prove it and take it home.</b> REPRODUCE re-solves from your words and confirms it is byte-identical; VERIFY checks the archived row; SHARE copies the ?gen= deep link. Read aloud, copy, download .txt/.json, import .json back.</li>'+
+  '</ol>'+
+  '<div class="tbtns"><button class="btn gold" id="welcomegotit">Got it \u2713</button></div>'+
+  '<div class="wnote">The \u2753 Guide button up top brings this guide back any time.</div></div>';
 }
-function jahTourNext(i){if(i>=JAH_TOUR_STEPS.length-1){jahTourDone();return}jahTourShow(i+1)}
-function jahTourDone(){try{localStorage.setItem(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahtourcard");if(c)c.style.display="none";jahTourStep=-1}
+function jahWelcomeShow(){
+  var card=document.getElementById("jahwelcomecard");
+  if(!card){card=document.createElement("div");card.id="jahwelcomecard";card.setAttribute("role","dialog");card.setAttribute("aria-modal","true");card.setAttribute("aria-label","Welcome");document.body.appendChild(card)}
+  card.innerHTML=jahWelcomeHTML();
+  card.classList.add("on");
+  var ok=document.getElementById("welcomegotit");
+  if(ok){ok.onclick=jahWelcomeDone;try{ok.focus()}catch(e){}}
+}
+function jahWelcomeDone(){try{localStorage.setItem(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahwelcomecard");if(c)c.classList.remove("on")}
 function jahTourMaybe(){
   var seen=null;try{seen=localStorage.getItem(JAH_TOUR_KEY)}catch(e){seen="1"}
   if(seen)return;
   if(location.search&&location.search.length>1)return; /* deep-linked visitors get straight to the record */
-  jahTourStep=0;jahTourShow(0);
+  setTimeout(jahWelcomeShow,900);
 }
 function jahGuideOpen(){
   var c=document.getElementById("jahguidecard");
@@ -861,15 +859,10 @@ function jahGuideOpen(){
   try{var b=c.querySelector(".tbtns .btn");if(b)b.focus()}catch(e){}
 }
 function jahGuideClose(){var c=document.getElementById("jahguidecard");if(c)c.style.display="none"}
-var jahTourStep=-1;
 document.addEventListener("keydown",function(e){
-  var tour=document.getElementById("jahtourcard"),tourOpen=tour&&tour.style.display!=="none";
+  var w=document.getElementById("jahwelcomecard"),wOpen=w&&w.classList.contains("on");
   var guide=document.getElementById("jahguidecard"),guideOpen=guide&&guide.style.display!=="none";
-  if(e.key==="Escape"){if(guideOpen){jahGuideClose();e.preventDefault();return}if(tourOpen){jahTourDone();e.preventDefault();return}}
-  if(tourOpen&&jahTourStep>=0){
-    if(e.key==="ArrowRight"){jahTourNext(jahTourStep);e.preventDefault()}
-    else if(e.key==="ArrowLeft"&&jahTourStep>0){jahTourShow(jahTourStep-1);e.preventDefault()}
-  }
+  if(e.key==="Escape"){if(guideOpen){jahGuideClose();e.preventDefault();return}if(wOpen){jahWelcomeDone();e.preventDefault();return}}
 });
 /* auto-show the tour on first home visit, after the page boots */
 (function(){function kick(){try{jahTourMaybe()}catch(e){}}if(document.readyState==="complete")kick();else window.addEventListener("load",kick)})();
