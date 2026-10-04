@@ -1212,6 +1212,632 @@ fam({
   }
 });
 
+/* ================= VIDEO-GAME DEMO STUBS + COVER ENGINE ================= */
+/* Dependency-free canvas micro-demos. Each archetype is (canvas, CFG) -> {stop, err}.
+   demo_js ships vgBase + the archetype + CFG as one string; the page runs it with
+   new Function("canvas", demo_js). No external references, no weasel words. */
+function vgBase(canvas, CFG) {
+  var ctx = canvas.getContext("2d"), W = canvas.width, H = canvas.height;
+  var RAF = window.requestAnimationFrame || function (cb) { return setTimeout(function () { cb(Date.now()); }, 16); };
+  var CAF = window.cancelAnimationFrame || function (id) { clearTimeout(id); };
+  var keys = {}, running = true, raf = 0, score = 0, over = false, win = false, msg = "";
+  function kd(e) {
+    var k = String((e && e.key) || "").toLowerCase();
+    keys[k] = true;
+    if (k === " " || k === "spacebar" || k.indexOf("arrow") === 0) { try { e.preventDefault(); } catch (x) {} }
+  }
+  function ku(e) { keys[String((e && e.key) || "").toLowerCase()] = false; }
+  window.addEventListener("keydown", kd);
+  window.addEventListener("keyup", ku);
+  var taps = [];
+  function tp(e) {
+    try { e.preventDefault(); } catch (x) {}
+    var r = canvas.getBoundingClientRect();
+    var t = (e.touches && e.touches[0]) || e;
+    taps.push({ x: (t.clientX - r.left) * W / r.width, y: (t.clientY - r.top) * H / r.height });
+  }
+  canvas.addEventListener("pointerdown", tp);
+  function pressed() { return !!(keys[" "] || keys["spacebar"]); }
+  function ax() {
+    return {
+      x: ((keys["arrowright"] || keys["d"]) ? 1 : 0) - ((keys["arrowleft"] || keys["a"]) ? 1 : 0),
+      y: ((keys["arrowdown"] || keys["s"]) ? 1 : 0) - ((keys["arrowup"] || keys["w"]) ? 1 : 0)
+    };
+  }
+  function tap() { return taps.length ? taps.shift() : null; }
+  var api = null;
+  function end(w, m) { if (!over) { over = true; win = w; msg = m; } }
+  function hud(sub) {
+    ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(0, 0, W, 30);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+    ctx.fillText(String(CFG.title).slice(0, 26), 8, 20);
+    ctx.textAlign = "right"; ctx.fillText("SCORE " + score + (sub ? "  " + sub : ""), W - 8, 20);
+    ctx.textAlign = "left";
+    if (over) {
+      ctx.fillStyle = "rgba(0,0,0,0.72)"; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = win ? "#4dff88" : "#ff6b6b"; ctx.font = "bold 26px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText(win ? "YOU WIN!" : "GAME OVER", W / 2, H / 2 - 12);
+      ctx.fillStyle = "#fff"; ctx.font = "14px sans-serif";
+      ctx.fillText(String(msg).slice(0, 52), W / 2, H / 2 + 16);
+      ctx.textAlign = "left";
+    }
+  }
+  function loop(step) {
+    var last = 0;
+    function fr(t) {
+      if (!running) return;
+      raf = RAF(fr);
+      var now = t || 16;
+      var dt = Math.min(3, Math.max(0.25, (now - last) / 16.7)); last = now;
+      if (!over) { try { step(dt); } catch (e) { if (api) api.err = e; end(false, "demo stopped"); } }
+    }
+    raf = RAF(fr);
+  }
+  function stop() {
+    running = false;
+    try { CAF(raf); } catch (e) {}
+    try { window.removeEventListener("keydown", kd); } catch (e) {}
+    try { window.removeEventListener("keyup", ku); } catch (e) {}
+    try { canvas.removeEventListener("pointerdown", tp); } catch (e) {}
+  }
+  api = { ctx: ctx, W: W, H: H, keys: keys, pressed: pressed, ax: ax, tap: tap, end: end,
+    addScore: function (n) { score += n; }, getScore: function () { return score; },
+    hud: hud, loop: loop, stop: stop, err: null };
+  return api;
+}
+
+var VG_ARCH = {
+chase: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG), N = 15, S = Math.min(b.W, b.H - 40) / N, ox = (b.W - N * S) / 2, oy = 40;
+  var snake = [{ x: 7, y: 8 }, { x: 6, y: 8 }, { x: 5, y: 8 }], dir = { x: 1, y: 0 }, nd = { x: 1, y: 0 }, food = null, t = 0, i;
+  function place() { food = { x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N) }; }
+  place();
+  b.loop(function () {
+    t++;
+    var a = b.ax();
+    if (a.x === 1 && dir.x !== -1) nd = { x: 1, y: 0 };
+    else if (a.x === -1 && dir.x !== 1) nd = { x: -1, y: 0 };
+    else if (a.y === -1 && dir.y !== 1) nd = { x: 0, y: -1 };
+    else if (a.y === 1 && dir.y !== -1) nd = { x: 0, y: 1 };
+    if (t % Math.max(4, 10 - Math.floor(CFG.speed * 3)) === 0) {
+      dir = nd;
+      var h = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N) return b.end(false, "Wall hit! " + b.getScore() + " points.");
+      for (i = 0; i < snake.length; i++) if (snake[i].x === h.x && snake[i].y === h.y) return b.end(false, "Tail bite! " + b.getScore() + " points.");
+      snake.unshift(h);
+      if (h.x === food.x && h.y === food.y) { b.addScore(10); if (b.getScore() >= 150) return b.end(true, "150 points! Grid master."); place(); }
+      else snake.pop();
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#06130c"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.fillStyle = CFG.pal[2]; ctx.beginPath(); ctx.arc(ox + (food.x + 0.5) * S, oy + (food.y + 0.5) * S, S * 0.32, 0, 7); ctx.fill();
+    for (i = 0; i < snake.length; i++) { ctx.fillStyle = i ? CFG.pal[0] : "#ffffff"; ctx.fillRect(ox + snake[i].x * S + 1, oy + snake[i].y * S + 1, S - 2, S - 2); }
+    b.hud("goal 150");
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+breaker: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var pw = 84, px = b.W / 2 - pw / 2, bx = b.W / 2, by = b.H - 120, vx = 3.2 * CFG.speed, vy = -3.6 * CFG.speed, launched = false, i;
+  var bricks = [], cols = 8, rows = 4, r, c;
+  for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) bricks.push({ x: 20 + c * ((b.W - 40) / cols), y: 60 + r * 26, w: (b.W - 40) / cols - 6, h: 20, hp: r === 0 ? 2 : 1 });
+  b.loop(function () {
+    var a = b.ax();
+    px = Math.max(0, Math.min(b.W - pw, px + a.x * 7));
+    var tp = b.tap();
+    if (tp) { px = Math.max(0, Math.min(b.W - pw, tp.x - pw / 2)); if (!launched) launched = true; }
+    if (!launched && b.pressed()) launched = true;
+    if (launched) {
+      bx += vx; by += vy;
+      if (bx < 8 || bx > b.W - 8) vx *= -1;
+      if (by < 38) vy *= -1;
+      if (by > b.H - 36 && by < b.H - 16 && bx > px - 6 && bx < px + pw + 6) { vy = -Math.abs(vy); vx += (bx - (px + pw / 2)) / (pw / 2) * 1.2; }
+      for (i = bricks.length - 1; i >= 0; i--) {
+        var br = bricks[i];
+        if (bx > br.x && bx < br.x + br.w && by > br.y && by < br.y + br.h) { br.hp--; vy *= -1; if (br.hp <= 0) { bricks.splice(i, 1); b.addScore(25); } break; }
+      }
+      if (by > b.H) return b.end(false, "Ball lost! " + b.getScore() + " points.");
+      if (!bricks.length) return b.end(true, "Bricks cleared! " + b.getScore() + " points.");
+    } else { bx = px + pw / 2; by = b.H - 44; }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#0b0b18"; ctx.fillRect(0, 0, b.W, b.H);
+    for (i = 0; i < bricks.length; i++) { var br2 = bricks[i]; ctx.fillStyle = br2.hp > 1 ? CFG.pal[2] : CFG.pal[0]; ctx.fillRect(br2.x, br2.y, br2.w, br2.h); }
+    ctx.fillStyle = CFG.pal[1]; ctx.fillRect(px, b.H - 28, pw, 12);
+    ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(bx, by, 7, 0, 7); ctx.fill();
+    if (!launched) { ctx.fillStyle = "#9aa4b2"; ctx.font = "14px sans-serif"; ctx.textAlign = "center"; ctx.fillText("SPACE / tap to launch", b.W / 2, b.H / 2); ctx.textAlign = "left"; }
+    b.hud();
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+shooter: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var combat = CFG.mode === "combat";
+  var me = { x: b.W / 2, y: b.H - 80 }, shots = [], foes = [], t = 0, cd = 0, wave = 0, i, j;
+  function spawn() {
+    wave++;
+    for (i = 0; i < 3 + wave; i++) foes.push({ x: 30 + Math.random() * (b.W - 60), y: -20 - i * 46, hp: combat && wave > 2 ? 2 : 1, sp: (0.9 + wave * 0.14) * CFG.speed });
+  }
+  spawn();
+  b.loop(function () {
+    t++; cd--;
+    var a = b.ax();
+    me.x = Math.max(16, Math.min(b.W - 16, me.x + a.x * 5));
+    me.y = Math.max(b.H / 2, Math.min(b.H - 30, me.y + a.y * 5));
+    var tp = b.tap();
+    if ((b.pressed() || tp) && cd <= 0) { shots.push({ x: me.x, y: me.y - 16, vy: -9 }); cd = combat ? 9 : 12; }
+    for (i = shots.length - 1; i >= 0; i--) { var s = shots[i]; s.y += s.vy; if (s.y < 30) shots.splice(i, 1); }
+    for (i = foes.length - 1; i >= 0; i--) {
+      var f = foes[i]; f.y += f.sp; f.x += Math.sin((t + i * 40) / 28) * 1.1;
+      if (f.y > b.H - 20) return b.end(false, "Line breached on wave " + wave + ".");
+      if (Math.abs(f.x - me.x) < 22 && Math.abs(f.y - me.y) < 22) return b.end(false, "Direct hit! " + b.getScore() + " points.");
+      for (j = shots.length - 1; j >= 0; j--) {
+        var s2 = shots[j];
+        if (Math.abs(s2.x - f.x) < 18 && Math.abs(s2.y - f.y) < 16) {
+          shots.splice(j, 1); f.hp--;
+          if (f.hp <= 0) { foes.splice(i, 1); b.addScore(combat ? 30 : 20); }
+          break;
+        }
+      }
+    }
+    if (!foes.length) { if (wave >= 6) return b.end(true, "6 waves cleared! " + b.getScore() + " points."); spawn(); }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#050510"; ctx.fillRect(0, 0, b.W, b.H);
+    for (i = 0; i < foes.length; i++) { var f2 = foes[i]; ctx.fillStyle = CFG.pal[2]; ctx.beginPath(); ctx.arc(f2.x, f2.y, 13, 0, 7); ctx.fill(); ctx.fillStyle = "#ffffff"; ctx.fillRect(f2.x - 3, f2.y - 3, 6, 6); }
+    ctx.fillStyle = "#ffffff"; for (i = 0; i < shots.length; i++) ctx.fillRect(shots[i].x - 2, shots[i].y - 8, 4, 10);
+    ctx.fillStyle = CFG.pal[0]; ctx.beginPath(); ctx.moveTo(me.x, me.y - 16); ctx.lineTo(me.x - 12, me.y + 10); ctx.lineTo(me.x + 12, me.y + 10); ctx.fill();
+    b.hud("WAVE " + wave + "/6");
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+driver: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var cx = b.W / 2, cy = b.H / 2, rx = b.W / 2 - 50, ry = b.H / 2 - 110;
+  var car = { a: Math.PI / 2, x: cx + rx, y: cy, sp: 0 }, lap = 0, half = false;
+  function onTrack(x, y) { var dx = (x - cx) / rx, dy = (y - cy) / ry, d = dx * dx + dy * dy; return d > 0.5 && d < 1.3; }
+  b.loop(function () {
+    var a = b.ax();
+    if (a.y === -1) car.sp = Math.min(5.2 * CFG.speed, car.sp + 0.16);
+    else if (a.y === 1) car.sp = Math.max(-2, car.sp - 0.2);
+    else car.sp *= 0.985;
+    var turn = 0.055 * Math.min(1, Math.abs(car.sp) / 2) * (car.sp >= 0 ? 1 : -1);
+    if (a.x === -1) car.a -= turn;
+    if (a.x === 1) car.a += turn;
+    car.x += Math.cos(car.a) * car.sp; car.y += Math.sin(car.a) * car.sp;
+    if (!onTrack(car.x, car.y)) car.sp *= 0.94;
+    if (Math.abs(car.x - (cx - rx)) < 16 && Math.abs(car.y - cy) < 32) half = true;
+    if (half && Math.abs(car.x - (cx + rx)) < 16 && Math.abs(car.y - cy) < 32 && Math.sin(car.a) > 0.5) {
+      half = false; lap++; b.addScore(100);
+      if (lap >= 3) return b.end(true, "3 laps done! Circuit champion.");
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#0d140d"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.strokeStyle = "#2c3a2c"; ctx.lineWidth = 44; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 7); ctx.stroke();
+    ctx.strokeStyle = "#e8e8e8"; ctx.lineWidth = 3;
+    if (ctx.setLineDash) ctx.setLineDash([14, 14]);
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 7); ctx.stroke();
+    if (ctx.setLineDash) ctx.setLineDash([]);
+    ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.a);
+    ctx.fillStyle = CFG.pal[0]; ctx.fillRect(-14, -8, 28, 16);
+    ctx.fillStyle = "#111111"; ctx.fillRect(2, -8, 9, 16);
+    ctx.restore();
+    b.hud("LAP " + Math.min(3, lap + 1) + "/3");
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+jumper: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var plats = [], coins = [], me = null, i;
+  function reset() {
+    plats = [{ x: 0, y: b.H - 24, w: b.W, h: 24 }];
+    var y = b.H - 24, x;
+    for (i = 0; i < 6; i++) { y -= 78; x = 20 + Math.random() * (b.W - 150); plats.push({ x: x, y: y, w: 110, h: 16 }); coins.push({ x: x + 55, y: y - 22, got: false }); }
+    plats.push({ x: b.W / 2 - 60, y: y - 78, w: 120, h: 16 });
+    me = { x: 40, y: b.H - 60, vx: 0, vy: 0, g: false };
+  }
+  reset();
+  b.loop(function () {
+    var a = b.ax(), tp = b.tap();
+    me.vx = a.x * 3.6;
+    if ((a.y === -1 || b.pressed() || tp) && me.g) { me.vy = -11.5; me.g = false; }
+    if (b.pressed()) b.keys[" "] = false;
+    me.vy = Math.min(13, me.vy + 0.55);
+    me.x = Math.max(0, Math.min(b.W - 22, me.x + me.vx));
+    me.y += me.vy; me.g = false;
+    for (i = 0; i < plats.length; i++) {
+      var p = plats[i];
+      if (me.x + 22 > p.x && me.x < p.x + p.w && me.y + 30 > p.y && me.y + 30 < p.y + p.h + 16 && me.vy >= 0) { me.y = p.y - 30; me.vy = 0; me.g = true; }
+    }
+    if (me.y > b.H) return b.end(false, "Fell! " + b.getScore() + " points.");
+    for (i = 0; i < coins.length; i++) {
+      var c = coins[i];
+      if (!c.got && Math.abs(me.x + 11 - c.x) < 24 && Math.abs(me.y + 15 - c.y) < 28) { c.got = true; b.addScore(25); }
+    }
+    var gp = plats[plats.length - 1];
+    if (me.x + 22 > gp.x && me.x < gp.x + gp.w && me.y + 30 >= gp.y && me.y + 30 <= gp.y + 34) return b.end(true, "Flag reached! " + b.getScore() + " points.");
+    var ctx = b.ctx;
+    ctx.fillStyle = "#0b1026"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.fillStyle = "#2a3a5f"; for (i = 0; i < plats.length; i++) ctx.fillRect(plats[i].x, plats[i].y, plats[i].w, plats[i].h);
+    ctx.fillStyle = CFG.pal[2]; ctx.fillRect(gp.x + gp.w / 2 - 3, gp.y - 44, 6, 44);
+    ctx.beginPath(); ctx.moveTo(gp.x + gp.w / 2 + 3, gp.y - 44); ctx.lineTo(gp.x + gp.w / 2 + 33, gp.y - 33); ctx.lineTo(gp.x + gp.w / 2 + 3, gp.y - 22); ctx.fill();
+    ctx.fillStyle = "#ffe14d"; for (i = 0; i < coins.length; i++) if (!coins[i].got) { ctx.beginPath(); ctx.arc(coins[i].x, coins[i].y, 8, 0, 7); ctx.fill(); }
+    ctx.fillStyle = CFG.pal[0]; ctx.fillRect(me.x, me.y, 22, 30);
+    b.hud();
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+flap: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var bx = b.W * 0.32, bird = { y: b.H / 2, vy: 0 }, gates = [], started = false, t = 0, i;
+  function gate(x) { gates.push({ x: x, gy: 120 + Math.random() * (b.H - 300), gap: 150, passed: false }); }
+  gate(b.W + 40); gate(b.W + 260); gate(b.W + 480);
+  b.loop(function () {
+    t++;
+    var go = b.pressed() || b.tap();
+    b.keys[" "] = false; b.keys["spacebar"] = false;
+    if (!started) { if (go) { started = true; bird.vy = -6.2; } }
+    else {
+      if (go) bird.vy = -6.2;
+      bird.vy = Math.min(10, bird.vy + 0.42);
+      bird.y += bird.vy;
+      for (i = gates.length - 1; i >= 0; i--) {
+        var g = gates[i]; g.x -= 3.1 * CFG.speed;
+        if (!g.passed && g.x + 30 < bx) { g.passed = true; b.addScore(10); }
+        if (g.x < -50) gates.splice(i, 1);
+        if (bx + 14 > g.x && bx - 14 < g.x + 30 && (bird.y - 12 < g.gy - g.gap / 2 || bird.y + 12 > g.gy + g.gap / 2)) return b.end(false, "Gate clipped! " + b.getScore() + " points.");
+      }
+      if (gates.length < 4) gate(b.W + 40);
+      if (b.getScore() >= 100) return b.end(true, "100 points! Sky captain.");
+      if (bird.y > b.H - 6 || bird.y < -20) return b.end(false, "Down! " + b.getScore() + " points.");
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#141033"; ctx.fillRect(0, 0, b.W, b.H);
+    for (i = 0; i < gates.length; i++) { var g2 = gates[i]; ctx.fillStyle = CFG.pal[0]; ctx.fillRect(g2.x, 0, 30, g2.gy - g2.gap / 2); ctx.fillRect(g2.x, g2.gy + g2.gap / 2, 30, b.H); }
+    ctx.fillStyle = "#ffb300"; ctx.beginPath(); ctx.ellipse(bx, bird.y, 16, 12, 0, 0, 7); ctx.fill();
+    if (!started) { ctx.fillStyle = "#ffffff"; ctx.font = "16px sans-serif"; ctx.textAlign = "center"; ctx.fillText("SPACE / tap to flap", b.W / 2, b.H / 2 - 60); ctx.textAlign = "left"; }
+    b.hud();
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+match: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var N = 6, SZ = 52, ox = (b.W - N * SZ) / 2, oy = 90, grid = [], sel = null, time = 75, r, c;
+  function gem() { return Math.floor(Math.random() * 5); }
+  function matches() {
+    var out = [];
+    for (r = 0; r < N; r++) for (c = 0; c < N - 2; c++) if (grid[r][c] === grid[r][c + 1] && grid[r][c] === grid[r][c + 2]) { out.push([r, c], [r, c + 1], [r, c + 2]); }
+    for (c = 0; c < N; c++) for (r = 0; r < N - 2; r++) if (grid[r][c] === grid[r + 1][c] && grid[r][c] === grid[r + 2][c]) { out.push([r, c], [r + 1, c], [r + 2, c]); }
+    return out;
+  }
+  function refill() { var m = matches(); if (!m.length) return false; for (var i = 0; i < m.length; i++) grid[m[i][0]][m[i][1]] = gem(); b.addScore(m.length * 10); return true; }
+  for (r = 0; r < N; r++) { grid.push([]); for (c = 0; c < N; c++) grid[r].push(gem()); }
+  var guard = 0; while (matches().length && guard++ < 60) refill();
+  b.loop(function (dt) {
+    time -= dt / 60;
+    if (time <= 0) { var s = b.getScore(); return b.end(s >= 500, "Time! " + s + " points."); }
+    var tp = b.tap();
+    if (tp) {
+      var c2 = Math.floor((tp.x - ox) / SZ), r2 = Math.floor((tp.y - oy) / SZ);
+      if (r2 >= 0 && r2 < N && c2 >= 0 && c2 < N) {
+        if (!sel) sel = { r: r2, c: c2 };
+        else {
+          if (Math.abs(sel.r - r2) + Math.abs(sel.c - c2) === 1) {
+            var t2 = grid[sel.r][sel.c]; grid[sel.r][sel.c] = grid[r2][c2]; grid[r2][c2] = t2;
+            if (refill()) { var cc = 0; while (refill() && cc++ < 5) {} } else { var t3 = grid[sel.r][sel.c]; grid[sel.r][sel.c] = grid[r2][c2]; grid[r2][c2] = t3; }
+          }
+          sel = null;
+        }
+      } else sel = null;
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#120b26"; ctx.fillRect(0, 0, b.W, b.H);
+    for (r = 0; r < N; r++) for (c = 0; c < N; c++) {
+      var x = ox + c * SZ, y = oy + r * SZ;
+      ctx.fillStyle = "rgba(255,255,255,0.06)"; ctx.fillRect(x + 1, y + 1, SZ - 2, SZ - 2);
+      ctx.fillStyle = CFG.pal[grid[r][c] % CFG.pal.length];
+      ctx.beginPath(); ctx.arc(x + SZ / 2, y + SZ / 2, SZ / 2 - 8, 0, 7); ctx.fill();
+      if (sel && sel.r === r && sel.c === c) { ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3; ctx.strokeRect(x + 2, y + 2, SZ - 4, SZ - 4); }
+    }
+    b.hud(Math.ceil(time) + "s · goal 500");
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+maze: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var MAP = ["############", "#....#.....#", "#.##.#.###.#", "#.#..#...#.#", "#.#.####.#.#", "#.#......#.#", "#.######.#.#", "#......#...#", "######.#####", "#K...#..K#E#", "############"];
+  var S = 34, ox = (b.W - 12 * S) / 2, oy = 56;
+  var me = { x: ox + 1.5 * S, y: oy + 1.5 * S }, keysGot = 0, keysTotal = 0, r, c;
+  var keys = [];
+  for (r = 0; r < MAP.length; r++) for (c = 0; c < MAP[r].length; c++) if (MAP[r][c] === "K") { keys.push({ c: c, r: r, got: false }); keysTotal++; }
+  function wallAt(x, y) {
+    var cc = Math.floor((x - ox) / S), rr = Math.floor((y - oy) / S);
+    if (rr < 0 || cc < 0 || rr >= MAP.length || cc >= MAP[0].length) return true;
+    return MAP[rr][cc] === "#";
+  }
+  function free(x, y) { return !wallAt(x - 9, y - 9) && !wallAt(x + 9, y - 9) && !wallAt(x - 9, y + 9) && !wallAt(x + 9, y + 9); }
+  b.loop(function () {
+    var a = b.ax(), sp = 2.6;
+    if (a.x && free(me.x + a.x * sp, me.y)) me.x += a.x * sp;
+    if (a.y && free(me.x, me.y + a.y * sp)) me.y += a.y * sp;
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (!k.got && Math.abs(me.x - (ox + (k.c + 0.5) * S)) < 18 && Math.abs(me.y - (oy + (k.r + 0.5) * S)) < 18) { k.got = true; keysGot++; b.addScore(50); }
+    }
+    var cc = Math.floor((me.x - ox) / S), rr = Math.floor((me.y - oy) / S);
+    if (rr >= 0 && cc >= 0 && rr < MAP.length && cc < MAP[0].length && MAP[rr][cc] === "E") {
+      if (keysGot >= keysTotal) return b.end(true, "Escaped with every key! " + b.getScore() + " points.");
+      return b.end(false, "The exit needs " + (keysTotal - keysGot) + " more key(s).");
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#0a0a14"; ctx.fillRect(0, 0, b.W, b.H);
+    for (r = 0; r < MAP.length; r++) for (c = 0; c < MAP[r].length; c++) {
+      if (MAP[r][c] === "#") { ctx.fillStyle = "#232a4d"; ctx.fillRect(ox + c * S, oy + r * S, S, S); }
+      else if (MAP[r][c] === "E") { ctx.fillStyle = keysGot >= keysTotal ? "#4dff88" : "#5a2a2a"; ctx.fillRect(ox + c * S + 4, oy + r * S + 4, S - 8, S - 8); }
+    }
+    ctx.fillStyle = "#ffe14d";
+    for (var i = 0; i < keys.length; i++) if (!keys[i].got) { ctx.beginPath(); ctx.arc(ox + (keys[i].c + 0.5) * S, oy + (keys[i].r + 0.5) * S, 8, 0, 7); ctx.fill(); }
+    ctx.fillStyle = CFG.pal[0]; ctx.beginPath(); ctx.arc(me.x, me.y, 11, 0, 7); ctx.fill();
+    b.hud("KEYS " + keysGot + "/" + keysTotal);
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+defense: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var path = [], x, y, i, j;
+  for (x = -20; x <= b.W / 2; x += 10) path.push([x, 150]);
+  for (y = 150; y <= 330; y += 10) path.push([b.W / 2, y]);
+  for (x = b.W / 2; x <= b.W + 20; x += 10) path.push([x, 330]);
+  var towers = [], foes = [], shots = [], gold = 120, lives = 10, wave = 0, state = "build";
+  function startWave() {
+    wave++; state = "fight";
+    for (i = 0; i < 4 + wave * 2; i++) foes.push({ pi: -i * 30, hp: 3 + wave * 2, sp: (30 + wave * 3) * CFG.speed, x: -30, y: 150 });
+  }
+  b.loop(function (dt) {
+    var fdt = dt / 60;
+    var tp = b.tap();
+    if (tp && state === "build") {
+      if (tp.y > b.H - 64) { if (wave < 5) startWave(); }
+      else if (gold >= 50) {
+        var ok = true;
+        for (i = 0; i < path.length; i += 4) if (Math.hypot(path[i][0] - tp.x, path[i][1] - tp.y) < 34) ok = false;
+        for (i = 0; i < towers.length; i++) if (Math.hypot(towers[i].x - tp.x, towers[i].y - tp.y) < 36) ok = false;
+        if (ok && tp.y > 40) { towers.push({ x: tp.x, y: tp.y, cd: 0 }); gold -= 50; }
+      }
+    }
+    for (i = foes.length - 1; i >= 0; i--) {
+      var f = foes[i]; f.pi += f.sp * fdt;
+      var pi = Math.max(0, Math.min(path.length - 1, Math.floor(f.pi)));
+      f.x = path[pi][0]; f.y = path[pi][1];
+      if (f.pi >= path.length - 1) { foes.splice(i, 1); lives--; if (lives <= 0) return b.end(false, "Overrun on wave " + wave + "!"); }
+    }
+    for (i = 0; i < towers.length; i++) {
+      var t2 = towers[i]; t2.cd -= fdt;
+      if (t2.cd <= 0) {
+        var best = null, bd = 1e9;
+        for (j = 0; j < foes.length; j++) { var d = Math.hypot(foes[j].x - t2.x, foes[j].y - t2.y); if (d < 110 && d < bd) { bd = d; best = foes[j]; } }
+        if (best) { t2.cd = 0.7; shots.push({ x: t2.x, y: t2.y, tx: best.x, ty: best.y, sp: 380 }); }
+      }
+    }
+    for (i = shots.length - 1; i >= 0; i--) {
+      var s = shots[i], dx = s.tx - s.x, dy = s.ty - s.y, d = Math.hypot(dx, dy);
+      if (d < 14) {
+        for (j = foes.length - 1; j >= 0; j--) if (Math.hypot(foes[j].x - s.tx, foes[j].y - s.ty) < 30) { foes[j].hp -= 2; if (foes[j].hp <= 0) { foes.splice(j, 1); gold += 10; b.addScore(20); } }
+        shots.splice(i, 1);
+      } else { s.x += dx / d * s.sp * fdt; s.y += dy / d * s.sp * fdt; }
+    }
+    if (state === "fight" && !foes.length) {
+      b.addScore(wave * 100); gold += 40;
+      if (wave >= 5) return b.end(true, "5 waves held! " + b.getScore() + " points.");
+      state = "build";
+    }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#0a0f1a"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.strokeStyle = "#3a3a55"; ctx.lineWidth = 24; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(path[0][0], path[0][1]);
+    for (i = 1; i < path.length; i += 4) ctx.lineTo(path[i][0], path[i][1]);
+    ctx.stroke();
+    for (i = 0; i < towers.length; i++) { ctx.fillStyle = CFG.pal[0]; ctx.fillRect(towers[i].x - 12, towers[i].y - 12, 24, 24); }
+    for (i = 0; i < foes.length; i++) { ctx.fillStyle = CFG.pal[2]; ctx.beginPath(); ctx.arc(foes[i].x, foes[i].y, 10, 0, 7); ctx.fill(); }
+    ctx.fillStyle = "#ffe14d"; for (i = 0; i < shots.length; i++) { ctx.beginPath(); ctx.arc(shots[i].x, shots[i].y, 4, 0, 7); ctx.fill(); }
+    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0, b.H - 64, b.W, 64);
+    ctx.fillStyle = "#ffffff"; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(state === "build" ? "TAP FIELD: TOWER (50g)  ·  TAP HERE: START WAVE " + (wave + 1) + "/5" : "WAVE " + wave + "/5 — HOLD!", b.W / 2, b.H - 24);
+    ctx.textAlign = "left";
+    b.hud("GOLD " + gold + " · LIVES " + lives);
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+pong: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var me = 200, ai = 200, ms = 0, as = 0, ball = null;
+  function serve(d) { ball = { x: b.W / 2, y: b.H / 2, vx: 4 * d * CFG.speed, vy: (Math.random() - 0.5) * 4 }; }
+  serve(1);
+  b.loop(function () {
+    var a = b.ax();
+    me = Math.max(0, Math.min(b.H - 90, me + a.y * 6));
+    var tp = b.tap(); if (tp) me = Math.max(0, Math.min(b.H - 90, tp.y - 45));
+    ai = Math.max(0, Math.min(b.H - 90, ai + Math.max(-4, Math.min(4, ball.y - 45 - ai)) * 0.9));
+    ball.x += ball.vx; ball.y += ball.vy;
+    if (ball.y < 38 || ball.y > b.H - 8) ball.vy *= -1;
+    if (ball.vx < 0 && ball.x < 36 && ball.x > 18 && ball.y > me - 8 && ball.y < me + 98) {
+      ball.vx = -ball.vx * 1.05; ball.vy = ((ball.y - (me + 45)) / 45) * 5; ball.x = 36;
+    }
+    if (ball.vx > 0 && ball.x > b.W - 36 && ball.x < b.W - 18 && ball.y > ai - 8 && ball.y < ai + 98) {
+      ball.vx = -ball.vx * 1.05; ball.vy = ((ball.y - (ai + 45)) / 45) * 5; ball.x = b.W - 36;
+    }
+    if (ball.x < 0) { as++; serve(1); if (as >= 5) return b.end(false, "AI takes it 5-" + ms + "."); }
+    if (ball.x > b.W) { ms++; b.addScore(100); serve(-1); if (ms >= 5) return b.end(true, "You win 5-" + as + "!"); }
+    var ctx = b.ctx;
+    ctx.fillStyle = "#061206"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.fillStyle = CFG.pal[0]; ctx.fillRect(24, me, 12, 90);
+    ctx.fillStyle = CFG.pal[2]; ctx.fillRect(b.W - 36, ai, 12, 90);
+    ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(ball.x, ball.y, 8, 0, 7); ctx.fill();
+    b.hud("YOU " + ms + " · AI " + as);
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+},
+voyage: function (canvas, CFG) {
+  var b = vgBase(canvas, CFG);
+  var ship = { x: b.W / 2, y: b.H / 2, vx: 0, vy: 0 }, fuel = 100, found = 0, pulse = -1, t = 0, i;
+  var pois = [];
+  for (i = 0; i < 5; i++) pois.push({ x: 40 + Math.random() * (b.W - 80), y: 90 + Math.random() * (b.H - 160), done: false });
+  var stars = [];
+  for (i = 0; i < 40; i++) stars.push({ x: Math.random() * b.W, y: Math.random() * b.H });
+  b.loop(function (dt) {
+    t++;
+    var a = b.ax();
+    ship.vx = Math.max(-3.4, Math.min(3.4, ship.vx + a.x * 0.24 * CFG.speed));
+    ship.vy = Math.max(-3.4, Math.min(3.4, ship.vy + a.y * 0.24 * CFG.speed));
+    ship.vx *= 0.985; ship.vy *= 0.985;
+    ship.x = Math.max(20, Math.min(b.W - 20, ship.x + ship.vx));
+    ship.y = Math.max(50, Math.min(b.H - 20, ship.y + ship.vy));
+    fuel = Math.max(0, fuel - dt * 0.009);
+    if (fuel <= 0) return b.end(false, "Fuel gone: " + found + "/5 anomalies.");
+    var go = b.pressed() || b.tap();
+    b.keys[" "] = false; b.keys["spacebar"] = false;
+    if (go) {
+      pulse = 0;
+      for (i = 0; i < pois.length; i++) {
+        var p = pois[i];
+        if (!p.done && Math.hypot(p.x - ship.x, p.y - ship.y) < 90) { p.done = true; found++; b.addScore(100); }
+      }
+    }
+    if (pulse >= 0) { pulse += 4; if (pulse > 110) pulse = -1; }
+    if (found >= 5) return b.end(true, "Sector charted! " + b.getScore() + " points.");
+    var ctx = b.ctx;
+    ctx.fillStyle = "#05060f"; ctx.fillRect(0, 0, b.W, b.H);
+    ctx.fillStyle = "#ffffff"; for (i = 0; i < stars.length; i++) ctx.fillRect(stars[i].x, stars[i].y, 2, 2);
+    for (i = 0; i < pois.length; i++) {
+      var p2 = pois[i]; if (p2.done) continue;
+      ctx.strokeStyle = CFG.pal[2]; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p2.x, p2.y, 12 + Math.sin(t / 14) * 3, 0, 7); ctx.stroke();
+    }
+    if (pulse >= 0) { ctx.strokeStyle = CFG.pal[0]; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ship.x, ship.y, pulse, 0, 7); ctx.stroke(); }
+    ctx.fillStyle = CFG.pal[0];
+    ctx.beginPath(); ctx.moveTo(ship.x, ship.y - 14); ctx.lineTo(ship.x - 10, ship.y + 10); ctx.lineTo(ship.x + 10, ship.y + 10); ctx.fill();
+    b.hud("FUEL " + Math.round(fuel) + "% · " + found + "/5");
+  });
+  return { stop: b.stop, err: function () { return b.err; } };
+}
+};
+
+/* deterministic SVG cover for a video-game concept */
+function vgEscape(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function vgCoverSVG(rng, title, genre) {
+  var pals = [["#00f0ff", "#ff2fb3", "#0b0f22"], ["#ffe14d", "#ff6b4d", "#1a0f2e"], ["#4dff88", "#00f0ff", "#071a12"], ["#c44dff", "#ff4d88", "#150a24"], ["#ffb300", "#ff4d4d", "#1c1005"]];
+  var pal = pals[rng.int(0, pals.length - 1)], A = pal[0], Bc = pal[1], bg = pal[2];
+  var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" role="img" aria-label="' + vgEscape(title) + ' cover">';
+  s += '<rect width="400" height="520" fill="' + bg + '"/>';
+  var i, x, y;
+  for (i = 0; i < 24; i++) { x = rng.int(0, 400); y = rng.int(0, 520); s += '<circle cx="' + x + '" cy="' + y + '" r="' + rng.int(1, 3) + '" fill="' + A + '" opacity="0.35"/>'; }
+  var motif = {"Arcade chase": "chase", "Brick-breaker": "bricks", "Space shooter": "ships", "Top-down racer": "track", "Platformer": "steps", "Match-3 puzzle": "gems", "Combat ops": "cross", "Maze explorer": "maze", "Tower defense": "towers", "Pong-style": "pong", "Sky hopper": "gates", "Starship explorer": "stars"}[genre] || "stars";
+  s += '<g opacity="0.9">';
+  if (motif === "chase" || motif === "maze") {
+    for (i = 0; i < 5; i++) for (var j = 0; j < 5; j++) if (rng.int(0, 2)) s += '<rect x="' + (60 + j * 56) + '" y="' + (120 + i * 44) + '" width="48" height="36" fill="none" stroke="' + A + '" stroke-width="4"/>';
+    s += '<rect x="60" y="120" width="48" height="36" fill="' + Bc + '"/>';
+  } else if (motif === "bricks") {
+    for (i = 0; i < 4; i++) for (var j = 0; j < 6; j++) s += '<rect x="' + (40 + j * 54) + '" y="' + (110 + i * 34) + '" width="48" height="28" fill="' + (i === 0 ? Bc : A) + '" opacity="' + (0.55 + i * 0.12) + '"/>';
+  } else if (motif === "ships") {
+    for (i = 0; i < 5; i++) { x = 60 + rng.int(0, 260); y = 110 + rng.int(0, 200); s += '<polygon points="' + x + ',' + y + ' ' + (x - 22) + ',' + (y + 34) + ' ' + (x + 22) + ',' + (y + 34) + '" fill="' + (i % 2 ? A : Bc) + '"/>'; }
+  } else if (motif === "track") {
+    s += '<ellipse cx="200" cy="220" rx="140" ry="90" fill="none" stroke="' + A + '" stroke-width="26"/>';
+    s += '<ellipse cx="200" cy="220" rx="140" ry="90" fill="none" stroke="' + bg + '" stroke-width="4" stroke-dasharray="16 12"/>';
+  } else if (motif === "steps") {
+    for (i = 0; i < 6; i++) s += '<rect x="' + (40 + i * 52) + '" y="' + (300 - i * 32) + '" width="52" height="' + (32 * (i + 1)) + '" fill="' + A + '" opacity="0.75"/>';
+  } else if (motif === "gems") {
+    for (i = 0; i < 6; i++) { x = 60 + rng.int(0, 260); y = 110 + rng.int(0, 200); s += '<polygon points="' + x + ',' + (y - 22) + ' ' + (x + 18) + ',' + y + ' ' + x + ',' + (y + 22) + ' ' + (x - 18) + ',' + y + '" fill="' + (i % 2 ? A : Bc) + '"/>'; }
+  } else if (motif === "cross") {
+    s += '<circle cx="200" cy="220" r="90" fill="none" stroke="' + A + '" stroke-width="8"/><circle cx="200" cy="220" r="10" fill="' + Bc + '"/>';
+    s += '<line x1="200" y1="110" x2="200" y2="330" stroke="' + A + '" stroke-width="6"/><line x1="90" y1="220" x2="310" y2="220" stroke="' + A + '" stroke-width="6"/>';
+  } else if (motif === "towers") {
+    for (i = 0; i < 4; i++) { x = 50 + i * 80; s += '<rect x="' + x + '" y="180" width="44" height="140" fill="' + A + '" opacity="0.8"/><rect x="' + (x - 8) + '" y="160" width="60" height="24" fill="' + Bc + '"/>'; }
+  } else if (motif === "pong") {
+    s += '<rect x="60" y="150" width="18" height="140" fill="' + A + '"/><rect x="322" y="150" width="18" height="140" fill="' + A + '"/>';
+    s += '<circle cx="200" cy="220" r="26" fill="' + Bc + '"/>';
+  } else if (motif === "gates") {
+    for (i = 0; i < 4; i++) { x = 60 + i * 80; s += '<rect x="' + x + '" y="100" width="26" height="120" fill="' + A + '"/><rect x="' + x + '" y="260" width="26" height="120" fill="' + A + '"/>'; }
+  } else {
+    for (i = 0; i < 7; i++) { x = 50 + rng.int(0, 280); y = 100 + rng.int(0, 220); s += '<polygon points="' + x + ',' + (y - 26) + ' ' + (x - 14) + ',' + (y + 14) + ' ' + (x + 14) + ',' + (y + 14) + '" fill="' + (i % 2 ? A : Bc) + '"/>'; }
+  }
+  s += '</g>';
+  s += '<rect y="380" width="400" height="140" fill="rgba(0,0,0,0.55)"/>';
+  var words = vgEscape(title).split(" "), lines = [""], li = 0;
+  words.forEach(function (w) { if ((lines[li] + " " + w).length > 16) { li++; lines[li] = ""; } lines[li] = (lines[li] + " " + w).trim(); });
+  lines.slice(0, 2).forEach(function (ln, k) { s += '<text x="200" y="' + (428 + k * 40) + '" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="34" fill="#ffffff">' + ln + '</text>'; });
+  s += '<text x="200" y="500" text-anchor="middle" font-family="sans-serif" font-size="15" fill="' + A + '">' + vgEscape(genre.toUpperCase()) + ' · SIGNATURE VIDEO GAME</text>';
+  s += '</svg>';
+  return s;
+}
+
+/* genre data: description, rules, controls, demo archetype */
+var VG_GENRE_INFO = {
+  "Arcade chase": { arch: "chase", desc: "Gobble pellets across a neon grid while your own tail grows longer behind you.", rules: "Eat 15 pellets to win. Hitting a wall or your own tail ends the run.", controls: "Arrow keys or WASD to steer.", inputs: 4 },
+  "Brick-breaker": { arch: "breaker", desc: "Bounce the ball off your paddle and smash every brick on the board.", rules: "Clear all bricks to win. Losing the ball below the paddle ends the run.", controls: "Arrow keys or tap to slide the paddle. Space or tap to launch.", inputs: 3 },
+  "Space shooter": { arch: "shooter", desc: "Pilot a lone starfighter against six incoming waves.", rules: "Destroy all six waves to win. A collision or a breached line ends the run.", controls: "Arrow keys or WASD to fly, Space or tap to fire.", inputs: 5 },
+  "Top-down racer": { arch: "driver", desc: "Slide a stock car around an oval circuit and chase the perfect line.", rules: "Complete 3 laps to win. Off-track grass slows the car down.", controls: "Up or W to accelerate, Down or S to brake, Left/Right or A/D to steer.", inputs: 4 },
+  "Platformer": { arch: "jumper", desc: "Run and jump up the tower platforms, grab coins, and plant the flag.", rules: "Reach the flag platform to win. Falling past the bottom ends the run.", controls: "Arrow keys or A/D to run, Up/W or Space or tap to jump.", inputs: 4 },
+  "Match-3 puzzle": { arch: "match", desc: "Swap touching gems to line up three or more and pop them off the board.", rules: "Score 500 points in 75 seconds to win. Cascades keep the combo alive.", controls: "Tap two touching gems to swap them.", inputs: 1 },
+  "Combat ops": { arch: "shooter", mode: "combat", desc: "Hold the line in a combat-ops shooter with armored waves and faster fire.", rules: "Destroy all six waves to win. Armored foes take extra hits.", controls: "Arrow keys or WASD to move, Space or tap to fire.", inputs: 5 },
+  "Maze explorer": { arch: "maze", desc: "Explore a neon maze, collect every key, and escape through the exit gate.", rules: "Collect all keys, then reach the exit. The exit stays locked until then.", controls: "Arrow keys or WASD to move.", inputs: 4 },
+  "Tower defense": { arch: "defense", desc: "Place blaster towers along the road and hold it for five waves.", rules: "Survive 5 waves with lives left to win. Each leaked foe costs one life.", controls: "Tap the field to place a tower (50 gold). Tap START WAVE when ready.", inputs: 1 },
+  "Pong-style": { arch: "pong", desc: "The classic duel: your paddle against a tracking AI.", rules: "First to 5 points wins the match.", controls: "Up/Down or W/S to move, or tap the canvas to place the paddle.", inputs: 2 },
+  "Sky hopper": { arch: "flap", desc: "Flap through neon gates without clipping a single one.", rules: "Score 100 points to win. Clipping a gate or hitting the ground ends the run.", controls: "Space or tap to flap.", inputs: 1 },
+  "Starship explorer": { arch: "voyage", desc: "Chart five anomalies across the sector before the fuel runs dry.", rules: "Scan all 5 anomalies to win. Fly close, then ping with Space or tap.", controls: "Arrow keys or WASD to thrust, Space or tap to scan.", inputs: 5 }
+};
+var VG_TITLE_A = ["Cinder", "Vexel", "Nova", "Quasar", "Pixel", "Turbo", "Nebula", "Crimson", "Volt", "Echo", "Iron", "Solar", "Lunar", "Blaze", "Frost", "Glyph", "Orbit", "Rogue", "Onyx", "Zephyr"];
+var VG_TITLE_B = ["Drift", "Storm", "Quest", "Run", "Siege", "Maze", "Voyage", "Strike", "Bloom", "Fall", "Rise", "Shift", "Core", "Wing", "Tide", "Line"];
+var VG_ERA_FLAVOR = {
+  "1970s arcade": "chunky pixels and four proud colors",
+  "1980s 8-bit": "sprite-flicker charm and chiptune bite",
+  "1990s 16-bit": "parallax layers and bold sprites",
+  "2000s 3D": "low-poly bravado and lens flare",
+  "Modern": "neon polish and buttery motion"
+};
+
+/* assemble the shipped demo_js: vgBase + archetype + seeded CFG, run with new Function("canvas", demo_js) */
+function vgDemoJS(rng, archKey, cfg) {
+  return "var vgBase=" + vgBase.toString() + ";\n" +
+    "var __arch=" + VG_ARCH[archKey].toString() + ";\n" +
+    "var CFG=" + JSON.stringify(cfg) + ";\n" +
+    "return __arch(canvas, CFG);";
+}
+
+fam({
+  key: "videogame", name: "Signature Video Game Generator", icon: "🎮",
+  blurb: "Complete Signature-line video game concepts — title, rules, controls, difficulty, deterministic cover art, and a playable canvas demo, fully specified.",
+  params: [
+    { id: "genre", label: "Genre", type: "choice", options: ["Arcade chase", "Brick-breaker", "Space shooter", "Top-down racer", "Platformer", "Match-3 puzzle", "Combat ops", "Maze explorer", "Tower defense", "Pong-style", "Sky hopper", "Starship explorer"] },
+    { id: "era", label: "Era", type: "choice", options: ["1970s arcade", "1980s 8-bit", "1990s 16-bit", "2000s 3D", "Modern"] },
+    { id: "mechanics", label: "Core mechanics", type: "choice", options: ["Single-button", "Twin-stick", "Turn-based", "Real-time action", "Physics play", "Stealth"] }
+  ],
+  solve: function (rng, P) {
+    var GI = VG_GENRE_INFO[P.genre];
+    var title = rng.pick(VG_TITLE_A) + " " + rng.pick(VG_TITLE_B);
+    var diff = rng.pick(["Gentle", "Fair", "Spicy", "Brutal"]);
+    var lv = GI.arch === "shooter" ? 6 : GI.arch === "defense" ? 5 : rng.int(6, 12);
+    var kb = rng.int(9, 58);
+    var mins = rng.int(3, 15);
+    var colors = colorSet(rng, ["player", "hazards", "background"], 3);
+    var cfg = { title: title, pal: colors.map(function (c) { return c.hex; }), speed: rng.float(0.85, 1.25, 2), mode: GI.mode || "arcade" };
+    var idea = "The " + title + " is a Signature-line " + P.genre.toLowerCase() + " in a " + P.era.toLowerCase() +
+      " style, driven by " + P.mechanics.toLowerCase() + " play. " + GI.desc + " " + GI.rules +
+      " The look: " + VG_ERA_FLAVOR[P.era] + ". Difficulty: " + diff + ".";
+    return {
+      name: title,
+      tagline: P.genre + " · " + P.era + " · " + P.mechanics,
+      idea: idea,
+      dimensions: [D("Target frame rate", "60", "fps"), D("Playfield", "16:9", "landscape"), D("Demo canvas", "420 x 560", "px"), D("Touch targets", "48", "px minimum")],
+      materials: [M("Game code", "JavaScript", "ES2020"), M("Cover art", "SVG vector", "print-ready"), M("Audio synth", "WebAudio", "8-voice")],
+      colors: colors,
+      components: [CP("Core game loop", "n/a", "fixed-timestep 60 Hz update + render"), CP("Input handler", "n/a", "keyboard + touch, 48 px targets"), CP("Audio synth", "n/a", "WebAudio 8-voice bleep synth"), CP("Demo build", "n/a", "standalone single-file HTML, playable on this page")],
+      measurements: [S("Levels / waves", lv, ""), S("Difficulty", diff, ""), S("Estimated code", kb, "KB"), S("Session length", mins, "min")],
+      how_to_use: "Press the Run demo button on this page (or open the downloaded demo file), then play: " + GI.controls,
+      game: { title: title, description: GI.desc, rules: GI.rules, controls: GI.controls, difficulty: diff, genre: P.genre, era: P.era, mechanics: P.mechanics },
+      cover_svg: vgCoverSVG(rng, title, P.genre),
+      demo_js: vgDemoJS(rng, GI.arch, cfg)
+    };
+  }
+});
+
 /* ================= UNIVERSAL "DESCRIBE ANYTHING" SOLVER ================= */
 /* Hash the user's words into a seed, classify into the nearest base family
    (or "universal" when nothing fits), then solve every field with the seeded
