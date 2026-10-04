@@ -2,7 +2,7 @@
 """Build the sitemap INDEX for the Boundless Generator Archive.
 
 Produces sitemap-index.xml + sharded record sitemaps (max 10,000 URLs each):
-  - sitemap-core.xml    (home, hubs, ?fam= pages, llms.txt, developers.html)
+  - sitemap-core.xml    (home, browse.html, hubs, ?fam= pages, llms.txt, developers.html)
   - sitemap-records-N.xml (every ?gen= output)
 
 Also refreshes the static hub pages (code/build_hubs.py) and re-stamps the
@@ -48,8 +48,8 @@ def main():
     counts = build_hubs.main()
     total = sum(counts.values())
 
-    core = [BASE, BASE + "hubs/", BASE + "llms.txt", BASE + "developers.html",
-            BASE + "api.json", BASE + "generators-catalog.json"]
+    core = [BASE, BASE + "browse.html", BASE + "hubs/", BASE + "llms.txt",
+            BASE + "developers.html", BASE + "api.json", BASE + "generators-catalog.json"]
     fams = build_hubs.families()
     for f in fams:
         core.append(BASE + "?fam=" + f["key"])

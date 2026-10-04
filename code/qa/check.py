@@ -14,6 +14,8 @@ Gates:
   7. filed cross-reference resolution: every FILED_REFS spec/patent ID resolves
      to a real record in the local filed-archive search files
   8. manifest schema: all required fields present; api.json consistent
+  9. browse catalog: browse.html stamped count == manifest count; per-family
+     browse files cover every record exactly once (no dupes, no gaps)
 """
 import gzip, hashlib, json, os, re, subprocess, sys, xml.etree.ElementTree as ET
 
@@ -232,6 +234,56 @@ def gate_schema(m):
         ok("api.json consistent with manifest")
 
 
+def gate_browse(m):
+    bp = os.path.join(ROOT, "browse.html")
+    if not os.path.exists(bp):
+        fail("browse.html missing")
+    else:
+        html = open(bp).read()
+        mm = re.search(r"<!--__BROWSE_COUNT_START-->(.*?)<!--__BROWSE_COUNT_END-->", html, re.S)
+        if not mm:
+            fail("browse.html missing BROWSE_COUNT stamp markers")
+        else:
+            n = re.search(r"<b>([\d,]+)</b>", mm.group(1))
+            if not n or int(n.group(1).replace(",", "")) != m["count"]:
+                fail("browse.html stamped count != manifest count (%d)" % m["count"])
+            else:
+                ok("browse.html stamped count == manifest count (%d)" % m["count"])
+        tm = re.search(r"<!--__BROWSE_TREE_START-->(.*?)<!--__BROWSE_TREE_END-->", html, re.S)
+        if not tm or 'class="famblock"' not in tm.group(1):
+            fail("browse.html family/letter tree missing or empty")
+        else:
+            ok("browse.html family/letter tree present")
+    bi_p = os.path.join(ROOT, "data", "browse", "index.json")
+    if not os.path.exists(bi_p):
+        fail("data/browse/index.json missing")
+        return
+    bi = json.load(open(bi_p))
+    if bi.get("count") != m["count"]:
+        fail("data/browse/index.json count != manifest count")
+    seen, dup, tot = set(), 0, 0
+    for fam in bi.get("families", []):
+        fp = os.path.join(ROOT, "data", "browse", "browse-%s.json.gz" % fam["key"])
+        if not os.path.exists(fp):
+            fail("browse family file missing: browse-%s.json.gz" % fam["key"])
+            continue
+        d = json.load(gzip.open(fp, "rt"))
+        for rows in d.get("letters", {}).values():
+            for r in rows:
+                tot += 1
+                if r[0] in seen:
+                    dup += 1
+                    if dup <= 5:
+                        fail("duplicate ID in browse files: " + r[0])
+                seen.add(r[0])
+    if tot != m["count"]:
+        fail("browse family files hold %d rows != manifest count %d" % (tot, m["count"]))
+    elif dup:
+        fail("browse family files have %d duplicate IDs" % dup)
+    else:
+        ok("browse family files cover all %d records, no dupes" % tot)
+
+
 def main():
     m = load_manifest()
     rows = gate_counts(m)
@@ -242,6 +294,7 @@ def main():
     gate_sitemap(m)
     gate_crossrefs()
     gate_schema(m)
+    gate_browse(m)
     if FAIL:
         print("\n%d GATE(S) FAILED" % len(FAIL))
         return 1

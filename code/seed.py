@@ -3,7 +3,8 @@
 
 Generates N new outputs per family via the deterministic JS engine
 (node code/engine.js batch), appends compact rows to gz chunks, and
-rebuilds manifest + index + sitemap + api.json.
+rebuilds manifest + index + browse catalog files + api.json.
+(The 2h drip runs code/build_sitemap.py next for sitemaps.)
 
 Usage: python3 code/seed.py --per-family 150
 """
@@ -217,6 +218,11 @@ def main():
         t = re.sub(r"^ARCHIVE_UPDATED: .*$",
                    "ARCHIVE_UPDATED: %s" % now.strftime("%Y-%m-%d"), t, flags=re.M)
         open(llms_p, "w").write(t)
+
+    # browse.html lazy A-Z catalog (runs AFTER the manifest/index/api rebuild above,
+    # so the stamped count can never be one run behind)
+    subprocess.run([sys.executable, "code/build_browse_index.py"],
+                   cwd=ROOT, check=True)
 
     print("TOTAL outputs:", manifest["count"])
 
