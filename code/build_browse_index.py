@@ -58,7 +58,7 @@ def esc(s):
 
 def build_tree(fam_meta):
     """Static family -> letter <details> skeleton (row lists load lazily)."""
-    out = ["<!--__BROWSE_TREE_START-->"]
+    out = ["<!--__BROWSE_TREE_START-->", '<div id="jah-askai-scope">']
     out.append('<div class="famjump" aria-label="Jump to a generator family">')
     for fm in fam_meta:
         out.append('<a href="#fam-%s">%s %s</a>'
@@ -78,6 +78,7 @@ def build_tree(fam_meta):
             out.append('</details>')
         out.append('</div>')
         out.append('</details>')
+    out.append('</div>')
     out.append('<!--__BROWSE_TREE_END-->')
     return "\n".join(out)
 
