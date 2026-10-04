@@ -248,6 +248,34 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <div id="aubar"><span id="aulabel">Reading…</span><span class="prog" id="auprog"></span><button class="btn ghost" id="aupause">⏸ Pause</button><button class="btn ghost" id="austop">⏹ Stop</button></div>
 <script src="code/engine.js"></script>
 <script>
+/* ==== JAH global read-aloud controller (one per page): no stacked voices, no orphan audio ==== */
+(function(){
+if(window.__JAHREAD)return;
+var R={audios:[],lastTap:0,lastLabel:""};
+R.stopAll=function(){
+ try{if(window.speechSynthesis)window.speechSynthesis.cancel();}catch(e){}
+ try{if(window.responsiveVoice&&window.responsiveVoice.cancel)window.responsiveVoice.cancel();}catch(e){}
+ var i,a;
+ for(i=0;i<R.audios.length;i++){a=R.audios[i];try{a.pause();}catch(e){}try{a.removeAttribute("src");}catch(e){}try{a.load();}catch(e){}}
+ R.audios.length=0;
+ var els=document.querySelectorAll("audio");
+ for(i=0;i<els.length;i++){try{els[i].pause();}catch(e){}}
+};
+R.reg=function(a){if(a&&R.audios.indexOf(a)<0)R.audios.push(a);return a;};
+R.playGuard=function(label){
+ var now=Date.now();
+ if(now-R.lastTap<450&&label===R.lastLabel){R.lastTap=0;R.lastLabel="";R.stopAll();return false;}
+ R.lastTap=now;R.lastLabel=String(label||"");
+ R.stopAll();return true;
+};
+try{
+ var NativeAudio=window.Audio;
+ window.Audio=function(src){var a=src===undefined?new NativeAudio():new NativeAudio(src);R.reg(a);return a;};
+ window.Audio.prototype=NativeAudio.prototype;
+}catch(e){}
+window.__JAHREAD=R;
+})();
+
 /* ============ tiered read-aloud: speechSynthesis -> ResponsiveVoice -> Google TTS ============ */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
 function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("en")===0});if(!vs.length)return null;var fem=/samantha|zira|joanna|amy|emma|kate|serena|moira|tessa|veena|fiona|karen|female|google us english/i;for(var i=0;i<vs.length;i++)if(fem.test(vs[i].name))return vs[i];var g=vs.filter(function(v){return v.name.toLowerCase().indexOf("google")>=0})[0];return g||vs[0]||null}catch(e){return null}}
@@ -262,10 +290,10 @@ var FX={audio:null,active:false,errs:0};
 var TTS_TIERS=[function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US"},function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)},function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q="+encodeURIComponent(t)}];
 function fxChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);function pushWords(s){var w=s.split(" "),c="";for(var k=0;k<w.length;k++){var t=(c+" "+w[k]).trim();if(t.length>180){if(c)out.push(c);c=w[k]}else c=t}if(c)out.push(c)}for(var i=0;i<parts.length;i+=2){var s=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!s)continue;if(s.length>180){if(cur){out.push(cur);cur=""}pushWords(s);continue}if(cur&&(cur+" "+s).length>180){out.push(cur);cur=s}else cur=cur?cur+" "+s:s}if(cur)out.push(cur);return out}
 function fxPlay(list,i,tier,retry,proven){if(!FX.active||!AU.active)return;if(i>=list.length){auStop();return}var a;try{a=new Audio(TTS_TIERS[tier](list[i]))}catch(e){auStop();return}try{a.playbackRate=AU.rate||1}catch(e){}FX.audio=a;a.onended=function(){if(AU.active&&FX.active){FX.errs=0;fxPlay(list,i+1,tier,0,true)}};a.onerror=function(){if(!AU.active||!FX.active)return;if(!proven){if(retry<1){fxPlay(list,i,tier,retry+1,false);return}if(tier+1<TTS_TIERS.length){fxPlay(list,i,tier+1,0,false);return}auStop();audMsg("I couldn't reach a voice service — check your connection, or open this page in Chrome for built-in voices.");return}if(retry<1){fxPlay(list,i,tier,retry+1,true);return}FX.errs=(FX.errs||0)+1;if(FX.errs>4){auStop();audMsg("The voice service dropped — check your connection, or open this page in Chrome.");return}fxPlay(list,i+1,tier,0,true)};try{var pr=a.play();if(pr&&pr.catch)pr.catch(function(){if(!proven&&i===0)audMsg("The browser blocked audio — tap the pause button, then play, to start it.")})}catch(e){}}
-function fxStart(text){FX.active=true;FX.errs=0;fxPlay(fxChunks(text),0,0,0,false)}
-function fxStop(){FX.active=false;if(FX.audio){try{FX.audio.pause()}catch(e){}FX.audio=null}}
+function fxStart(text){if(window.__JAHREAD&&!window.__JAHREAD.playGuard("fxStart"))return;FX.active=true;FX.errs=0;fxPlay(fxChunks(text),0,0,0,false)}
+function fxStop(){try{if(window.__JAHREAD)window.__JAHREAD.stopAll();}catch(e){}FX.active=false;if(FX.audio){try{FX.audio.pause()}catch(e){}FX.audio=null}}
 function auPauseToggle(){if(!AU.active)return;if(FX.active){var fa=FX.audio;try{if(AU.paused){if(fa)fa.play()}else{if(fa)fa.pause()}}catch(e){}AU.paused=!AU.paused;auPaintBtn();return}try{if(AU.paused)window.speechSynthesis.resume();else window.speechSynthesis.pause()}catch(e){}AU.paused=!AU.paused;auPaintBtn()}
-function auStop(){AU.active=false;AU.paused=false;AU.q=[];AU.i=0;fxStop();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(e){}auShowBar(false)}
+function auStop(){try{if(window.__JAHREAD)window.__JAHREAD.stopAll();}catch(e){}AU.active=false;AU.paused=false;AU.q=[];AU.i=0;fxStop();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(e){}auShowBar(false)}
 function genSpeakText(o){
   var t="Concept simulation. This generated design has not been engineered, tested, or certified safe. ";
   if(isMedicalOut(o,o.family||""))t+="Speculative wellness concept only — not medical advice. Consult a qualified professional. ";
@@ -280,7 +308,7 @@ function genSpeakText(o){
   t+="How to use: "+o.how_to_use;
   return t.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
 }
-function readGen(o){auStop();AU.label=o.name;AU.q=auChunks(genSpeakText(o));AU.i=0;AU.active=true;AU.paused=false;if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auSpeakNext()}else{auShowBar(true);auPaintBtn();fxStart(genSpeakText(o));audMsg("This browser has no built-in voice — reading with the online voice instead.")}}
+function readGen(o){if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readGen"))return;auStop();AU.label=o.name;AU.q=auChunks(genSpeakText(o));AU.i=0;AU.active=true;AU.paused=false;if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auSpeakNext()}else{auShowBar(true);auPaintBtn();fxStart(genSpeakText(o));audMsg("This browser has no built-in voice — reading with the online voice instead.")}}
 
 /* ============ app ============ */
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
