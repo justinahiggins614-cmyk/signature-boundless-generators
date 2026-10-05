@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="js/signin.js"></script>
+<script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
+var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
-<script>try{var _jt=localStorage.getItem('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
+<script>try{var _jt=PS.get('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Signature Boundless Generator Archive — every field, fully solved</title>
 <meta name="description" content="The Signature Boundless Generator Archive: Signature-line generators for every field — jets, cars, engines, food, candy, toys, robots, buildings and mix-and-match labs. Every output fully solved down to sizes, dimensions, chips, measurements, materials and colors. Marching to 1,000,000.">
@@ -421,8 +424,8 @@ async function fetchJSON(url,ms,retries){
   throw last;
 }
 var STATS_KEY="jah-gen17-stats";
-function statsCacheGet(){try{var s=localStorage.getItem(STATS_KEY);return s?JSON.parse(s):null}catch(e){return null}}
-function statsCacheSet(n,fams){try{localStorage.setItem(STATS_KEY,JSON.stringify({count:n,families:fams,goal:1000000,verifiedAt:new Date().toISOString()}))}catch(e){}}
+function statsCacheGet(){try{var s=PS.get(STATS_KEY);return s?JSON.parse(s):null}catch(e){return null}}
+function statsCacheSet(n,fams){try{PS.set(STATS_KEY,JSON.stringify({count:n,families:fams,goal:1000000,verifiedAt:new Date().toISOString()}))}catch(e){}}
 var G={manifest:null,api:null,idx:null,idxFail:false,fams:[],curFam:null,curSeed:1,curOut:null};
 
 async function boot(){
@@ -944,8 +947,8 @@ document.addEventListener("DOMContentLoaded",boot);
 /* UX PASS: dark-mode toggle + session restore (localStorage only, nothing leaves this device) */
 (function(){
 'use strict';
-function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
-function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsGet(k){try{return PS.get(k);}catch(e){return null;}}
+function lsSet(k,v){try{PS.set(k,v);}catch(e){}}
 /* dark-mode toggle */
 var tb=document.getElementById('jahThemeToggle');
 function paintToggle(){ if(tb) tb.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '◑' : '◐'; }
@@ -986,9 +989,9 @@ function jahWelcomeShow(){
   var ok=document.getElementById("welcomegotit");
   if(ok){ok.onclick=jahWelcomeDone;try{ok.focus({preventScroll:true})}catch(e){}}
 }
-function jahWelcomeDone(){try{localStorage.setItem(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahwelcomecard");if(c)c.classList.remove("on")}
+function jahWelcomeDone(){try{PS.set(JAH_TOUR_KEY,"1")}catch(e){}var c=document.getElementById("jahwelcomecard");if(c)c.classList.remove("on")}
 function jahTourMaybe(){
-  var seen=null;try{seen=localStorage.getItem(JAH_TOUR_KEY)}catch(e){seen="1"}
+  var seen=null;try{seen=PS.get(JAH_TOUR_KEY)}catch(e){seen="1"}
   if(seen)return;
   if(location.search&&location.search.length>1)return; /* deep-linked visitors get straight to the record */
   setTimeout(jahWelcomeShow,900);
@@ -1021,6 +1024,17 @@ document.addEventListener("keydown",function(e){
 });
 /* auto-show the tour on first home visit, after the page boots */
 (function(){function kick(){try{jahTourMaybe()}catch(e){}}if(document.readyState==="complete")kick();else window.addEventListener("load",kick)})();
+</script>
+<script>
+(function () {
+  /* mount into the header; falls back gracefully when the header markup differs */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
 </script>
 </body>
 </html>

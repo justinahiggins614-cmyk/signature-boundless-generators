@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="../js/signin.js"></script>
+<script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
+var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Generator families — The Signature Boundless Generator Archive</title>
@@ -38,4 +41,15 @@ h1{color:#c9a227}a{color:#9fc2ff}li{margin:12px 0}span{color:#9aa4b2;font-size:.
 <li><a href="./mix-jet-engine.html">✈️ Jet × Engine Mix Lab</a> — 2350 outputs<br><span>A Signature jet with its powerplant solved as one machine — airframe and turbofan co-designed.</span></li>
 <li><a href="./videogame.html">🎮 Signature Video Game Generator</a> — 250 outputs<br><span>Complete Signature-line video game concepts — title, rules, controls, difficulty, deterministic cover art, and a playable canvas demo, fully specified.</span></li>
 </ul>
-</div></body></html>
+</div><script>
+(function () {
+  /* mount into the header; falls back gracefully when the header markup differs */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
+</body></html>

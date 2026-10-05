@@ -73,6 +73,9 @@ def family_page(f, rows):
     return """<!doctype html>
 <html lang="en">
 <head>
+<script src="../js/signin.js"></script>
+<script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
+var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{name} — The Signature Boundless Generator Archive</title>
@@ -101,6 +104,16 @@ th{{color:#9aa4b2;font-weight:400}}
 {rows}
 </table>
 <p><a href="./">All generator families</a></p>
+<script>
+(function () {
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </div></body></html>""".format(
         name=esc(f["name"]), desc=esc(f.get("blurb", "")), canon=BASE + "hubs/" + key + ".html",
         ld=json.dumps(ld, separators=(",", ":")), icon=esc(f.get("icon", "")),
@@ -117,6 +130,9 @@ def index_page(fams, counts):
     return """<!doctype html>
 <html lang="en">
 <head>
+<script src="../js/signin.js"></script>
+<script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
+var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Generator families — The Signature Boundless Generator Archive</title>
@@ -134,6 +150,16 @@ h1{{color:#c9a227}}a{{color:#9fc2ff}}li{{margin:12px 0}}span{{color:#9aa4b2;font
 <ul>
 {lis}
 </ul>
+<script>
+(function () {
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </div></body></html>""".format(base=BASE, lis="\n".join(lis))
 
 

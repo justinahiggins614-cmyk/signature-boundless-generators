@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="js/signin.js"></script>
+<script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
+var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
-<script>try{var _jt=localStorage.getItem('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
+<script>try{var _jt=PS.get('jah-theme');if(_jt==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(_je){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Browse the full archive — The Signature Boundless Generator Archive</title>
 <meta name="description" content="Every fully-solved generator output on file in The Signature Boundless Generator Archive — 20 generator families, A–Z browsable: jets, cars, engines, dishes, candies, toys, robots, buildings, nanoplasma, lightbots, medical concepts and mix-and-match labs.">
@@ -1987,6 +1990,17 @@ document.getElementById("bq").addEventListener("keydown",function(e){if(e.key===
     if(ld){ld.open=true;setTimeout(function(){ld.scrollIntoView()},60);return}
   }
   setTimeout(function(){fd.scrollIntoView()},60);
+})();
+</script>
+<script>
+(function () {
+  /* mount into the header; falls back gracefully when the header markup differs */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
 })();
 </script>
 </body>
