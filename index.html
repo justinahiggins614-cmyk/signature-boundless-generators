@@ -392,7 +392,7 @@ function showGenNotFound(gen){
   document.getElementById("genview").innerHTML='<div class="panel"><div class="conceptbanner">⚠ '+esc(CONCEPT_STATUS)+'</div><h2>Output not found</h2><p class="note">OUTPUT_NOT_FOUND — no archived output matches <b>'+esc(gen)+'</b>. IDs are permanent: <b>JAH-GEN-&lt;FAMILY&gt;-&lt;6-digit seed&gt;</b> (e.g. JAH-GEN-JET-000001). Check the ID, or <a href="./">browse the archive</a>.</p></div>';
   window.scrollTo(0,0);
 }
-/* FIX-WAVE: kicker reads "Site 15 of 27" live from the network manifest; cached fallback */
+/* FIX-WAVE: kicker reads "Site 15 of 31" live from the network manifest; cached fallback */
 async function paintKicker(){
   var el=document.querySelector(".sitekicker");if(!el)return;
   var nm=null;
