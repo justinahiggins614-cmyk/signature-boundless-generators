@@ -133,49 +133,192 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 .jtabbar a.jtab.on{background:#f5c518;border-color:#f5c518;color:#191919;font-weight:700}
 </style>
 <nav class="jtabbar" aria-label="Site sections">
-<a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 JAH-N Wiki Leaks</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a>
-<a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a>
-<a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mix and Match Generator</a>
-<span class="here">15 The Signature Boundless Generator Archive · YOU ARE HERE</span>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olympics</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI to Robot Matcher</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-earth/">26 Signature Earth</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-flight-school/">27 The Signature Flight School</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-game-store/">28 The Signature Game Store</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-website-creator/">29 The Signature Website Creator</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-antivirus/">30 The Signature Antivirus</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-os-updater/">31 The Signature OS Updater</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-space-mapping/">32 Signature Space Mapping</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-cookbook/">33 The Signature Cookbook</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-spell-check/">34 Spell Check</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-image-grid-measure/">35 Grid Measure</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">36 The Signature Cyber Mega-Mall</a>
-<a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">37 The Signature 3D Print Mega Mall</a>
 <a class="jtab" href="index.html">🏠 Front Door</a>
 <a class="jtab on" href="browse.html">📚 1 Million Archive</a>
 <a class="jtab" href="developers.html">Developers</a>
-<a href="./">front door</a>
-<a href="'+esc(f.h)+'">'+esc(f.t)+"</a>
+</nav>
+
+<div class="toolbar">
+<input type="search" id="bq" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
+<button class="btn" id="bgo">Search</button>
+</div>
+<div id="bmeta" class="searchmeta" aria-live="polite"></div>
+<div id="bresults" class="searchres"></div>
+<!-- moved 2026-10-05 from index.html front door: archive search + fresh cards -->
+<h2 style="color:var(--gold)">Find an existing output</h2>
+<div class="filterstack">
+<div style="margin:2px 0 8px"><span class="reclbl">FIND AN EXISTING OUTPUT</span> <span class="note">— archive search only, never invents records. To solve something new, use the generators on the <a href="./">front door</a>.</span></div>
+<div class="toolbar">
+<input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
+<select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
+</div>
+<div id="searchmeta" class="searchmeta" aria-live="polite"></div>
+<div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
+</div>
+<div id="fresults" class="fresults"></div>
+<h2 style="color:var(--gold)" id="freshtitle">Fresh from the forge</h2>
+<div class="cards" id="fresh"><p class="note">Loading the forge index…</p></div>
+<!-- ASK THE AI — Manon's 2026-10-04 order. Paste on the archive page, directly under the
+     search/filter area (or at the top of the archive section if there is no search box).
+     It FINDS records by scanning the page's own archive list, and ANSWERS with his real
+     Signature Llama (same loader as the phone book). Never fake: if the Llama can't load,
+     the found records are still shown honestly. Replace The Signature Boundless Generator Archive and the generator-output archive. -->
+<div class="jah-askai" id="jah-askai">
+<style>
+.jah-askai{border:1px solid rgba(160,160,160,.4);border-radius:12px;padding:14px;margin:14px 0;background:rgba(127,127,127,.06)}
+.jah-askai h2{margin:0 0 4px;font-size:1.15em}
+.jah-askai .jah-askai-sub{margin:0 0 10px;font-size:.9em;opacity:.85}
+.jah-askai .jah-askai-row{display:flex;gap:8px}
+.jah-askai input#jah-askai-q{flex:1;min-width:0;padding:10px 12px;border-radius:8px;border:1px solid rgba(160,160,160,.5);font-size:1em;background:#fff;color:#111}
+.jah-askai button#jah-askai-go{padding:10px 18px;border-radius:8px;border:1px solid #f5c518;background:#f5c518;color:#191919;font-weight:700;font-size:1em;cursor:pointer}
+.jah-askai #jah-askai-out{margin-top:10px;font-size:.95em}
+.jah-askai #jah-askai-out ul{margin:6px 0;padding-left:20px}
+.jah-askai .jah-askai-ans{border-left:3px solid #f5c518;padding-left:10px;margin-top:8px}
+.jah-askai .jah-askai-thinking{opacity:.7;font-style:italic}
+</style>
+<h2>🤖 Ask the AI</h2>
+<p class="jah-askai-sub">Ask about anything in this archive — the AI searches the records and answers.</p>
+<div class="jah-askai-row">
+<input id="jah-askai-q" type="text" autocomplete="off" placeholder="Ask about this archive…" aria-label="Ask about this archive">
+<button id="jah-askai-go" type="button">Ask</button>
+</div>
+<div id="jah-askai-out" aria-live="polite"></div>
+<script>
+(function(){
+var SITE="The Signature Boundless Generator Archive", DESC="the generator-output archive";
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+/* Real Signature Llama loader — same pattern as the phone book. */
+var LLAMA_BASE="https://justinahiggins614-cmyk.github.io/signature-backend/sigllama/";
+var LLAMA_VOCAB="vocab2.json", LLAMA_BIN="sigllama-v2.bin";
+var net={loading:null,ready:false};
+function llamaEnsure(){
+  if(net.ready) return Promise.resolve(true);
+  if(net.loading) return net.loading;
+  net.loading=new Promise(function(resolve){
+    function fin(ok){net.ready=!!ok;resolve(net.ready);}
+    function boot(){try{
+      if(typeof SigLlama==="undefined"){fin(false);return;}
+      SigLlama.load(LLAMA_BASE,LLAMA_VOCAB,LLAMA_BIN).then(function(){fin(true);},function(){fin(false);});
+    }catch(e){fin(false);}}
+    if(typeof SigLlama!=="undefined"){boot();return;}
+    var s=document.createElement("script");s.src=LLAMA_BASE+"sigllama.js";s.async=true;
+    s.onload=boot;s.onerror=function(){fin(false);};document.head.appendChild(s);
+  });
+  return net.loading;
+}
+/* FIND: keyword scan over the page's own archive list links. */
+function findRecords(q){
+  var words=String(q).toLowerCase().split(/[^a-z0-9]+/).filter(function(w){return w.length>2;});
+  if(!words.length) return [];
+  var scope=document.getElementById("jah-askai-scope")||document.querySelector("main")||document.body;
+  var links=scope.getElementsByTagName("a"),out=[],seen={};
+  for(var i=0;i<links.length;i++){
+    var a=links[i];
+    if(a.closest("nav")||a.closest("header")||a.closest("footer")||a.closest(".jah-askai")) continue;
+    var t=(a.textContent||"").replace(/\s+/g," ").trim();
+    if(t.length<3||t.length>160) continue;
+    var tl=t.toLowerCase(),score=0;
+    for(var j=0;j<words.length;j++) if(tl.indexOf(words[j])>=0) score++;
+    if(score>0&&!seen[a.href]){seen[a.href]=1;out.push({t:t,h:a.href,s:score});}
+    if(out.length>=60) break;
+  }
+  out.sort(function(x,y){return y.s-x.s;});
+  return out.slice(0,5);
+}
+function ask(){
+  var q=document.getElementById("jah-askai-q").value.trim();
+  var out=document.getElementById("jah-askai-out");
+  if(!q){out.innerHTML="<p>Please type a question first.</p>";return;}
+  var found=findRecords(q),html="";
+  if(found.length){
+    html+="<p><b>📎 I found "+found.length+" record"+(found.length>1?"s":"")+" matching your words:</b></p><ul>"+
+      found.map(function(f){return '<li><a href="'+esc(f.h)+'">'+esc(f.t)+"</a></li>";}).join("")+"</ul>";
+  }else{
+    html+="<p>No record titles matched those words — asking the AI anyway.</p>";
+  }
+  html+='<p class="jah-askai-thinking">🤖 thinking…</p>';
+  out.innerHTML=html;
+  var think=out.querySelector(".jah-askai-thinking");
+  llamaEnsure().then(function(ok){
+    if(!ok||typeof SigLlama==="undefined"||!SigLlama.loaded||!SigLlama.loaded()){
+      think.textContent="The AI voice could not load right now — the records above are what matched your words.";return;}
+    var ctx="You are the "+SITE+" archive helper. "+DESC+".\n"+
+      (found.length?("Records matching the question: "+found.map(function(f){return f.t;}).join(" | ")+"\n"):"")+
+      "User: "+q.slice(0,300)+"\nHelper (one to three sentences, plain words):";
+    var done=false;
+    function show(t){
+      if(done) return; done=true;
+      t=String(t||"").trim().replace(/^Helper\s*:\s*/i,"");
+      if(t.length<8||/User\s*:/.test(t)) t="I searched the archive for you — the matching records are listed above.";
+      think.outerHTML='<p class="jah-askai-ans">🤖 '+esc(t)+"</p>";
+    }
+    try{
+      SigLlama.generate(ctx,{maxTokens:90,temperature:0.5,topK:40}).then(show,function(){show("");});
+      setTimeout(function(){show("");},25000);
+    }catch(e){show("");}
+  });
+}
+document.getElementById("jah-askai-go").addEventListener("click",ask);
+document.getElementById("jah-askai-q").addEventListener("keydown",function(e){if(e.key==="Enter")ask();});
+})();
+</script>
+</div>
+
+<section class="bestofbest" aria-labelledby="besth">
+<h2 id="besth">★ Best of the Best</h2>
+<p class="note" style="margin:4px 0">The AI's top pick from this archive — the single output that best shows what a Signature generator does. Popped open for you.</p>
+<details open>
+<summary style="cursor:pointer;font-size:1.1em"><b>Fennahaven J-4</b> <span style="font-size:.8em;color:var(--dim)">JAH-GEN-JET-000001 · Jet Generator · output #1</span></summary>
+<div style="padding-top:8px">
+<!--__BESTOFBEST_START-->
+<p class="whybest"><b>Why this is the best:</b> the first fully-solved generator output ever made — output #1 of 56,700. It set the format every output since follows: fully solved to sizes, dimensions, measurements, and materials, with an exact-recreation parts list. This is the standard of the archive.</p>
+<div class="bestflow" aria-hidden="true"><div class="bnode"><b>You dream</b>a light trainer jet</div><div class="barrow">→</div><div class="bnode"><b>It solves</b>parts, sizes, materials</div><div class="barrow">→</div><div class="bnode"><b>It proves</b>every number stated</div><div class="barrow">→</div><div class="bnode"><b>You build</b>exact recreation</div></div>
+<p><b>What it does:</b> a light trainer jet — 911 nm range, 4 seats — fully solved: piece-by-piece parts list with critical parts flagged, every measurement, material and tolerance, assembly steps, and filed-archive cross-references. No assumptions anywhere — every number stated.</p>
+<p><b>Implications:</b> all <b>56,700</b> outputs across <b>21</b> generator families are built to this same depth. The archive marches toward <b>1,000,000</b>.</p>
+<div class="beststats"><span class="beststat"><b>56,700</b> outputs on file</span><span class="beststat">Output <b>#1</b> — the genesis</span><span class="beststat">Range: <b>911 nm</b> · Seats: <b>4</b></span><span class="beststat"><b>21</b> generator families</span></div>
+<!--__BESTOFBEST_END-->
+<div class="toolbar">
+<button class="btn" id="best-speak" type="button">🔊 Read aloud</button>
+<button class="btn" id="best-copy" type="button">⧉ Copy</button>
+<button class="btn" id="best-dl" type="button">⤓ Download</button>
 <a class="btn gold" href="./?gen=jet-1">Open the full record →</a>
+</div>
+</div>
+</details>
+</section>
+<script>
+(function(){
+"use strict";
+var plain="Best of the Best — Fennahaven J-4, JAH-GEN-JET-000001. The first fully-solved generator output ever made. A light trainer jet: 911 nautical mile range, 4 seats — fully solved with a piece-by-piece parts list, every measurement, material and tolerance, assembly steps, and filed-archive cross-references. No assumptions anywhere — every number stated.";
+var dl="THE SIGNATURE BOUNDLESS GENERATOR ARCHIVE — BEST OF THE BEST\nFennahaven J-4 — JAH-GEN-JET-000001 (output 1 of 56,700)\nJet Generator — Light trainer — 911 nm range — 4 seats\n\nWHY THIS IS THE BEST\nThe first fully-solved generator output ever made — it set the format every output since follows: fully solved to sizes, dimensions, measurements, and materials, with an exact-recreation parts list.\n\nWHAT IT DOES\nPiece-by-piece parts list with critical parts flagged, every measurement, material and tolerance, assembly steps, filed-archive cross-references. No assumptions — every number stated.\n\nIMPLICATIONS\nAll 56,700 outputs across 21 generator families are built to this same depth, marching toward 1,000,000.\n\nFull record: https://justinahiggins614-cmyk.github.io/signature-boundless-generators/?gen=jet-1";
+function copyText(t,btn){function done(ok){var o=btn.textContent;btn.textContent=ok?"Copied ✓":"Copy failed";setTimeout(function(){btn.textContent=o;},1500);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(false);});}else{var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done(true);}catch(e){done(false);}document.body.removeChild(ta);}}
+function download(name,text){try{var url=URL.createObjectURL(new Blob([text],{type:"text/plain"}));var a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);try{URL.revokeObjectURL(url);}catch(e){}},800);}catch(e){}}
+var speakTimer=null;
+function speakStop(){try{if(window.speechSynthesis)window.speechSynthesis.cancel();}catch(e){}if(speakTimer){clearTimeout(speakTimer);speakTimer=null;}}
+var speakBtn=document.getElementById("best-speak");
+speakBtn.onclick=function(){
+  speakStop();
+  try{
+    if(!("speechSynthesis" in window)){speakBtn.textContent="No voice on this device";setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},1800);return;}
+    if(window.speechSynthesis.speaking){speakBtn.textContent="🔊 Read aloud";return;}
+    var u=new SpeechSynthesisUtterance(plain);
+    speakBtn.textContent="⏹ Stop";
+    u.onend=function(){speakBtn.textContent="🔊 Read aloud";};
+    u.onerror=function(){speakBtn.textContent="🔊 Read aloud";};
+    window.speechSynthesis.speak(u);
+    speakTimer=setTimeout(function(){speakBtn.textContent="🔊 Read aloud";},30000);
+  }catch(e){speakBtn.textContent="🔊 Read aloud";}
+};
+document.getElementById("best-copy").onclick=function(){copyText(dl,this);};
+document.getElementById("best-dl").onclick=function(){download("JAH-GEN-JET-000001-best.txt",dl);};
+})();
+</script>
+
+<h2 style="color:var(--gold)">Browse by family, then A–Z</h2>
+<p class="note">Open a family, then open a letter. Each letter list loads on its own — the page never downloads the whole archive at once. Tapping an output opens its full record.</p>
+<!--__BROWSE_TREE_START-->
+<div id="jah-askai-scope">
+<div class="famjump" aria-label="Jump to a generator family">
 <a href="#fam-jet">✈️ Signature Jet Generator</a>
 <a href="#fam-medical">✚ Signature Medical Concept Generator</a>
 <a href="#fam-food">🍽️ Signature Dish Generator</a>
@@ -197,7 +340,1622 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 <a href="#fam-mix-food-candy">🍽️ Dish × Candy Mix Lab</a>
 <a href="#fam-mix-jet-engine">✈️ Jet × Engine Mix Lab</a>
 <a href="#fam-videogame">🎮 Signature Video Game Generator</a>
-<a class="btn gold" href="./" style="text-decoration:none">← Back to the generators</a><span class="here">15 The Signature Boundless Generator Archive — YOU ARE HERE</span></nav>
+</div>
+<details class="famblock" id="fam-jet">
+<summary><span class="fic">✈️</span> Signature Jet Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="jet" data-letter="A">
+<summary>A <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="B">
+<summary>B <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="C">
+<summary>C <b>&middot; 159</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="D">
+<summary>D <b>&middot; 144</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="E">
+<summary>E <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="F">
+<summary>F <b>&middot; 120</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="G">
+<summary>G <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="H">
+<summary>H <b>&middot; 154</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="I">
+<summary>I <b>&middot; 270</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="J">
+<summary>J <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="K">
+<summary>K <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="L">
+<summary>L <b>&middot; 123</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="N">
+<summary>N <b>&middot; 276</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="O">
+<summary>O <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="Q">
+<summary>Q <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="S">
+<summary>S <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="V">
+<summary>V <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="jet" data-letter="Z">
+<summary>Z <b>&middot; 175</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-medical">
+<summary><span class="fic">✚</span> Signature Medical Concept Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="medical" data-letter="A">
+<summary>A <b>&middot; 121</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="B">
+<summary>B <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="C">
+<summary>C <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="D">
+<summary>D <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="E">
+<summary>E <b>&middot; 146</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="F">
+<summary>F <b>&middot; 110</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="G">
+<summary>G <b>&middot; 160</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="H">
+<summary>H <b>&middot; 118</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="I">
+<summary>I <b>&middot; 300</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="J">
+<summary>J <b>&middot; 157</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="K">
+<summary>K <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="L">
+<summary>L <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="N">
+<summary>N <b>&middot; 288</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="O">
+<summary>O <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="Q">
+<summary>Q <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="S">
+<summary>S <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="V">
+<summary>V <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="medical" data-letter="Z">
+<summary>Z <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-food">
+<summary><span class="fic">🍽️</span> Signature Dish Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="food" data-letter="A">
+<summary>A <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="B">
+<summary>B <b>&middot; 158</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="C">
+<summary>C <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="D">
+<summary>D <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="E">
+<summary>E <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="F">
+<summary>F <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="G">
+<summary>G <b>&middot; 114</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="H">
+<summary>H <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="I">
+<summary>I <b>&middot; 276</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="J">
+<summary>J <b>&middot; 169</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="K">
+<summary>K <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="L">
+<summary>L <b>&middot; 144</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="N">
+<summary>N <b>&middot; 278</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="O">
+<summary>O <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="Q">
+<summary>Q <b>&middot; 117</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="S">
+<summary>S <b>&middot; 123</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="V">
+<summary>V <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="food" data-letter="Z">
+<summary>Z <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-candy">
+<summary><span class="fic">🍬</span> Signature Candy Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="candy" data-letter="A">
+<summary>A <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="B">
+<summary>B <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="C">
+<summary>C <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="D">
+<summary>D <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="E">
+<summary>E <b>&middot; 125</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="F">
+<summary>F <b>&middot; 157</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="G">
+<summary>G <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="H">
+<summary>H <b>&middot; 122</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="I">
+<summary>I <b>&middot; 315</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="J">
+<summary>J <b>&middot; 128</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="K">
+<summary>K <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="L">
+<summary>L <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="N">
+<summary>N <b>&middot; 272</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="O">
+<summary>O <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="Q">
+<summary>Q <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="S">
+<summary>S <b>&middot; 121</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="V">
+<summary>V <b>&middot; 121</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="candy" data-letter="Z">
+<summary>Z <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-nanoplasma">
+<summary><span class="fic">⚛️</span> Signature Nanoplasma Device Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="nanoplasma" data-letter="A">
+<summary>A <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="B">
+<summary>B <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="C">
+<summary>C <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="D">
+<summary>D <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="E">
+<summary>E <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="F">
+<summary>F <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="G">
+<summary>G <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="H">
+<summary>H <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="I">
+<summary>I <b>&middot; 277</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="J">
+<summary>J <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="K">
+<summary>K <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="L">
+<summary>L <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="N">
+<summary>N <b>&middot; 259</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="O">
+<summary>O <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="Q">
+<summary>Q <b>&middot; 170</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="S">
+<summary>S <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="V">
+<summary>V <b>&middot; 151</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="nanoplasma" data-letter="Z">
+<summary>Z <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-lightbot">
+<summary><span class="fic">💡</span> Signature Lightbot Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="lightbot" data-letter="A">
+<summary>A <b>&middot; 144</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="B">
+<summary>B <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="C">
+<summary>C <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="D">
+<summary>D <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="E">
+<summary>E <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="F">
+<summary>F <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="G">
+<summary>G <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="H">
+<summary>H <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="I">
+<summary>I <b>&middot; 246</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="J">
+<summary>J <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="K">
+<summary>K <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="L">
+<summary>L <b>&middot; 125</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="N">
+<summary>N <b>&middot; 282</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="O">
+<summary>O <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="Q">
+<summary>Q <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="S">
+<summary>S <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="V">
+<summary>V <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="lightbot" data-letter="Z">
+<summary>Z <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-car">
+<summary><span class="fic">🚗</span> Signature Car Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="car" data-letter="A">
+<summary>A <b>&middot; 154</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="B">
+<summary>B <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="C">
+<summary>C <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="D">
+<summary>D <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="E">
+<summary>E <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="F">
+<summary>F <b>&middot; 151</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="G">
+<summary>G <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="H">
+<summary>H <b>&middot; 109</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="I">
+<summary>I <b>&middot; 276</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="J">
+<summary>J <b>&middot; 163</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="K">
+<summary>K <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="L">
+<summary>L <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="N">
+<summary>N <b>&middot; 257</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="O">
+<summary>O <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="Q">
+<summary>Q <b>&middot; 132</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="S">
+<summary>S <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="V">
+<summary>V <b>&middot; 159</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="car" data-letter="Z">
+<summary>Z <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-engine">
+<summary><span class="fic">⚙️</span> Signature Engine Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="engine" data-letter="A">
+<summary>A <b>&middot; 163</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="B">
+<summary>B <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="C">
+<summary>C <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="D">
+<summary>D <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="E">
+<summary>E <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="F">
+<summary>F <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="G">
+<summary>G <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="H">
+<summary>H <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="I">
+<summary>I <b>&middot; 283</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="J">
+<summary>J <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="K">
+<summary>K <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="L">
+<summary>L <b>&middot; 132</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="N">
+<summary>N <b>&middot; 288</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="O">
+<summary>O <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="Q">
+<summary>Q <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="S">
+<summary>S <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="V">
+<summary>V <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="engine" data-letter="Z">
+<summary>Z <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-toy">
+<summary><span class="fic">🧸</span> Signature Toy Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="toy" data-letter="A">
+<summary>A <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="B">
+<summary>B <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="C">
+<summary>C <b>&middot; 160</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="D">
+<summary>D <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="E">
+<summary>E <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="F">
+<summary>F <b>&middot; 144</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="G">
+<summary>G <b>&middot; 128</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="H">
+<summary>H <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="I">
+<summary>I <b>&middot; 262</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="J">
+<summary>J <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="K">
+<summary>K <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="L">
+<summary>L <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="N">
+<summary>N <b>&middot; 268</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="O">
+<summary>O <b>&middot; 142</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="Q">
+<summary>Q <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="S">
+<summary>S <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="V">
+<summary>V <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="toy" data-letter="Z">
+<summary>Z <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-tool">
+<summary><span class="fic">🔧</span> Signature Tool Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="tool" data-letter="A">
+<summary>A <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="B">
+<summary>B <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="C">
+<summary>C <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="D">
+<summary>D <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="E">
+<summary>E <b>&middot; 164</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="F">
+<summary>F <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="G">
+<summary>G <b>&middot; 144</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="H">
+<summary>H <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="I">
+<summary>I <b>&middot; 280</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="J">
+<summary>J <b>&middot; 165</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="K">
+<summary>K <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="L">
+<summary>L <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="N">
+<summary>N <b>&middot; 247</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="O">
+<summary>O <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="Q">
+<summary>Q <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="S">
+<summary>S <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="V">
+<summary>V <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="tool" data-letter="Z">
+<summary>Z <b>&middot; 123</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-furniture">
+<summary><span class="fic">🪑</span> Signature Furniture Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="furniture" data-letter="A">
+<summary>A <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="B">
+<summary>B <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="C">
+<summary>C <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="D">
+<summary>D <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="E">
+<summary>E <b>&middot; 125</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="F">
+<summary>F <b>&middot; 162</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="G">
+<summary>G <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="H">
+<summary>H <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="I">
+<summary>I <b>&middot; 263</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="J">
+<summary>J <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="K">
+<summary>K <b>&middot; 162</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="L">
+<summary>L <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="N">
+<summary>N <b>&middot; 235</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="O">
+<summary>O <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="Q">
+<summary>Q <b>&middot; 167</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="S">
+<summary>S <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="V">
+<summary>V <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="furniture" data-letter="Z">
+<summary>Z <b>&middot; 109</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-clothing">
+<summary><span class="fic">👕</span> Signature Clothing Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="clothing" data-letter="A">
+<summary>A <b>&middot; 146</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="B">
+<summary>B <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="C">
+<summary>C <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="D">
+<summary>D <b>&middot; 146</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="E">
+<summary>E <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="F">
+<summary>F <b>&middot; 125</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="G">
+<summary>G <b>&middot; 120</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="H">
+<summary>H <b>&middot; 146</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="I">
+<summary>I <b>&middot; 288</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="J">
+<summary>J <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="K">
+<summary>K <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="L">
+<summary>L <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="N">
+<summary>N <b>&middot; 309</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="O">
+<summary>O <b>&middot; 132</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="Q">
+<summary>Q <b>&middot; 115</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="S">
+<summary>S <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="V">
+<summary>V <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="clothing" data-letter="Z">
+<summary>Z <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-game">
+<summary><span class="fic">🎲</span> Signature Game Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="game" data-letter="A">
+<summary>A <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="B">
+<summary>B <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="C">
+<summary>C <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="D">
+<summary>D <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="E">
+<summary>E <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="F">
+<summary>F <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="G">
+<summary>G <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="H">
+<summary>H <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="I">
+<summary>I <b>&middot; 297</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="J">
+<summary>J <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="K">
+<summary>K <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="L">
+<summary>L <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="N">
+<summary>N <b>&middot; 267</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="O">
+<summary>O <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="Q">
+<summary>Q <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="S">
+<summary>S <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="V">
+<summary>V <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="game" data-letter="Z">
+<summary>Z <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-instrument">
+<summary><span class="fic">🎺</span> Signature Instrument Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="instrument" data-letter="A">
+<summary>A <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="B">
+<summary>B <b>&middot; 162</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="C">
+<summary>C <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="D">
+<summary>D <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="E">
+<summary>E <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="F">
+<summary>F <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="G">
+<summary>G <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="H">
+<summary>H <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="I">
+<summary>I <b>&middot; 308</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="J">
+<summary>J <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="K">
+<summary>K <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="L">
+<summary>L <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="N">
+<summary>N <b>&middot; 280</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="O">
+<summary>O <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="Q">
+<summary>Q <b>&middot; 113</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="S">
+<summary>S <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="V">
+<summary>V <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="instrument" data-letter="Z">
+<summary>Z <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-robot">
+<summary><span class="fic">🤖</span> Signature Robot Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="robot" data-letter="A">
+<summary>A <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="B">
+<summary>B <b>&middot; 109</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="C">
+<summary>C <b>&middot; 156</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="D">
+<summary>D <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="E">
+<summary>E <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="F">
+<summary>F <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="G">
+<summary>G <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="H">
+<summary>H <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="I">
+<summary>I <b>&middot; 307</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="J">
+<summary>J <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="K">
+<summary>K <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="L">
+<summary>L <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="N">
+<summary>N <b>&middot; 291</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="O">
+<summary>O <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="Q">
+<summary>Q <b>&middot; 151</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="S">
+<summary>S <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="V">
+<summary>V <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="robot" data-letter="Z">
+<summary>Z <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-building">
+<summary><span class="fic">🏢</span> Signature Building Generator <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="building" data-letter="A">
+<summary>A <b>&middot; 128</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="B">
+<summary>B <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="C">
+<summary>C <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="D">
+<summary>D <b>&middot; 128</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="E">
+<summary>E <b>&middot; 151</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="F">
+<summary>F <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="G">
+<summary>G <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="H">
+<summary>H <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="I">
+<summary>I <b>&middot; 266</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="J">
+<summary>J <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="K">
+<summary>K <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="L">
+<summary>L <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="N">
+<summary>N <b>&middot; 297</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="O">
+<summary>O <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="Q">
+<summary>Q <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="S">
+<summary>S <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="V">
+<summary>V <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="building" data-letter="Z">
+<summary>Z <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-mix-car-engine">
+<summary><span class="fic">🚗</span> Car × Engine Mix Lab <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="mix-car-engine" data-letter="A">
+<summary>A <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="B">
+<summary>B <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="C">
+<summary>C <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="D">
+<summary>D <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="E">
+<summary>E <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="F">
+<summary>F <b>&middot; 162</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="G">
+<summary>G <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="H">
+<summary>H <b>&middot; 166</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="I">
+<summary>I <b>&middot; 262</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="J">
+<summary>J <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="K">
+<summary>K <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="L">
+<summary>L <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="N">
+<summary>N <b>&middot; 309</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="O">
+<summary>O <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="Q">
+<summary>Q <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="S">
+<summary>S <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="V">
+<summary>V <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-car-engine" data-letter="Z">
+<summary>Z <b>&middot; 132</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-mix-toy-lightbot">
+<summary><span class="fic">🧸</span> Toy × Lightbot Mix Lab <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="A">
+<summary>A <b>&middot; 167</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="B">
+<summary>B <b>&middot; 127</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="C">
+<summary>C <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="D">
+<summary>D <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="E">
+<summary>E <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="F">
+<summary>F <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="G">
+<summary>G <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="H">
+<summary>H <b>&middot; 155</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="I">
+<summary>I <b>&middot; 256</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="J">
+<summary>J <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="K">
+<summary>K <b>&middot; 132</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="L">
+<summary>L <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="N">
+<summary>N <b>&middot; 287</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="O">
+<summary>O <b>&middot; 159</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="Q">
+<summary>Q <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="S">
+<summary>S <b>&middot; 128</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="V">
+<summary>V <b>&middot; 150</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-toy-lightbot" data-letter="Z">
+<summary>Z <b>&middot; 140</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-mix-food-candy">
+<summary><span class="fic">🍽️</span> Dish × Candy Mix Lab <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="mix-food-candy" data-letter="A">
+<summary>A <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="B">
+<summary>B <b>&middot; 151</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="C">
+<summary>C <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="D">
+<summary>D <b>&middot; 146</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="E">
+<summary>E <b>&middot; 167</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="F">
+<summary>F <b>&middot; 135</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="G">
+<summary>G <b>&middot; 131</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="H">
+<summary>H <b>&middot; 124</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="I">
+<summary>I <b>&middot; 287</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="J">
+<summary>J <b>&middot; 145</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="K">
+<summary>K <b>&middot; 129</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="L">
+<summary>L <b>&middot; 153</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="N">
+<summary>N <b>&middot; 269</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="O">
+<summary>O <b>&middot; 138</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="Q">
+<summary>Q <b>&middot; 152</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="S">
+<summary>S <b>&middot; 165</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="V">
+<summary>V <b>&middot; 130</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-food-candy" data-letter="Z">
+<summary>Z <b>&middot; 118</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-mix-jet-engine">
+<summary><span class="fic">✈️</span> Jet × Engine Mix Lab <b>&middot; 2,800 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="A">
+<summary>A <b>&middot; 143</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="B">
+<summary>B <b>&middot; 137</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="C">
+<summary>C <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="D">
+<summary>D <b>&middot; 118</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="E">
+<summary>E <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="F">
+<summary>F <b>&middot; 149</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="G">
+<summary>G <b>&middot; 141</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="H">
+<summary>H <b>&middot; 134</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="I">
+<summary>I <b>&middot; 287</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="J">
+<summary>J <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="K">
+<summary>K <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="L">
+<summary>L <b>&middot; 136</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="N">
+<summary>N <b>&middot; 292</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="O">
+<summary>O <b>&middot; 139</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="Q">
+<summary>Q <b>&middot; 148</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="S">
+<summary>S <b>&middot; 133</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="V">
+<summary>V <b>&middot; 147</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="mix-jet-engine" data-letter="Z">
+<summary>Z <b>&middot; 126</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+<details class="famblock" id="fam-videogame">
+<summary><span class="fic">🎮</span> Signature Video Game Generator <b>&middot; 700 outputs</b></summary>
+<div class="lettergrid">
+<details class="letterblock" data-fam="videogame" data-letter="B">
+<summary>B <b>&middot; 44</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="C">
+<summary>C <b>&middot; 85</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="E">
+<summary>E <b>&middot; 25</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="F">
+<summary>F <b>&middot; 34</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="G">
+<summary>G <b>&middot; 38</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="I">
+<summary>I <b>&middot; 41</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="L">
+<summary>L <b>&middot; 42</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="N">
+<summary>N <b>&middot; 55</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="O">
+<summary>O <b>&middot; 64</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="P">
+<summary>P <b>&middot; 39</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="Q">
+<summary>Q <b>&middot; 41</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="R">
+<summary>R <b>&middot; 25</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="S">
+<summary>S <b>&middot; 29</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="T">
+<summary>T <b>&middot; 29</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="V">
+<summary>V <b>&middot; 74</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+<details class="letterblock" data-fam="videogame" data-letter="Z">
+<summary>Z <b>&middot; 35</b></summary>
+<div class="browselist"><p class="note">Opening this list loads it &mdash; one tap, never the whole archive at once.</p></div>
+</details>
+</div>
+</details>
+</div>
+<!--__BROWSE_TREE_END-->
+
+<p style="text-align:center;margin:26px 0"><a class="btn gold" href="./" style="text-decoration:none">← Back to the generators</a></p>
+</div>
+
 <footer><div class="wrap">
 <p><b style="color:var(--gold)">The Signature Boundless Generator Archive</b> — every generator an original Signature-line concept engine by <b>Justin Addam Higgins</b>. Outputs are deterministic: the same family + seed always yields the same fully-solved design. Medical-family outputs are speculative wellness concepts only — not medical advice.</p>
 </div></footer>
