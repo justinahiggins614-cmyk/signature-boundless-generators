@@ -105,15 +105,15 @@ th{{color:#9aa4b2;font-weight:400}}
 </table>
 <p><a href="./">All generator families</a></p>
 <script>
-(function () {
+(function () {{
   var mount = document.querySelector('header .booksearch') ||
               document.querySelector('nav.jtabbar') ||
               document.querySelector('header nav') ||
               document.querySelector('header') ||
               document.body;
   if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
-})();
-</script>
+}})();
+</script><script>(function () {{ if (window.JAHProfile && JAHProfile.ui) {{ var mount = document.querySelector('header') || document.body; JAHProfile.ui.renderGreeting(mount); }} }})();</script>
 </div></body></html>""".format(
         name=esc(f["name"]), desc=esc(f.get("blurb", "")), canon=BASE + "hubs/" + key + ".html",
         ld=json.dumps(ld, separators=(",", ":")), icon=esc(f.get("icon", "")),
@@ -151,15 +151,15 @@ h1{{color:#c9a227}}a{{color:#9fc2ff}}li{{margin:12px 0}}span{{color:#9aa4b2;font
 {lis}
 </ul>
 <script>
-(function () {
+(function () {{
   var mount = document.querySelector('header .booksearch') ||
               document.querySelector('nav.jtabbar') ||
               document.querySelector('header nav') ||
               document.querySelector('header') ||
               document.body;
   if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
-})();
-</script>
+}})();
+</script><script>(function () {{ if (window.JAHProfile && JAHProfile.ui) {{ var mount = document.querySelector('header') || document.body; JAHProfile.ui.renderGreeting(mount); }} }})();</script>
 </div></body></html>""".format(base=BASE, lis="\n".join(lis))
 
 
