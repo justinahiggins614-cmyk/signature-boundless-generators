@@ -324,7 +324,83 @@ function genSpeakText(o){
   t+="How to use: "+o.how_to_use;
   return t.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
 }
-function readGen(o){if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readGen"))return;auStop();AU.label=o.name;AU.q=auChunks(genSpeakText(o));AU.i=0;AU.active=true;AU.paused=false;if(hasSpeech()){try{window.speechSynthesis.cancel()}catch(e){}auSpeakNext()}else{auShowBar(true);auPaintBtn();fxStart(genSpeakText(o));audMsg("This browser has no built-in voice — reading with the online voice instead.")}}
+/* ============ solved-view reader: comics-proven pattern (online TTS tiers, per-chunk progress) ============
+   Why: the old readGen->fxStart chain nested playGuard twice per click, never changed the button
+   label, never advanced the chunk indicator on the online-audio path, and branched on
+   speechSynthesis first — on devices without a working built-in voice (his phone's in-app
+   browser) the tap produced no player and no feedback. This mirrors signature-comics'
+   rdSpeak, which works there: straight to tiered online audio, button flips to Stop at once,
+   "Reading chunk N of M…" advances per chunk, Pause/Stop on the floating bar. */
+var GR={queue:[],total:0,playing:false,paused:false,stopped:true,audio:null,timer:null,label:"",btn:null,speed:1,_advance:null,_remain:12000,_t0:0};
+var GR_TIERS=TTS_TIERS; /* ResponsiveVoice -> Google x2, same tiers the comics reader uses */
+function grPaint(){
+  var l=document.getElementById("aulabel");if(l)l.textContent="Reading: "+GR.label;
+  var pr=document.getElementById("auprog");if(pr)pr.textContent=GR.total?("Reading chunk "+(GR.total-GR.queue.length)+" of "+GR.total+"…"):"";
+  var p=document.getElementById("aupause");if(p)p.innerHTML=GR.paused?"&#9654; Resume":"&#10074;&#10074; Pause";
+}
+function grBtnReset(){if(GR.btn){try{GR.btn.textContent="🔊 Read aloud"}catch(e){}}GR.btn=null}
+function grStop(){
+  try{if(window.__JAHREAD)window.__JAHREAD.stopAll();}catch(e){}
+  GR.stopped=true;GR.playing=false;GR.paused=false;GR.queue=[];GR.total=0;
+  if(GR.timer){clearTimeout(GR.timer);GR.timer=null}
+  if(GR.audio){try{GR.audio.pause()}catch(e){}GR.audio=null}
+  grPaint();auShowBar(false);grBtnReset();
+}
+function grPlayTier(chunk,tier,done){
+  if(tier>=GR_TIERS.length){done(false);return}
+  var url,a;
+  try{url=GR_TIERS[tier](chunk);a=new Audio()}catch(e){done(false);return}
+  GR.audio=a;GR.paused=false;
+  try{a.playbackRate=GR.speed||1}catch(e){}
+  var finished=false;
+  function next(ok){if(finished)return;finished=true;GR.audio=null;GR.paused=false;grPaint();if(GR.timer){clearTimeout(GR.timer);GR.timer=null}try{a.pause()}catch(e){}done(ok)}
+  function advance(){if(finished)return;finished=true;GR.audio=null;GR.paused=false;grPaint();try{a.pause()}catch(e){}grPlayTier(chunk,tier+1,done)}
+  a.onended=function(){next(true)};
+  a.onerror=function(){advance()};
+  GR._advance=advance;GR._remain=12000;GR._t0=Date.now();
+  GR.timer=setTimeout(advance,12000);
+  try{a.src=url;var p=a.play();if(p&&p.catch)p.catch(function(){advance()})}catch(e){advance()}
+  grPaint();
+}
+function grNext(){
+  if(GR.stopped||!GR.queue.length){grStop();return}
+  GR.playing=true;
+  var chunk=GR.queue.shift(),tier=0;
+  grPaint();
+  (function attempt(){
+    if(GR.stopped)return;
+    grPlayTier(chunk,tier,function(ok){
+      if(GR.stopped)return;
+      if(ok){setTimeout(grNext,250)}else{tier++;if(tier<GR_TIERS.length)attempt();else setTimeout(grNext,250)}
+    });
+  })();
+}
+function grPauseToggle(){
+  if(!GR.audio||GR.stopped||!GR.playing)return;
+  if(!GR.paused){
+    GR.paused=true;GR._remain=Math.max(1000,GR._remain-(Date.now()-GR._t0));
+    if(GR.timer){clearTimeout(GR.timer);GR.timer=null}
+    try{GR.audio.pause()}catch(e){}
+  }else{
+    GR.paused=false;GR._t0=Date.now();
+    GR.timer=setTimeout(function(){if(GR._advance)GR._advance()},GR._remain);
+    try{GR.audio.play()}catch(e){}
+  }
+  grPaint();
+}
+function readGen(o,btn){
+  if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readGen"))return;
+  if(GR.playing&&!GR.stopped){grStop();return}
+  grStop();
+  if(!o||!o.name){audMsg("Nothing to read yet — open a solved design first.");return}
+  var text;
+  try{text=genSpeakText(o)}catch(e){audMsg("Could not prepare the reading text.");return}
+  GR.queue=fxChunks(text);GR.total=GR.queue.length;GR.label=o.name;
+  if(!GR.queue.length){audMsg("Nothing to read.");return}
+  GR.stopped=false;GR.btn=btn||null;
+  if(GR.btn)GR.btn.textContent="⏹ Stop";
+  auShowBar(true);grPaint();grNext();
+}
 
 /* ============ app ============ */
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
@@ -628,7 +704,7 @@ function outputPanelHTML(o,icon,ctx){
     o.crosslinks.map(function(c){return '<p class="xlink">🔗 <a href="'+esc(c.url)+'" target="_blank" rel="noopener"><b>'+esc(c.label)+'</b></a>'+(c.title?' — '+esc(c.title):"")+'<br><span class="note">'+esc(c.note||"")+'</span></p>'}).join("")+'</div>'+
     '<div class="sect"><h3>🧭 How to use</h3><p>'+esc(o.how_to_use)+'</p></div>'+
     '<p class="note">'+esc(o.lineage)+'</p>'+
-    '<div class="mbtns"><button class="btn" onclick="readGen(G.curOut)">🔊 Read aloud</button>'+
+    '<div class="mbtns"><button class="btn" onclick="readGen(G.curOut,this)">🔊 Read aloud</button>'+
     '<button class="btn" onclick="copyGen()">📋 Copy</button>'+
     '<button class="btn" onclick="dlGen(\'txt\')">⬇ .txt</button>'+
     '<button class="btn" onclick="dlGen(\'json\')">⬇ .json</button>'+
@@ -828,8 +904,8 @@ function askQA(){
   out.innerHTML='<div class="q">Q: '+esc(q)+'</div><div class="a">A: '+ans+'</div>';
   inp.value="";
 }
-document.getElementById("aupause").onclick=auPauseToggle;
-document.getElementById("austop").onclick=auStop;
+document.getElementById("aupause").onclick=grPauseToggle;
+document.getElementById("austop").onclick=grStop;
 /* ============ FINDER AI (pinned above A–Z; deterministic, data-grounded) ============ */
 var FSTOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,me,my,i,you,your,we,our,do,does,want,need,needs,looking,look,find,finds,get,something,anything,some,any,please,like,just,really,very,would,could,should,can,will,have,has,show,tell,give,kind,thing,things,describe,generator,generate,generated,output,outputs,design".split(","));
 function fKeywords(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FSTOP.has(w)})}
