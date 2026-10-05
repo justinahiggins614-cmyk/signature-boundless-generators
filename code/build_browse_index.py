@@ -99,6 +99,37 @@ def stamp_browse_html(manifest, fam_meta):
     assert cpat.search(html), "BROWSE_COUNT markers missing in browse.html"
     html = cpat.sub(lambda m: count_block, html, count=1)
 
+    # Best-of-the-Best copy carries live archive numbers too (it used to say
+    # 40,500/20 long after the archive grew). Keep it in lockstep here.
+    total_s = format(manifest["count"], ",")
+    n_fams = len(fam_meta)
+    best_block = (
+        "<!--__BESTOFBEST_START-->\n"
+        '<p class="whybest"><b>Why this is the best:</b> the first fully-solved '
+        "generator output ever made — output #1 of " + total_s + ". It set the format "
+        "every output since follows: fully solved to sizes, dimensions, measurements, "
+        "and materials, with an exact-recreation parts list. This is the standard of the archive.</p>\n"
+        '<div class="bestflow" aria-hidden="true"><div class="bnode"><b>You dream</b>a light trainer jet</div><div class="barrow">→</div><div class="bnode"><b>It solves</b>parts, sizes, materials</div><div class="barrow">→</div><div class="bnode"><b>It proves</b>every number stated</div><div class="barrow">→</div><div class="bnode"><b>You build</b>exact recreation</div></div>\n'
+        "<p><b>What it does:</b> a light trainer jet — 911 nm range, 4 seats — fully solved: "
+        "piece-by-piece parts list with critical parts flagged, every measurement, material and tolerance, "
+        "assembly steps, and filed-archive cross-references. No assumptions anywhere — every number stated.</p>\n"
+        "<p><b>Implications:</b> all <b>" + total_s + "</b> outputs across <b>" + str(n_fams)
+        + "</b> generator families are built to this same depth. The archive marches toward <b>1,000,000</b>.</p>\n"
+        '<div class="beststats"><span class="beststat"><b>' + total_s + "</b> outputs on file</span>"
+        '<span class="beststat">Output <b>#1</b> — the genesis</span>'
+        '<span class="beststat">Range: <b>911 nm</b> · Seats: <b>4</b></span>'
+        '<span class="beststat"><b>' + str(n_fams) + "</b> generator families</span></div>\n"
+        "<!--__BESTOFBEST_END-->"
+    )
+    bpat = re.compile(r"<!--__BESTOFBEST_START-->.*?<!--__BESTOFBEST_END-->", re.S)
+    assert bpat.search(html), "BESTOFBEST markers missing in browse.html"
+    html = bpat.sub(lambda m: best_block, html, count=1)
+    # the copy/download JS string (var dl=...) carries the same numbers
+    html = re.sub(r"output 1 of [\d,]+", "output 1 of " + total_s, html)
+    html = re.sub(r"All [\d,]+ outputs across \d+ generator families",
+                  "All " + total_s + " outputs across " + str(n_fams) + " generator families",
+                  html)
+
     tree = build_tree(fam_meta)
     tpat = re.compile(r"<!--__BROWSE_TREE_START-->.*?<!--__BROWSE_TREE_END-->", re.S)
     assert tpat.search(html), "BROWSE_TREE markers missing in browse.html"
