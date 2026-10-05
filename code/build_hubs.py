@@ -74,6 +74,7 @@ def family_page(f, rows):
 <html lang="en">
 <head>
 <script src="../js/signin.js"></script>
+<script src="../js/godmode.js"></script>
 <script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
 var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
@@ -131,6 +132,7 @@ def index_page(fams, counts):
 <html lang="en">
 <head>
 <script src="../js/signin.js"></script>
+<script src="../js/godmode.js"></script>
 <script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
 var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
