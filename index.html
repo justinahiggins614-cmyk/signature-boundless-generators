@@ -237,21 +237,12 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <div id="home">
 <h2 style="color:var(--gold)">Pick a generator</h2>
 <div class="grid" id="famgrid"></div>
-<h2 style="color:var(--gold)">Browse the archive <a href="browse.html" style="font-size:.6em;color:var(--cy)">· full A–Z catalog →</a></h2>
-<div class="filterstack">
-<div style="margin:2px 0 8px"><span class="reclbl">FIND AN EXISTING OUTPUT</span> <span class="note">— archive search only, never invents records. To solve something new, use the all-purpose generator above.</span></div>
-<div class="toolbar">
-<input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
-<select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
-<button class="btn ghost" onclick="randomGen()" title="Open a random archived output">🎲 Random</button>
+<h2 style="color:var(--gold)">Browse the archive</h2>
+<p style="text-align:center;margin:6px 0 12px"><a href="browse.html" style="display:inline-block;background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:12px 26px;font-size:1.05em;font-weight:bold;text-decoration:none">📚 Browse the full A–Z archive</a><br><small style="color:var(--dim)">every stored output — search, family filters, A–Z lists, fresh from the forge</small></p>
+<div class="toolbar" style="justify-content:center">
+<button class="btn ghost" onclick="randomGen()" title="Open a random archived output">🎲 Random output</button>
 <button class="btn ghost" id="guidebtn" onclick="jahGuideOpen()" title="How to use this site">❓ Guide</button>
 </div>
-<div id="searchmeta" class="searchmeta" aria-live="polite"></div>
-<div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
-</div>
-<div id="fresults" class="fresults"></div>
-<h2 style="color:var(--gold)">Fresh from the forge</h2>
-<div class="cards" id="fresh"><p class="note">Loading the forge index…</p></div>
 </div>
 
 <div id="famview" style="display:none"></div>
@@ -444,10 +435,8 @@ async function boot(){
   }else{
     renderStats(0,nFams,"count unavailable — <button class='btn ghost' onclick='boot()' style='padding:2px 10px'>Retry</button>");
   }
-  renderFamGrid();renderFamFilter();renderAZ();
+  renderFamGrid();
   paintKicker();
-  /* SITE-17 DIAG FIX-06: initial match-feedback line */
-  ensureIdx().then(function(idx){if(idx)paintSearchMeta(idx.length,idx.length,idx.length)});
   var qs=new URLSearchParams(location.search);
   var gen=qs.get("gen"),fam=qs.get("fam"),q=qs.get("q");
   if(gen&&gen.toLowerCase().indexOf("custom-")===0){var d=qs.get("d");if(d){showCustom(d);return}}
@@ -464,8 +453,7 @@ async function boot(){
     showGenNotFound(gen);return;
   }
   if(fam&&SigGen.byKey(fam)){showFam(fam);return}
-  if(q){var qi=document.getElementById("q");if(qi){qi.value=q}loadFresh().then(function(){doSearch()});return}
-  loadFresh();
+  if(q){try{location.replace("browse.html")}catch(e){}return}
 }
 function showGenNotFound(gen){
   show("genview");
@@ -493,15 +481,6 @@ function renderFamGrid(){
     return '<div class="fcard" onclick="showFam(\''+f.key+'\')"><div class="ic">'+f.icon+'</div><h3>'+esc(f.name)+'</h3><p>'+esc(f.blurb)+'</p><span class="go">Open generator →</span></div>';
   }).join("");
 }
-function renderFamFilter(){
-  document.getElementById("ffam").innerHTML='<option value="">All families</option>'+G.fams.map(function(f){return '<option value="'+f.key+'">'+esc(f.name)+'</option>'}).join("");
-}
-function renderAZ(){
-  var el=document.getElementById("az");
-  if(!el)return;
-  el.innerHTML='<button class="on" data-l="">#</button>'+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function(l){return '<button data-l="'+l+'">'+l+'</button>'}).join("");
-  el.querySelectorAll("button").forEach(function(b){b.onclick=function(){el.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");doSearch()}});
-}
 /* FIX-WAVE: index fetch with timeout+retry; on failure G.idx stays null (never []) —
    the generator keeps working and search shows Retry instead of a fake "no match". */
 async function ensureIdx(){
@@ -521,48 +500,7 @@ async function ensureIdx(){
   G.idxFail=true;
   return null;
 }
-function idxFailHTML(){
-  return '<p class="note">⚠ The archive index could not be loaded (INDEX_UNAVAILABLE) — check your connection, then <button class="btn ghost" onclick="G.idxFail=false;loadFresh();doSearch()">Retry</button>. The generators above still work: every output is reproducible on this page without the index.</p>';
-}
 function show(id){["home","famview","genview"].forEach(function(x){document.getElementById(x).style.display=x===id?"":"none"})}
-async function loadFresh(){
-  var idx=await ensureIdx();
-  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();return}
-  var rows=idx.slice(-12).reverse();
-  document.getElementById("fresh").innerHTML=rows.map(cardHTML).join("");
-}
-function cardHTML(r){
-  var f=SigGen.byKey(r[1]);
-  return '<div class="card" onclick="showGen(\''+r[1]+'\','+r[2]+',{})"><div class="sku">'+esc(r[0])+'</div><span class="recbadge mini">GENERATED</span><h4>'+(f?f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div></div>';
-}
-var searchT;
-function bindSearch(){
-  var q=document.getElementById("q");
-  q.addEventListener("input",function(){clearTimeout(searchT);searchT=setTimeout(doSearch,220)});
-  document.getElementById("ffam").addEventListener("change",doSearch);
-}
-async function doSearch(){
-  var idx=await ensureIdx();
-  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();paintSearchMeta(0,0,0);return}
-  var q=document.getElementById("q").value.trim().toLowerCase();
-  var fam=document.getElementById("ffam").value;
-  var L=document.querySelector("#az button.on").dataset.l;
-  var rows=idx.filter(function(r){
-    return (!fam||r[1]===fam)&&(!L||r[3].toUpperCase().charAt(0)===L)&&
-      (!q||r[0].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0||r[4].toLowerCase().indexOf(q)>=0);
-  });
-  var shown=rows.slice(-60).reverse();
-  document.getElementById("fresh").innerHTML=shown.length?shown.map(cardHTML).join(""):'<p class="note"><b>NO ARCHIVE MATCH FOUND</b> — nothing on file matches. This search covers archived outputs only and never invents records. Try different words, or use the all-purpose generator above to solve something new.</p>';
-  var h=document.querySelector("#home h2:last-of-type");if(h)h.textContent=q||fam||L?"Search results":"Fresh from the forge";
-  /* SITE-17 DIAG FIX-06: real-time matching feedback */
-  paintSearchMeta(idx.length,rows.length,shown.length);
-}
-function paintSearchMeta(total,matching,shown){
-  var meta=document.getElementById("searchmeta");
-  if(!meta)return;
-  var t=total.toLocaleString()+" outputs on file · "+matching.toLocaleString()+" matching";
-  if(shown<matching)t+=" (showing "+shown+")";
-  meta.textContent=t;
 }
 </script>
 <script>
@@ -877,7 +815,7 @@ function importGenFile(inp){
 /* FIX-WAVE: random record from the archive */
 async function randomGen(){
   var idx=await ensureIdx();
-  if(!idx){document.getElementById("fresh").innerHTML=idxFailHTML();return}
+  if(!idx){audMsg("The archive index could not be loaded — check your connection and try again.");return}
   var r=idx[Math.floor(Math.random()*idx.length)];
   showGen(r[1],r[2],{});
 }
@@ -909,27 +847,6 @@ function askQA(){
   inp.value="";
 }
 document.getElementById("aupause").onclick=grPauseToggle;
-document.getElementById("austop").onclick=grStop;
-/* ============ FINDER AI (pinned above A–Z; deterministic, data-grounded) ============ */
-var FSTOP=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,me,my,i,you,your,we,our,do,does,want,need,needs,looking,look,find,finds,get,something,anything,some,any,please,like,just,really,very,would,could,should,can,will,have,has,show,tell,give,kind,thing,things,describe,generator,generate,generated,output,outputs,design".split(","));
-function fKeywords(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FSTOP.has(w)})}
-async function fAsk(){
-  var q=document.getElementById("fq").value.trim();if(!q)return;
-  var kws=fKeywords(q),box=document.getElementById("fresults");
-  if(!kws.length){box.innerHTML='<p class="note">One more word — a field, a thing, a material… ⚙️</p>';return}
-  var idx=await ensureIdx();
-  if(!idx){box.innerHTML=idxFailHTML();return}
-  var hits=idx.map(function(r){var f=SigGen.byKey(r[1]);
-    var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(f?f.name+" "+f.blurb:"")).toLowerCase();var s=0;
-    kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});
-    return{r:r,f:f,s:s}}).filter(function(x){return x.s>0})
-    .sort(function(a,b){return b.s-a.s}).slice(0,5);
-  if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. ⚙️</p>';return}
-  box.innerHTML=hits.map(function(h){var r=h.r;
-    return '<div class="card"><div class="sku">'+esc(r[0])+'</div><span class="recbadge mini">GENERATED</span><h4>'+(h.f?h.f.icon+" ":"")+esc(r[3])+'</h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="?gen='+encodeURIComponent(r[1])+'-'+r[2]+'">Take me there →</a></div>'}).join("");
-}
-document.getElementById("fgo").onclick=fAsk;
-document.getElementById("fq").addEventListener("keydown",function(e){if(e.key==="Enter")fAsk()});
 /* ============ UNIVERSAL SOLVER bar ("Describe anything…") ============ */
 function solveBarGo(){
   var t=document.getElementById("ctext").value;
@@ -941,7 +858,6 @@ function solveBarGo(){
 }
 document.getElementById("cgo").onclick=solveBarGo;
 document.getElementById("ctext").addEventListener("keydown",function(e){if(e.key==="Enter")solveBarGo()});
-bindSearch();
 document.addEventListener("DOMContentLoaded",boot);
 </script>
 <script>

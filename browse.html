@@ -3,6 +3,7 @@
 <head>
 <script src="js/signin.js"></script>
 <script src="js/godmode.js"></script>
+<script src="code/engine.js"></script>
 <script>/* JAHProfile storage: signed-out behavior is byte-identical to before; signed-in profiles get per-profile namespaced storage. */
 var PS = (typeof JAHProfile !== 'undefined') ? JAHProfile.store : localStorage;</script>
 <meta charset="utf-8">
@@ -91,6 +92,21 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,Helvetica,
 .browlink i{display:block;font-size:.7em;color:var(--cy);font-style:normal;margin-top:2px}
 .searchres{display:flex;flex-direction:column;gap:4px;max-height:480px;overflow:auto;margin:10px 0}
 .searchmeta{font-size:.82em;color:var(--dim);margin:6px 0}
+/* moved 2026-10-05 from index.html front door: archive search + fresh cards */
+.toolbar select{padding:11px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt)}
+.finderbar{display:flex;gap:10px;margin:16px 0 4px;flex-wrap:wrap}
+.finderbar input[type=search]{flex:1;min-width:200px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:#060b1c;color:var(--txt);font-size:.95em}
+.fresults{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:14px 0}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:13px}
+.card h4{margin:.2em 0;font-size:.95em}
+.card h4 a{color:var(--txt);text-decoration:none}
+.card h4 a:hover{color:var(--cy)}
+.card .sku{font-size:.72em;color:var(--dim)}
+.card .tag{font-size:.8em;color:var(--dim)}
+.reclbl{font-size:10.5px;letter-spacing:.22em;color:var(--dim);margin-right:8px}
+.recbadge{display:inline-block;border:2px solid var(--gold);background:#2a230c;color:var(--gold);border-radius:10px;padding:3px 12px;font-size:12px;font-weight:bold;letter-spacing:.06em;margin:3px 6px 3px 0}
+.recbadge.mini{font-size:10px;padding:1px 8px;border-width:1px;margin:0 0 6px}
 footer{border-top:1px solid var(--line);margin-top:30px;padding:20px 0 40px;color:var(--dim);font-size:.82em}
 footer .sites{line-height:2.2}
 footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
@@ -129,6 +145,20 @@ footer .sites a{color:#9fc2ff;text-decoration:none;margin:0 6px}
 </div>
 <div id="bmeta" class="searchmeta" aria-live="polite"></div>
 <div id="bresults" class="searchres"></div>
+<!-- moved 2026-10-05 from index.html front door: archive search + fresh cards -->
+<h2 style="color:var(--gold)">Find an existing output</h2>
+<div class="filterstack">
+<div style="margin:2px 0 8px"><span class="reclbl">FIND AN EXISTING OUTPUT</span> <span class="note">— archive search only, never invents records. To solve something new, use the generators on the <a href="./">front door</a>.</span></div>
+<div class="toolbar">
+<input type="search" id="q" placeholder="Search outputs — name, tagline, or JAH-GEN-…" aria-label="Search generated outputs">
+<select id="ffam" aria-label="Family filter"><option value="">All families</option></select>
+</div>
+<div id="searchmeta" class="searchmeta" aria-live="polite"></div>
+<div class="finderbar"><input type="search" id="fq" maxlength="140" placeholder="Describe what you're looking for… e.g. a solar-powered boat" aria-label="Describe what you're looking for"><button class="btn" id="fgo">Find it</button></div>
+</div>
+<div id="fresults" class="fresults"></div>
+<h2 style="color:var(--gold)" id="freshtitle">Fresh from the forge</h2>
+<div class="cards" id="fresh"><p class="note">Loading the forge index…</p></div>
 <!-- ASK THE AI — Manon's 2026-10-04 order. Paste on the archive page, directly under the
      search/filter area (or at the top of the archive section if there is no search box).
      It FINDS records by scanning the page's own archive list, and ANSWERS with his real
@@ -1979,6 +2009,84 @@ function doBSearch(){
 }
 document.getElementById("bgo").addEventListener("click",doBSearch);
 document.getElementById("bq").addEventListener("keydown",function(e){if(e.key==="Enter")doBSearch()});
+/* ===== moved 2026-10-05 from index.html front door: family-filter search, finder, fresh cards ===== */
+function bIdxFailHTML(){
+  return '<p class="note">⚠ The archive index could not be loaded (INDEX_UNAVAILABLE) — check your connection, then <button class="btn ghost" onclick="bIdxRetry()">Retry</button>.</p>';
+}
+async function bIdxRetry(){idxProm=null;loadFresh2();doSearch2();}
+function cardHTML2(r){
+  var f=(typeof SigGen!=="undefined")?SigGen.byKey(r[1]):null;
+  var href="index.html?gen="+encodeURIComponent(r[1])+"-"+r[2];
+  return '<div class="card"><div class="sku">'+esc(r[0])+'</div><span class="recbadge mini">GENERATED</span><h4><a href="'+href+'">'+(f?f.icon+" ":"")+esc(r[3])+'</a></h4><div class="tag">'+esc(r[4])+'</div><a class="btn gold" style="display:inline-block;margin-top:8px;text-decoration:none" href="'+href+'">Take me there →</a></div>';
+}
+async function loadFresh2(){
+  var box=document.getElementById("fresh");if(!box)return;
+  try{
+    var idx=await getIdx();
+    var rows=idx.slice(-12).reverse();
+    box.innerHTML=rows.map(cardHTML2).join("");
+  }catch(e){box.innerHTML=bIdxFailHTML();}
+}
+var searchT2=null;
+function bindSearch2(){
+  var q=document.getElementById("q");if(!q)return;
+  q.addEventListener("input",function(){clearTimeout(searchT2);searchT2=setTimeout(doSearch2,220)});
+  var ff=document.getElementById("ffam");if(ff)ff.addEventListener("change",doSearch2);
+}
+async function doSearch2(){
+  var box=document.getElementById("fresh");if(!box)return;
+  try{
+    var idx=await getIdx();
+    var q=document.getElementById("q").value.trim().toLowerCase();
+    var fam=document.getElementById("ffam").value;
+    var rows=idx.filter(function(r){
+      return (!fam||r[1]===fam)&&
+        (!q||r[0].toLowerCase().indexOf(q)>=0||r[3].toLowerCase().indexOf(q)>=0||r[4].toLowerCase().indexOf(q)>=0);
+    });
+    var shown=rows.slice(-60).reverse();
+    box.innerHTML=shown.length?shown.map(cardHTML2).join(""):'<p class="note"><b>NO ARCHIVE MATCH FOUND</b> — nothing on file matches. This search covers archived outputs only and never invents records. Try different words, or open the generators on the front door to solve something new.</p>';
+    var h=document.getElementById("freshtitle");if(h)h.textContent=q||fam?"Search results":"Fresh from the forge";
+    paintSearchMeta2(idx.length,rows.length,shown.length);
+  }catch(e){box.innerHTML=bIdxFailHTML();paintSearchMeta2(0,0,0);}
+}
+function paintSearchMeta2(total,matching,shown){
+  var meta=document.getElementById("searchmeta");if(!meta)return;
+  var t=total.toLocaleString()+" outputs on file · "+matching.toLocaleString()+" matching";
+  if(shown<matching)t+=" (showing "+shown+")";
+  meta.textContent=t;
+}
+function renderFamFilter2(){
+  var sel=document.getElementById("ffam");
+  if(!sel||typeof SigGen==="undefined")return;
+  sel.innerHTML='<option value="">All families</option>'+SigGen.families().map(function(f){return '<option value="'+f.key+'">'+esc(f.name)+'</option>'}).join("");
+}
+var FSTOP2=new Set("the,a,an,and,or,for,to,of,in,on,with,is,it,this,that,what,does,which,how,are,be,was,were,at,by,from,as,so,but,if,not,no,yes,up,out,about,into,over,after,than,then,there,their,them,they,he,she,his,her,its,tell,me,my,i,you,your,we,our,do,does,want,need,needs,looking,look,find,finds,get,something,anything,some,any,please,like,just,really,very,would,could,should,can,will,have,has,show,tell,give,kind,thing,things,describe,generator,generate,generated,output,outputs,design".split(","));
+function fKeywords2(t){return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FSTOP2.has(w)})}
+async function fAsk2(){
+  var q=document.getElementById("fq").value.trim();if(!q)return;
+  var box=document.getElementById("fresults");if(!box)return;
+  var kws=fKeywords2(q);
+  if(!kws.length){box.innerHTML='<p class="note">One more word — a field, a thing, a material… ⚙️</p>';return}
+  try{
+    var idx=await getIdx();
+    var hits=idx.map(function(r){var f=(typeof SigGen!=="undefined")?SigGen.byKey(r[1]):null;
+      var hay=(r[3]+" "+r[4]+" "+r[0]+" "+(f?f.name+" "+f.blurb:"")).toLowerCase();var s=0;
+      kws.forEach(function(k){if(r[0].toLowerCase()===k)s+=10;if(hay.indexOf(k)>=0)s+=k.length>5?3:2});
+      return{r:r,f:f,s:s}}).filter(function(x){return x.s>0})
+      .sort(function(a,b){return b.s-a.s}).slice(0,5);
+    if(!hits.length){box.innerHTML='<p class="note">Nothing matches "<b>'+esc(kws.join(" "))+'</b>" yet — try different words. ⚙️</p>';return}
+    box.innerHTML=hits.map(function(h){var r=h.r;return cardHTML2(r)}).join("");
+  }catch(e){box.innerHTML=bIdxFailHTML();}
+}
+(function(){
+  var fgo=document.getElementById("fgo"),fq=document.getElementById("fq");
+  if(fgo)fgo.addEventListener("click",fAsk2);
+  if(fq)fq.addEventListener("keydown",function(e){if(e.key==="Enter")fAsk2()});
+})();
+renderFamFilter2();
+bindSearch2();
+loadFresh2();
+getIdx().then(function(idx){paintSearchMeta2(idx.length,idx.length,idx.length)},function(){});
 /* ?fam=<key>&letter=<A> deep-open */
 (function(){
   var qs=new URLSearchParams(location.search);
