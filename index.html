@@ -285,13 +285,146 @@ try{
 window.__JAHREAD=R;
 })();
 
+/* === SigTTS dead-voice guard (2026-10-11, full-network read-aloud sweep) ===
+   window.speechSynthesis may EXIST but be dead (notably FB in-app browser on
+   Android: speak() silently does nothing, onend/onerror never fire,
+   getVoices() returns [] forever). Never trust presence — probe aliveness,
+   watch every utterance, fall back to online-audio tiers when dead/stalled.
+   Controller rule: S.speak() stops current audio first (no stacking);
+   S.stop() kills everything. Wire page stop buttons to S.stop().
+   INJECT VERBATIM — do not rename the SigTTS namespace. */
+(function(){
+if(window.SigTTS && window.SigTTS.voiceAlive) return;
+var S = window.SigTTS = window.SigTTS || {};
+S.TTS_URLS = S.TTS_URLS || [
+  function(t){return "https://code.responsivevoice.org/getvoice.php?t="+encodeURIComponent(t)+"&tl=en-US&sv=g2&vn=&pitch=0.5&rate=0.95";},
+  function(t){return "https://translate.google.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob";},
+  function(t){return "https://translate.googleapis.com/translate_tts?ie=UTF-8&q="+encodeURIComponent(t)+"&tl=en&client=tw-ob";}
+];
+/* Probe: cb(true) = live voice exists, cb(false) = dead/missing.
+   Waits up to ~3s for onvoiceschanged (healthy browsers load voices async). */
+S.voiceAlive = function(cb){
+  var done=false;
+  function fin(a){ if(done)return; done=true; try{cb(!!a);}catch(e){} }
+  try{
+    var ss=window.speechSynthesis;
+    if(!ss){ fin(false); return; }
+    var v0=null; try{ v0=ss.getVoices(); }catch(e){}
+    if(v0 && v0.length){ fin(true); return; }
+    var to=setTimeout(function(){ fin(false); },3000);
+    var prev=null; try{ prev=ss.onvoiceschanged; }catch(e){}
+    ss.onvoiceschanged=function(){
+      try{ if(prev) prev.call(ss); }catch(e){}
+      if(done) return;
+      var v2=null; try{ v2=ss.getVoices(); }catch(e){}
+      if(v2 && v2.length){ clearTimeout(to); fin(true); }
+    };
+    try{ ss.getVoices(); }catch(e){}
+  }catch(e){ fin(false); }
+};
+S._fb={audio:null,stopped:true,timer:null};
+S.fbStop=function(){
+  var f=S._fb; f.stopped=true;
+  if(f.timer){ clearTimeout(f.timer); f.timer=null; }
+  if(f.audio){ try{f.audio.pause();}catch(e){} f.audio=null; }
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+};
+/* Online-audio fallback: chunk-by-chunk through the tiers.
+   onDone(true)=finished, onDone(false)=failed/stopped. 14s fail-fast/chunk. */
+S.fbSpeak=function(text,onDone){
+  var f=S._fb; S.fbStop(); f.stopped=false;
+  var chunks=String(text).replace(/\s+/g," ").trim().split(/(?<=[.!?;])\s+/).filter(Boolean).slice(0,90);
+  if(!chunks.length){ if(onDone)try{onDone(false);}catch(e){} return; }
+  var i=0,tier=0;
+  function next(){
+    if(f.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+    if(i>=chunks.length){ if(onDone)try{onDone(true);}catch(e){} return; }
+    if(tier>=S.TTS_URLS.length){ if(onDone)try{onDone(false);}catch(e){} return; }
+    var a=new Audio(); f.audio=a; var settled=false;
+    function fin(ok){
+      if(settled) return; settled=true;
+      if(f.timer){ clearTimeout(f.timer); f.timer=null; }
+      try{a.pause();}catch(e){}
+      if(f.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+      if(ok){ i++; tier=0; f.timer=setTimeout(next,220); }
+      else { tier++; next(); }
+    }
+    a.onended=function(){fin(true);};
+    a.onerror=function(){fin(false);};
+    f.timer=setTimeout(function(){fin(false);},14000);
+    var src=""; try{ src=S.TTS_URLS[tier](chunks[i]); }catch(e){ fin(false); return; }
+    a.src=src;
+    try{ var p=a.play(); if(p&&p.catch)p.catch(function(){fin(false);}); }
+    catch(e){ fin(false); }
+  }
+  next();
+};
+/* Guarded speak: probes first; dead engine -> straight to fbSpeak.
+   Live path: onstart watchdog 6s + absolute budget; stall -> cancel + fallback.
+   onDone(true/false) ALWAYS fires exactly once — reset button/UI state there. */
+S.speak=function(text,opts,onDone){
+  if(typeof opts==="function"){ onDone=opts; opts={}; }
+  opts=opts||{};
+  S.fbStop(); S._fb.stopped=false;
+  S.voiceAlive(function(alive){
+    if(S._fb.stopped){ if(onDone)try{onDone(false);}catch(e){} return; }
+    if(!alive){ S.fbSpeak(text,onDone); return; }
+    try{
+      var ss=window.speechSynthesis, u=new SpeechSynthesisUtterance(String(text));
+      if(opts.rate)u.rate=opts.rate; if(opts.pitch)u.pitch=opts.pitch; if(opts.lang)u.lang=opts.lang;
+      try{
+        var vs=ss.getVoices()||[], en=vs.filter(function(v){return v.lang&&/^en/i.test(v.lang);});
+        if(en.length) u.voice=en[0];
+      }catch(e){}
+      var settled=false, started=false;
+      var budget=Math.min(120000, 30000+Math.ceil(String(text).length/15)*1000);
+      var t1=setTimeout(function(){ if(!started) fin(false); },6000);
+      var t2=setTimeout(function(){ fin(false); },budget);
+      function fin(ok){
+        if(settled) return; settled=true;
+        clearTimeout(t1); clearTimeout(t2);
+        try{ ss.cancel(); }catch(e){}
+        if(ok){ if(onDone)try{onDone(true);}catch(e){} }
+        else { S.fbSpeak(text,onDone); }
+      }
+      u.onstart=function(){ started=true; };
+      u.onend=function(){ fin(true); };
+      u.onerror=function(){ fin(false); };
+      ss.speak(u);
+    }catch(e){ S.fbSpeak(text,onDone); }
+  });
+};
+S.stop=function(){ S.fbStop(); };
+})();
+
+/* === SigTTS glue (2026-10-11 dead-voice sweep) ===
+   Speak entries route through SigTTS.speak: aliveness probe + watchdog.
+   Fallback delegates to this page's proven GR online tier. SigTTS._fin resolves
+   the pending onDone exactly once; SigTTS.stop() is the one controller. */
+(function(){
+var S=window.SigTTS;if(!S||S._glue)return;S._glue=true;
+var pending=null,budgetT=null;
+function fin(ok){var f=pending;pending=null;if(budgetT){clearTimeout(budgetT);budgetT=null;}if(f){try{f(!!ok);}catch(e){}}}
+S._fin=fin;
+S.fbSpeak=function(text,onDone){
+  S._fb.stopped=false;
+  budgetT=setTimeout(function(){fin(false);try{grStop();}catch(e){}},Math.min(180000,60000+String(text).length*20));
+  try{GR.queue=fxChunks(text);GR.total=GR.queue.length;GR.playing=false;GR.paused=false;GR.stopped=false;auShowBar(true);grPaint();grNext();}catch(e){fin(false);}
+};
+S._killAudio=S.stop;
+S._killPage=function(){try{if(GR.timer){clearTimeout(GR.timer);GR.timer=null;}}catch(e){}try{if(GR.audio){GR.audio.pause();GR.audio=null;}}catch(e){}try{fxStop();}catch(e){}};
+S._arm=function(onDone){fin(false);pending=(typeof onDone==="function")?onDone:null;};
+var stopping=false;
+S.stop=function(){if(stopping)return;stopping=true;try{try{S._killAudio();}catch(e){}try{S._killPage();}catch(e){}fin(false);try{auStop();}catch(e){}try{grStop();}catch(e){}}finally{stopping=false;}};
+})();
+
 /* ============ tiered read-aloud: speechSynthesis -> ResponsiveVoice -> Google TTS ============ */
 var AU={q:[],i:0,active:false,paused:false,rate:1,label:""};
 function auVoice(){try{var vs=window.speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().indexOf("en")===0});if(!vs.length)return null;var fem=/samantha|zira|joanna|amy|emma|kate|serena|moira|tessa|veena|fiona|karen|female|google us english/i;for(var i=0;i<vs.length;i++)if(fem.test(vs[i].name))return vs[i];var g=vs.filter(function(v){return v.name.toLowerCase().indexOf("google")>=0})[0];return g||vs[0]||null}catch(e){return null}}
 function auChunks(text){var out=[],cur="",parts=String(text).split(/([.!?]["']?(?:\s+|$))/);for(var i=0;i<parts.length;i+=2){var sent=((parts[i]||"")+(parts[i+1]||"")).replace(/\s+/g," ").trim();if(!sent)continue;if(cur&&(cur+" "+sent).length>220){out.push(cur.trim());cur=sent}else cur=cur?cur+" "+sent:sent}if(cur.trim())out.push(cur.trim());return out}
 function auShowBar(show){var bar=document.getElementById("aubar");if(bar)bar.style.display=show?"flex":"none"}
 function auPaintBtn(){var p=document.getElementById("aupause");if(p)p.innerHTML=AU.paused?"&#9654; Resume":"&#10074;&#10074; Pause";var l=document.getElementById("aulabel");if(l)l.textContent="Reading: "+AU.label;var pr=document.getElementById("auprog");if(pr)pr.textContent=AU.q.length?("chunk "+(AU.i+1)+" of "+AU.q.length):""}
-function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();var u=new SpeechSynthesisUtterance(AU.q[AU.i]);u.rate=AU.rate;u.lang="en-US";var v=auVoice();if(v)u.voice=v;var done=false,idx=AU.i;function adv(){if(done||!AU.active||AU.i!==idx)return;done=true;AU.i++;auSpeakNext()}u.onend=function(){adv()};u.onerror=function(){adv()};/* FIX-WAVE: speech watchdog — a hung utterance can never stall the queue */setTimeout(adv,30000);window.speechSynthesis.speak(u)}
+function auSpeakNext(){if(AU.i>=AU.q.length||!AU.active){auStop();return}auShowBar(true);auPaintBtn();/* SigTTS dead-voice guard: probe aliveness + watchdog; dead/stalled engine -> online tier */var rest=AU.q.slice(AU.i).join(" ");AU.q=[];AU.i=0;var S=window.SigTTS;try{S._killAudio();}catch(e){}try{S._killPage();}catch(e){}S._arm(function(){auStop();});S.speak(rest,{rate:AU.rate},function(ok){S._fin(ok);});}
 function hasSpeech(){try{return("speechSynthesis" in window)&&!!window.speechSynthesis&&typeof window.speechSynthesis.speak==="function"}catch(e){return false}}
 try{if(hasSpeech()){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){try{window.speechSynthesis.getVoices()}catch(e){}}}}catch(e){}
 function audMsg(m){var t=document.getElementById("audmsg");if(!t){t=document.createElement("div");t.id="audmsg";t.style.cssText="position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#0a0f22;border:1px solid #00f0ff;color:#d7e3ff;padding:10px 18px;border-radius:10px;z-index:10001;font-size:.9em;max-width:92vw;text-align:center";document.body.appendChild(t)}t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(function(){t.style.display="none"},2600)}
@@ -333,6 +466,7 @@ function grPaint(){
 }
 function grBtnReset(){if(GR.btn){try{GR.btn.textContent="🔊 Read aloud"}catch(e){}}GR.btn=null}
 function grStop(){
+  if(window.SigTTS&&window.SigTTS._fin)window.SigTTS._fin(true);
   try{if(window.__JAHREAD)window.__JAHREAD.stopAll();}catch(e){}
   GR.stopped=true;GR.playing=false;GR.paused=false;GR.queue=[];GR.total=0;
   if(GR.timer){clearTimeout(GR.timer);GR.timer=null}
@@ -383,16 +517,24 @@ function grPauseToggle(){
 }
 function readGen(o,btn){
   if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readGen"))return;
-  if(GR.playing&&!GR.stopped){grStop();return}
+  var S=window.SigTTS;
+  if((GR.playing&&!GR.stopped)||GR._sigActive){try{S.stop();}catch(e){}return}
+  try{if(S._fin)S._fin(false);}catch(e){}
   grStop();
-  if(!o||!o.name){audMsg("Nothing to read yet — open a solved design first.");return}
+  if(!o||!o.name){audMsg("Nothing to read yet \u2014 open a solved design first.");return}
   var text;
   try{text=genSpeakText(o)}catch(e){audMsg("Could not prepare the reading text.");return}
-  GR.queue=fxChunks(text);GR.total=GR.queue.length;GR.label=o.name;
-  if(!GR.queue.length){audMsg("Nothing to read.");return}
-  GR.stopped=false;GR.btn=btn||null;
-  if(GR.btn)GR.btn.textContent="⏹ Stop";
-  auShowBar(true);grPaint();grNext();
+  if(!text){audMsg("Nothing to read.");return}
+  /* SigTTS dead-voice guard: probe the built-in engine first (6s onstart
+     watchdog + absolute budget on the utterance); a dead/stalled engine falls
+     back to the proven GR online tier. onDone always fires exactly once. */
+  try{S._killAudio();}catch(e){}
+  try{S._killPage();}catch(e){}
+  GR.label=o.name;GR.btn=btn||null;GR._sigActive=true;
+  if(GR.btn)GR.btn.textContent="\u23f9 Stop";
+  auShowBar(true);grPaint();
+  S._arm(function(){GR._sigActive=false;try{grStop();}catch(e){}});
+  S.speak(text,{rate:1},function(ok){S._fin(ok);});
 }
 
 /* ============ app ============ */
@@ -882,6 +1024,7 @@ function askQA(){
   inp.value="";
 }
 document.getElementById("aupause").onclick=grPauseToggle;
+document.getElementById("austop").onclick=function(){try{window.SigTTS.stop();}catch(e){}};
 /* ============ UNIVERSAL SOLVER bar ("Describe anything…") ============ */
 function solveBarGo(){
   var t=document.getElementById("ctext").value;
