@@ -7549,31 +7549,52 @@
   "gen-c07546.json.gz",
   "gen-c07547.json.gz",
   "gen-c07548.json.gz",
-  "gen-c07549.json.gz"
+  "gen-c07549.json.gz",
+  "gen-c07550.json.gz",
+  "gen-c07551.json.gz",
+  "gen-c07552.json.gz",
+  "gen-c07553.json.gz",
+  "gen-c07554.json.gz",
+  "gen-c07555.json.gz",
+  "gen-c07556.json.gz",
+  "gen-c07557.json.gz",
+  "gen-c07558.json.gz",
+  "gen-c07559.json.gz",
+  "gen-c07560.json.gz",
+  "gen-c07561.json.gz",
+  "gen-c07562.json.gz",
+  "gen-c07563.json.gz",
+  "gen-c07564.json.gz",
+  "gen-c07565.json.gz",
+  "gen-c07566.json.gz",
+  "gen-c07567.json.gz",
+  "gen-c07568.json.gz",
+  "gen-c07569.json.gz",
+  "gen-c07570.json.gz"
  ],
- "count": 1132425,
+ "count": 1135575,
  "per_family": {
-  "jet": 54025,
-  "medical": 54025,
-  "food": 54025,
-  "candy": 54025,
-  "nanoplasma": 54025,
-  "lightbot": 54025,
-  "car": 54025,
-  "engine": 54025,
-  "toy": 54025,
-  "tool": 54025,
-  "furniture": 54025,
-  "clothing": 54025,
-  "game": 54025,
-  "instrument": 54025,
-  "robot": 54025,
-  "building": 54025,
-  "mix-car-engine": 54025,
-  "mix-toy-lightbot": 54025,
-  "mix-food-candy": 54025,
-  "mix-jet-engine": 54025,
-  "videogame": 51925
+  "jet": 54175,
+  "medical": 54175,
+  "food": 54175,
+  "candy": 54175,
+  "nanoplasma": 54175,
+  "lightbot": 54175,
+  "car": 54175,
+  "engine": 54175,
+  "toy": 54175,
+  "tool": 54175,
+  "furniture": 54175,
+  "clothing": 54175,
+  "game": 54175,
+  "instrument": 54175,
+  "robot": 54175,
+  "building": 54175,
+  "mix-car-engine": 54175,
+  "mix-toy-lightbot": 54175,
+  "mix-food-candy": 54175,
+  "mix-jet-engine": 54175,
+  "videogame": 52075
  },
  "site": "The Signature Boundless Generator Archive",
  "site_id": "SIGNATURE-BOUNDLESS-GENERATORS",
@@ -7603,27 +7624,27 @@
   "videogame": "JAH-GF-21"
  },
  "latest_ids": {
-  "jet": "JAH-GEN-JET-054025",
-  "medical": "JAH-GEN-MEDICAL-054025",
-  "food": "JAH-GEN-FOOD-054025",
-  "candy": "JAH-GEN-CANDY-054025",
-  "nanoplasma": "JAH-GEN-NANOPLASMA-054025",
-  "lightbot": "JAH-GEN-LIGHTBOT-054025",
-  "car": "JAH-GEN-CAR-054025",
-  "engine": "JAH-GEN-ENGINE-054025",
-  "toy": "JAH-GEN-TOY-054025",
-  "tool": "JAH-GEN-TOOL-054025",
-  "furniture": "JAH-GEN-FURNITURE-054025",
-  "clothing": "JAH-GEN-CLOTHING-054025",
-  "game": "JAH-GEN-GAME-054025",
-  "instrument": "JAH-GEN-INSTRUMENT-054025",
-  "robot": "JAH-GEN-ROBOT-054025",
-  "building": "JAH-GEN-BUILDING-054025",
-  "mix-car-engine": "JAH-GEN-MIXCARENGINE-054025",
-  "mix-toy-lightbot": "JAH-GEN-MIXTOYLIGHTBOT-054025",
-  "mix-food-candy": "JAH-GEN-MIXFOODCANDY-054025",
-  "mix-jet-engine": "JAH-GEN-MIXJETENGINE-054025",
-  "videogame": "JAH-GEN-VIDEOGAME-051925"
+  "jet": "JAH-GEN-JET-054175",
+  "medical": "JAH-GEN-MEDICAL-054175",
+  "food": "JAH-GEN-FOOD-054175",
+  "candy": "JAH-GEN-CANDY-054175",
+  "nanoplasma": "JAH-GEN-NANOPLASMA-054175",
+  "lightbot": "JAH-GEN-LIGHTBOT-054175",
+  "car": "JAH-GEN-CAR-054175",
+  "engine": "JAH-GEN-ENGINE-054175",
+  "toy": "JAH-GEN-TOY-054175",
+  "tool": "JAH-GEN-TOOL-054175",
+  "furniture": "JAH-GEN-FURNITURE-054175",
+  "clothing": "JAH-GEN-CLOTHING-054175",
+  "game": "JAH-GEN-GAME-054175",
+  "instrument": "JAH-GEN-INSTRUMENT-054175",
+  "robot": "JAH-GEN-ROBOT-054175",
+  "building": "JAH-GEN-BUILDING-054175",
+  "mix-car-engine": "JAH-GEN-MIXCARENGINE-054175",
+  "mix-toy-lightbot": "JAH-GEN-MIXTOYLIGHTBOT-054175",
+  "mix-food-candy": "JAH-GEN-MIXFOODCANDY-054175",
+  "mix-jet-engine": "JAH-GEN-MIXJETENGINE-054175",
+  "videogame": "JAH-GEN-VIDEOGAME-052075"
  },
  "earliest_ids": {
   "jet": "JAH-GEN-JET-000001",
@@ -60495,17 +60516,159 @@
   {
    "chunk": "gen-c07549.json.gz",
    "first_id": "JAH-GEN-VIDEOGAME-051851",
-   "last_id": "JAH-GEN-VIDEOGAME-051925",
+   "last_id": "JAH-GEN-JET-054100",
+   "count": 150,
+   "sha256": "dd55e8ab59abbab770135d8006b07a91ea2d266f40e6a4ba9b20d896ce4739bc"
+  },
+  {
+   "chunk": "gen-c07550.json.gz",
+   "first_id": "JAH-GEN-JET-054101",
+   "last_id": "JAH-GEN-MEDICAL-054100",
+   "count": 150,
+   "sha256": "b68c527fb7e8cad7b0868719ae4831be023b96cfa76169d455318b2862a267bc"
+  },
+  {
+   "chunk": "gen-c07551.json.gz",
+   "first_id": "JAH-GEN-MEDICAL-054101",
+   "last_id": "JAH-GEN-FOOD-054100",
+   "count": 150,
+   "sha256": "14d2ae8d32719967a433f1854ce432f83e22ee379fa63d1bc15fef7e07465beb"
+  },
+  {
+   "chunk": "gen-c07552.json.gz",
+   "first_id": "JAH-GEN-FOOD-054101",
+   "last_id": "JAH-GEN-CANDY-054100",
+   "count": 150,
+   "sha256": "13fab716f3514cc2c7a23cb40099474b14ede92a60d37b6558a4792ce565ebf0"
+  },
+  {
+   "chunk": "gen-c07553.json.gz",
+   "first_id": "JAH-GEN-CANDY-054101",
+   "last_id": "JAH-GEN-NANOPLASMA-054100",
+   "count": 150,
+   "sha256": "48524c9aa77e278cf9181ecbf0d42342b3c7651e947c4fe8cc28dedc3a6a17e6"
+  },
+  {
+   "chunk": "gen-c07554.json.gz",
+   "first_id": "JAH-GEN-NANOPLASMA-054101",
+   "last_id": "JAH-GEN-LIGHTBOT-054100",
+   "count": 150,
+   "sha256": "079960551a216a16fcba24df99d21136399284b0cc168e797128cfd0c1650749"
+  },
+  {
+   "chunk": "gen-c07555.json.gz",
+   "first_id": "JAH-GEN-LIGHTBOT-054101",
+   "last_id": "JAH-GEN-CAR-054100",
+   "count": 150,
+   "sha256": "d441de5c4b92d3d8a262bda1c8118aa9719eade3a7608f06aabcc0c1a6015c1e"
+  },
+  {
+   "chunk": "gen-c07556.json.gz",
+   "first_id": "JAH-GEN-CAR-054101",
+   "last_id": "JAH-GEN-ENGINE-054100",
+   "count": 150,
+   "sha256": "94f89d3bb045e16db8a265e05388d728dfcc5b7d643e4d1fa247c94f3791180c"
+  },
+  {
+   "chunk": "gen-c07557.json.gz",
+   "first_id": "JAH-GEN-ENGINE-054101",
+   "last_id": "JAH-GEN-TOY-054100",
+   "count": 150,
+   "sha256": "a772af26667804485b86eab31628cc4c794e42710fa4160524755371df9b5336"
+  },
+  {
+   "chunk": "gen-c07558.json.gz",
+   "first_id": "JAH-GEN-TOY-054101",
+   "last_id": "JAH-GEN-TOOL-054100",
+   "count": 150,
+   "sha256": "516971b7a2b1dd60f74f1a8a401299d11e56963a4fc0dd4de5fdd936b7ac0925"
+  },
+  {
+   "chunk": "gen-c07559.json.gz",
+   "first_id": "JAH-GEN-TOOL-054101",
+   "last_id": "JAH-GEN-FURNITURE-054100",
+   "count": 150,
+   "sha256": "ecbff91183e493711b29e8c85c066e99ab9cc38a5bf14106244e8f72ef918fa6"
+  },
+  {
+   "chunk": "gen-c07560.json.gz",
+   "first_id": "JAH-GEN-FURNITURE-054101",
+   "last_id": "JAH-GEN-CLOTHING-054100",
+   "count": 150,
+   "sha256": "ecacf1b0b55f4ed54e43868fe69c2615a79206f416772e5d759ea543d6d377f8"
+  },
+  {
+   "chunk": "gen-c07561.json.gz",
+   "first_id": "JAH-GEN-CLOTHING-054101",
+   "last_id": "JAH-GEN-GAME-054100",
+   "count": 150,
+   "sha256": "1f3b044220958756403900a5b355202a625bc9046cd2272da0297a0c7ab8469b"
+  },
+  {
+   "chunk": "gen-c07562.json.gz",
+   "first_id": "JAH-GEN-GAME-054101",
+   "last_id": "JAH-GEN-INSTRUMENT-054100",
+   "count": 150,
+   "sha256": "ddbd08c21ee153d0aec73efba613adf4bc7358b7718612ea6e004909b098e321"
+  },
+  {
+   "chunk": "gen-c07563.json.gz",
+   "first_id": "JAH-GEN-INSTRUMENT-054101",
+   "last_id": "JAH-GEN-ROBOT-054100",
+   "count": 150,
+   "sha256": "2062bbc77988502127085377c446ea39bd938e8dce6b7299c7c88758c57b9bed"
+  },
+  {
+   "chunk": "gen-c07564.json.gz",
+   "first_id": "JAH-GEN-ROBOT-054101",
+   "last_id": "JAH-GEN-BUILDING-054100",
+   "count": 150,
+   "sha256": "873170ac37e70d8d1c84be89d95100ac5651d21c543e1a9f270b50536a64374e"
+  },
+  {
+   "chunk": "gen-c07565.json.gz",
+   "first_id": "JAH-GEN-BUILDING-054101",
+   "last_id": "JAH-GEN-MIXCARENGINE-054100",
+   "count": 150,
+   "sha256": "1883246f041fd31d220a25db8ba7a85315d8d23937ba284afb0f9ad7af3e2241"
+  },
+  {
+   "chunk": "gen-c07566.json.gz",
+   "first_id": "JAH-GEN-MIXCARENGINE-054101",
+   "last_id": "JAH-GEN-MIXTOYLIGHTB-054100",
+   "count": 150,
+   "sha256": "86d08197c0777b20d6da3f818e3fd2492a9c6a96f22bb6a406e5876883b4b924"
+  },
+  {
+   "chunk": "gen-c07567.json.gz",
+   "first_id": "JAH-GEN-MIXTOYLIGHTB-054101",
+   "last_id": "JAH-GEN-MIXFOODCANDY-054100",
+   "count": 150,
+   "sha256": "3de7598a2637a6d6a7badab02f33db2f9bbebac5bc5d0b3a33bd71b17cf5b649"
+  },
+  {
+   "chunk": "gen-c07568.json.gz",
+   "first_id": "JAH-GEN-MIXFOODCANDY-054101",
+   "last_id": "JAH-GEN-MIXJETENGINE-054100",
+   "count": 150,
+   "sha256": "e77f458459f475766cd9f3c3b7edec87dedf42ef11b5c6f4b819f3f07d90744e"
+  },
+  {
+   "chunk": "gen-c07569.json.gz",
+   "first_id": "JAH-GEN-MIXJETENGINE-054101",
+   "last_id": "JAH-GEN-VIDEOGAME-052000",
+   "count": 150,
+   "sha256": "b7e4bae2cdc2cf973f585657672aa2e41b0e89e6e2e6fa0fc69b036ceb3eaf4c"
+  },
+  {
+   "chunk": "gen-c07570.json.gz",
+   "first_id": "JAH-GEN-VIDEOGAME-052001",
+   "last_id": "JAH-GEN-VIDEOGAME-052075",
    "count": 75,
-   "sha256": "f1c12b8897477aefc7917275302b87612f417dbc92f1bff8215efb6a924b1564"
+   "sha256": "1cf331d19b9c397a67ce7d0bdf9c3c9ed1e2d3d9d2a61369dfa909d4acf8aadf"
   }
  ],
  "drip_history": [
-  {
-   "date": "2026-11-09T20:35:04Z",
-   "added": 3150,
-   "per_family": 150
-  },
   {
    "date": "2026-11-09T22:33:48Z",
    "added": 3150,
@@ -60750,16 +60913,21 @@
    "date": "2026-11-13T22:33:46Z",
    "added": 3150,
    "per_family": 150
+  },
+  {
+   "date": "2026-11-14T00:34:38Z",
+   "added": 3150,
+   "per_family": 150
   }
  ],
- "archive_version": "2026-11-13",
+ "archive_version": "2026-11-14",
  "generator_version": "1.0",
  "engine_version": "1.0",
  "schema_version": "1.0",
  "index_version": "1.0",
  "index_url": "data/index.json.gz",
- "updated": "2026-11-13T22:33:46Z",
+ "updated": "2026-11-14T00:34:38Z",
  "canonical_url": "https://justinahiggins614-cmyk.github.io/signature-boundless-generators/",
  "id_scheme": "JAH-GEN-<FAMILY>-<seed 6-digit> (family key uppercased); universal solves JAH-GEN-CUSTOM-<base36 hash>",
- "index_sha256": "ab470c4e178b20528860d088f9a5136908577c588657d3e862fd8b33c0dd4db8"
+ "index_sha256": "dc50c190f9f9b025695b153906f21b8c948fb3c3d11b22f188f1950b60875775"
 }
